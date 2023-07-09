@@ -1,5 +1,5 @@
 import React from "react";
-import tempLogo from './resources/temp_logo.png';
+import tempLogo from '../assets/temp_logo.png';
 // 로고 컴포넌트
 function Logo() {
 

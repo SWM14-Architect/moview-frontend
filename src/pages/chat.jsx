@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import Header from "./layout/header";
-import Footer from "./layout/footer";
+import Header from "../components/header"
+import Footer from "../components/footer"
 
 function Chat() {
     const [messages, setMessages] = useState([

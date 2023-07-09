@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
-import IndexPage from "./page/index_page";
-import Input from "./page/input";
-import Chat from "./page/chat";
-import Result from "./page/result";
-import EndPage from "./page/end";
+import IndexPage from "./pages/index_page";
+import Input from "./pages/input";
+import Chat from "./pages/chat";
+import Result from "./pages/result";
+import EndPage from "./pages/end";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

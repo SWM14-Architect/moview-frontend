@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Header from "./layout/header";
-import Footer from "./layout/footer";
-import Logo from "./Logo";
+import Header from "../components/header"
+import Footer from "../components/footer"
+import Logo from "../components/Logo";
 
 function IndexPage() {
   const [isIndex, setIsIndex] = useState(false);
