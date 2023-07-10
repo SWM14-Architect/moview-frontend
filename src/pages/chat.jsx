@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import Header from "../components/header"
 import Footer from "../components/footer"
+import '../styles/button.css'
+import "../styles/outer-div.css"
 
 function Chat() {
     const [messages, setMessages] = useState([
@@ -25,7 +27,7 @@ function Chat() {
     };
 
     return (
-        <div className="Chat">
+        <div className="outer-div">
             <Header />
 
             <div className="chat-window">

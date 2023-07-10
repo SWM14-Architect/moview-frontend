@@ -1,11 +1,24 @@
 .big-button-div {
+  display: flex;
+  justify-content: space-between;
   margin-top: auto;
   margin-bottom: 10%;
 }
 
 .big-button {
-  background: #ffffff;
-  color: #333333;
   font-size: 40px;
   border-radius: 16px;
+}
+
+.big-button.left {
+  border: none;
+  margin-right: 10px;
+  background: yellowgreen;
+  opacity: 0.9;
+}
+
+.big-button.right {
+  background: #ffffff;
+  color: #333333;
+  margin-left: 10px;
 }
