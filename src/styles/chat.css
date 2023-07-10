@@ -1,0 +1,70 @@
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+.chat-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: rgba(240, 242, 246, 0.5);
+    margin-top: 5px;
+    margin-bottom: 3px;
+}
+
+.chat-icon {
+    flex-shrink: 0;
+    /* Prevents the icon from shrinking */
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+}
+
+.chat-icon img {
+    max-width: 100%;
+    height: auto;
+}
+
+.chat-message-content {
+    color: rgb(49, 51, 63);
+    margin: 0.5rem;
+    /* Add some margin to separate the content from the icon */
+    flex-grow: 1;
+
+}
+
+
+.answer-text-area {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    border: none;
+    border-top-color: rgb(240, 242, 246);
+    background-color: rgb(240, 242, 246);
+    border-bottom-color: rgb(240, 242, 246);
+    border-right-color: rgb(240, 242, 246);
+    border-left-color: rgb(240, 242, 246);
+    border-bottom-left-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    font-family: "Source Sans Pro", sans-serif;
+    padding-left: 5px;
+    /* caret 시작 위치를 오른쪽으로 이동시키기 위한 값 */
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.4, 1);
+    transition-property: border;
+    line-height: 1.6;
+    font-weight: normal;
+    font-size: 1rem;
+    caret-color: black;
+    outline: none;
+    width: 100%;
+    resize: none;
+    height:20vh;
+}
