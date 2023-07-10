@@ -1,18 +1,9 @@
 import React from "react";
+import "../styles/footer.css";
 
 function Footer() {
-  const footerStyle = {
-    background: "#f2f2f2",
-    padding: "20px",
-    textAlign: "center",
-    fontSize: "14px",
-    color: "#666",
-    borderTop: "1px solid #ccc",
-    width: "70%",
-  };
-
   return (
-    <footer className="custom-footer" style={footerStyle}>
+    <footer className="footer">
       © 2023 SWM Architect team. All Rights Reserved.
     </footer>
   );
