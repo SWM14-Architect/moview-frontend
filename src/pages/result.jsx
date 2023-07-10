@@ -1,56 +1,105 @@
-import React, { useState } from 'react';
-import Header from "../components/header"
-import Footer from "../components/footer"
+import React, { useState } from "react";
+import Header from "../components/header";
+import Footer from "../components/footer";
+import "../styles/result.css";
+import "../styles/outer-div.css";
 
-function Result() {
-    const [value, setValue] = useState({
-        questionValue: 50,
-        goodAspectValue: 50,
-        badAspectValue: 50
-    });
+const SliderInput = ({ label, sliderValue, setSliderValue }) => {
+  return (
+    <>
+      <label>{label}</label>
+      <div className="slider-container">
+        <p>0</p>
+        <div className="slider-value">{sliderValue}</div>
+        <p>100</p>
+      </div>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value={sliderValue}
+        onChange={(event) => setSliderValue(event.target.value)}
+      />
+    </>
+  );
+};
 
-    const handleChange = (e) => {
-        setValue({
-            ...value,
-            [e.target.name]: e.target.value
-        });
-    };
+const sections = [
+  {
+    title: "문제",
+    labels: [
+      "적절한 면접 질문을 제공했나요?",
+      "좋은 점이 잘 분석됬나요?",
+      "아쉬운 점이 잘 분석됬나요?",
+    ],
+  },
+  {
+    title: "문제에 대한 꼬리질문 1",
+    labels: [
+      "적절한 면접 질문을 제공했나요?",
+      "좋은 점이 잘 분석됬나요?",
+      "아쉬운 점이 잘 분석됬나요?",
+    ],
+  },
+  {
+    title: "문제에 대한 꼬리질문 2",
+    labels: [
+      "적절한 면접 질문을 제공했나요?",
+      "좋은 점이 잘 분석됬나요?",
+      "아쉬운 점이 잘 분석됬나요?",
+    ],
+  },
+];
 
-    return (
-        <div className="Result">
-            <Header />
+const Result = () => {
+  const [sliderValues, setSliderValues] = useState(
+    Array(sections.reduce((a, b) => a + b.labels.length, 0)).fill(50)
+  );
 
-            <div className="content">
-                <h2>문제 1</h2>
-                <textarea placeholder="면접 질문"></textarea>
-                <textarea placeholder="면접 답변"></textarea>
-                <textarea placeholder="좋은 점"></textarea>
-                <textarea placeholder="아쉬운 점"></textarea>
+  const handleSliderChange = (index) => (value) => {
+    const newSliderValues = [...sliderValues];
+    newSliderValues[index] = value;
+    setSliderValues(newSliderValues);
+  };
 
-                <label>
-                    적절한 면접 질문을 제공했나요?
-                    <input type="range" min="0" max="100" value={value.questionValue} onChange={handleChange} name="questionValue" />
-                </label>
+  let sliderIndex = 0;
 
-                <label>
-                    면접 답변의 좋은 점을 잘 분석 했나요?
-                    <input type="range" min="0" max="100" value={value.goodAspectValue} onChange={handleChange} name="goodAspectValue" />
-                </label>
+  return (
+    <div className="outer-div">
+      <Header />
+      <div className="form">
+        {sections.map((section, sectionIndex) => (
+          <div className="section" key={sectionIndex}>
+            <h2>{section.title}</h2>
+            <textarea placeholder="면접 질문" disabled />
+            <textarea placeholder="면접 답변" disabled />
+            <textarea placeholder="좋은 점" disabled />
+            <textarea placeholder="아쉬운 점" disabled />
 
-                <label>
-                    면접 답변의 아쉬운 점을 잘 분석 했나요?
-                    <input type="range" min="0" max="100" value={value.badAspectValue} onChange={handleChange} name="badAspectValue" />
-                </label>
-                <hr />
-                
-                {/* 여기에 필요한 만큼의 꼬리질문과 관련 폼들을 추가합니다. */}
-            </div>
+            {section.labels.map((label) => {
+              const currentSliderIndex = sliderIndex;
+              sliderIndex++;
+              return (
+                <SliderInput
+                  key={currentSliderIndex}
+                  label={label}
+                  sliderValue={sliderValues[currentSliderIndex]}
+                  setSliderValue={handleSliderChange(currentSliderIndex)}
+                />
+              );
+            })}
+            <hr />
+          </div>
+        ))}
 
-            <button className="big-button">다음으로</button>
-
-            <Footer />
+        <div className="big-button-div">
+          <button className="big-button left">이전으로</button>
+          <button className="big-button right">다음으로</button>
         </div>
-    );
-}
+      </div>
+      <Footer />
+    </div>
+  );
+};
 
 export default Result;

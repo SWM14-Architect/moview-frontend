@@ -80,7 +80,7 @@ function Input() {
 
         <div className="big-button-div">
           <button className="big-button left" onClick={addEssayField}>
-          <span role="img" aria-label="plus">➕</span>
+            추가하기
           </button>
           <button className="big-button right" onClick={handleSubmit}>
             제출하기

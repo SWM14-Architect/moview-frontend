@@ -8,17 +8,22 @@
 .big-button {
   font-size: 40px;
   border-radius: 16px;
+  display: block;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition-duration: 0.4s;
+  cursor: pointer;
 }
 
 .big-button.left {
   border: none;
-  margin-right: 10px;
-  background: yellowgreen;
-  opacity: 0.9;
+  margin-right: 50px;
 }
 
 .big-button.right {
-  background: #ffffff;
-  color: #333333;
-  margin-left: 10px;
+  margin-left: 50px;
 }
