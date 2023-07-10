@@ -1,0 +1,11 @@
+.big-button-div {
+  margin-top: auto;
+  margin-bottom: 10%;
+}
+
+.big-button {
+  background: #ffffff;
+  color: #333333;
+  font-size: 40px;
+  border-radius: 16px;
+}

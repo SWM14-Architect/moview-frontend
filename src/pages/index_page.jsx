@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Header from "../components/header"
 import Footer from "../components/footer"
 import Logo from "../components/Logo";
+import '../styles/button.css'
+import "../styles/outer-div.css"
 
 function IndexPage() {
   const [isIndex, setIsIndex] = useState(false);
@@ -11,11 +13,11 @@ function IndexPage() {
   };
 
   return (
-    <div className="App" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div className="outer-div">
       <Header />
       <Logo />
-      <div style={{ marginTop: "auto", marginBottom: "10%" }}>
-        <button className="big-button" onClick={handleButtonClick} style={{background: "#ffffff", color: "#333333", fontSize: "40px", borderRadius: "16px" }}>
+      <div className="big-button-div">
+        <button className="big-button" onClick={handleButtonClick}>
           START
         </button>
       </div>
