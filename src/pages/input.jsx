@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Header from "../components/header";
-import Footer from "../components/footer";
 import "../styles/button.css";
 import "../styles/outer-div.css";
 import "../styles/form.css";
@@ -33,8 +31,6 @@ function Input() {
 
   return (
     <div className="outer-div">
-      <Header />
-
       <div className="form">
         <div>
           <label>
@@ -87,8 +83,6 @@ function Input() {
           </button>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }

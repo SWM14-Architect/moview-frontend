@@ -1,6 +1,4 @@
 import React, { useState, useRef } from "react";
-import Header from "../components/header";
-import Footer from "../components/footer";
 import "../styles/button.css";
 import "../styles/outer-div.css";
 import "../styles/chat.css";
@@ -58,8 +56,6 @@ function Chat() {
 
   return (
     <div className="outer-div">
-      <Header />
-
       <div className="chat-window">
         {messages.map((message, index) => (
           <div className="chat-message" key={index}>
@@ -81,8 +77,6 @@ function Chat() {
       <button className="big-button" onClick={handleAddChatMessage}>
         +
       </button>
-
-      <Footer />
     </div>
   );
 }

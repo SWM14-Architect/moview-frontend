@@ -1,8 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import "chart.js/auto";
 import { Radar, Bar } from "react-chartjs-2";
-import Header from "../components/header";
-import Footer from "../components/footer";
 import "../styles/outer-div.css";
 import "../styles/end.css";
 import "../styles/button.css";
@@ -70,8 +68,6 @@ const End = () => {
 
   return (
     <div className="outer-div">
-      <Header />
-
       <div className="chart">
         <h2>영역별 점수</h2>
         <RadarChart />
@@ -94,7 +90,6 @@ const End = () => {
       <button className="big-button" onClick={handleSubmit}>
         평가 완료
       </button>
-      <Footer />
     </div>
   );
 };
