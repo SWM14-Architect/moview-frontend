@@ -3,8 +3,10 @@ import "../styles/button.css";
 import "../styles/outer-div.css";
 import "../styles/form.css";
 import "../styles/divider.css";
+import {useNavigate} from "react-router-dom";
 
 function Input() {
+  const navigate = useNavigate();
   const [jobGroup, setJobGroup] = useState("");
   const [recruitAnnouncement, setRecruitAnnouncement] = useState("");
   const [essay, setEssay] = useState([{ question: "", answer: "" }]);
@@ -27,6 +29,22 @@ function Input() {
 
   const handleSubmit = () => {
     // 제출 버튼이 눌렸을 때의 동작을 정의합니다.
+    if (jobGroup === "") {
+      alert("직군을 입력해주세요.");
+      return false;
+    }
+    if (recruitAnnouncement === "") {
+      alert("공고를 입력해주세요.");
+      return false;
+    }
+    for (let i = 0; i < essay.length; i++) {
+      if (essay[i].question === "" || essay[i].answer === "") {
+        alert("빈 문항을 입력해주세요.");
+        return false;
+      }
+    }
+    navigate(`/chat`);
+    return true;
   };
 
   return (
