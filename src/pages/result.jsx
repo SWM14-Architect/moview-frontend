@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Header from "../components/header";
-import Footer from "../components/footer";
 import "../styles/result.css";
 import "../styles/outer-div.css";
 
@@ -66,7 +64,6 @@ const Result = () => {
 
   return (
     <div className="outer-div">
-      <Header />
       <div className="form">
         {sections.map((section, sectionIndex) => (
           <div className="section" key={sectionIndex}>
@@ -97,7 +94,6 @@ const Result = () => {
           <button className="big-button right">다음으로</button>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
