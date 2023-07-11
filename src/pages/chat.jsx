@@ -7,17 +7,13 @@ import botIcon from "../assets/bot-icon.png";
 
 function UserIcon() {
   return (
-    <div>
-      <img src={userIcon} alt="userIcon" />
-    </div>
+    <img src={userIcon} alt="userIcon" />
   );
 }
 
 function AssistantIcon() {
   return (
-    <div>
-      <img src={botIcon} alt="botIcon" />
-    </div>
+    <img src={botIcon} alt="botIcon" />
   );
 }
 
