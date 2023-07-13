@@ -7,6 +7,7 @@ import Room from "./pages/room";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 function Index(){
+  // roomID는 room 페이지에서 표시할 컴포넌트 이름
   const [roomID, setRoomID] = React.useState("input");
   const router = createBrowserRouter([
     {
@@ -17,6 +18,7 @@ function Index(){
       ]
     },
   ]);
+
   return(
       <div>
         <RouterProvider router={router}/>
