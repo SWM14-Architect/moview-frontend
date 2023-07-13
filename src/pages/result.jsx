@@ -49,7 +49,8 @@ const sections = [
   },
 ];
 
-const Result = () => {
+const Result = (props) => {
+  const { setRoomID } = props;
   const [sliderValues, setSliderValues] = useState(
     Array(sections.reduce((a, b) => a + b.labels.length, 0)).fill(50)
   );

@@ -2,16 +2,24 @@ import React, { useState } from "react";
 import Logo from "../components/Logo";
 import '../styles/button.css'
 import "../styles/outer-div.css"
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
-function IndexPage() {
+
+function IndexPage(props) {
+  const { setRoomID } = props;
+  const navigate = useNavigate();
+  function handleButtonClick(e) {
+    e.preventDefault();
+    setRoomID("input");
+    navigate("/room");
+  }
   return (
     <div className="outer-div">
       <Logo />
       <div className="big-button-div">
-        <Link className="big-button" to={"/input"}>
+        <button className="big-button" onClick={handleButtonClick}>
           START
-        </Link>
+        </button>
       </div>
     </div>
   );
