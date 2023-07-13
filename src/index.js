@@ -5,6 +5,7 @@ import App from "./App";
 import IndexPage from "./pages/index_page";
 import Room from "./pages/room";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import ErrorPage from "./pages/error_page";
 
 function Index(){
   // roomID는 room 페이지에서 표시할 컴포넌트 이름
@@ -15,7 +16,8 @@ function Index(){
       children: [
         { path: "/", element: <IndexPage setRoomID={setRoomID} /> },
         { path: "/room", element: <Room roomID={roomID} setRoomID={setRoomID} /> },
-      ]
+      ],
+      errorElement: <ErrorPage />,
     },
   ]);
 
