@@ -19,6 +19,9 @@ function Index(){
       ],
       errorElement: <ErrorPage />,
     },
+    {
+      path: "/error", element: <ErrorPage />,
+    }
   ]);
 
   return(
