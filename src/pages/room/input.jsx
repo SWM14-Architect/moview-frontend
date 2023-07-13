@@ -3,9 +3,11 @@ import "../../styles/button.css";
 import "../../styles/outer-div.css";
 import "../../styles/form.css";
 import "../../styles/divider.css";
+import {useRecoilState} from "recoil";
+import {roomIdAtom} from "../../store/room_atom";
 
-function Input(props) {
-  const { setRoomID } = props;
+function Input() {
+  const [, setRoomID] = useRecoilState(roomIdAtom);
   const [jobGroup, setJobGroup] = useState("");
   const [recruitAnnouncement, setRecruitAnnouncement] = useState("");
   const [essay, setEssay] = useState([{ question: "", answer: "" }]);

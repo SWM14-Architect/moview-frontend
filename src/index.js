@@ -6,16 +6,16 @@ import IndexPage from "./pages/index_page";
 import Room from "./pages/room";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ErrorPage from "./pages/error_page";
+import {RecoilRoot} from "recoil";
 
 function Index(){
   // roomID는 room 페이지에서 표시할 컴포넌트 이름
-  const [roomID, setRoomID] = React.useState("input");
   const router = createBrowserRouter([
     {
       path: "/", element: <App />,
       children: [
-        { path: "/", element: <IndexPage setRoomID={setRoomID} /> },
-        { path: "/room", element: <Room roomID={roomID} setRoomID={setRoomID} /> },
+        { path: "/", element: <IndexPage /> },
+        { path: "/room", element: <Room /> },
       ],
       errorElement: <ErrorPage />,
     },
@@ -26,7 +26,9 @@ function Index(){
 
   return(
       <div>
-        <RouterProvider router={router}/>
+        <RecoilRoot>
+          <RouterProvider router={router}/>
+        </RecoilRoot>
       </div>
   )
 }

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import Logo from "../components/Logo";
 import '../styles/button.css'
 import "../styles/outer-div.css"
 import {useNavigate} from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {roomIdAtom} from "../store/room_atom";
 
 
-function IndexPage(props) {
-  const { setRoomID } = props;
+function IndexPage() {
+  const [, setRoomID ] = useRecoilState(roomIdAtom);
   const navigate = useNavigate();
   function handleButtonClick(e) {
     e.preventDefault();

@@ -5,16 +5,18 @@ import Result from "./room/result";
 import EndPage from "./room/end";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
+import {useRecoilState} from "recoil";
+import {roomIdAtom} from "../store/room_atom";
 
-function Room(props) {
-  const { roomID, setRoomID } = props;
+function Room() {
+  const [roomID,] = useRecoilState(roomIdAtom);
   const navigate = useNavigate();
 
   const pages = {
-    "input": <Input setRoomID={setRoomID}/>,
-    "chat": <Chat setRoomID={setRoomID}/>,
-    "result": <Result setRoomID={setRoomID}/>,
-    "end": <EndPage setRoomID={setRoomID}/>
+    "input": <Input />,
+    "chat": <Chat />,
+    "result": <Result />,
+    "end": <EndPage />
   };
 
   useEffect(() => {
@@ -22,7 +24,8 @@ function Room(props) {
     if (!pages.hasOwnProperty(roomID)) {
       navigate("/error");
     }
-  }, [roomID])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomID, navigate])
 
 
   return(
