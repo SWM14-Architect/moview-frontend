@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import "../styles/button.css";
-import "../styles/outer-div.css";
-import "../styles/form.css";
-import "../styles/divider.css";
-import {useNavigate} from "react-router-dom";
+import "../../styles/button.css";
+import "../../styles/outer-div.css";
+import "../../styles/form.css";
+import "../../styles/divider.css";
 
-function Input() {
-  const navigate = useNavigate();
+function Input(props) {
+  const { setRoomID } = props;
   const [jobGroup, setJobGroup] = useState("");
   const [recruitAnnouncement, setRecruitAnnouncement] = useState("");
   const [essay, setEssay] = useState([{ question: "", answer: "" }]);
@@ -43,7 +42,7 @@ function Input() {
         return false;
       }
     }
-    navigate(`/chat`);
+    setRoomID("chat");
     return true;
   };
 

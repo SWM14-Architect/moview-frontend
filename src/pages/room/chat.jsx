@@ -1,10 +1,9 @@
 import React, {useState, useRef, useEffect} from "react";
-import "../styles/button.css";
-import "../styles/outer-div.css";
-import "../styles/chat.css";
-import userIcon from "../assets/human-icon.png";
-import botIcon from "../assets/bot-icon.png";
-import {useNavigate} from "react-router-dom";
+import "../../styles/button.css";
+import "../../styles/outer-div.css";
+import "../../styles/chat.css";
+import userIcon from "../../assets/human-icon.png";
+import botIcon from "../../assets/bot-icon.png";
 
 function UserIcon() {
   return (
@@ -18,8 +17,8 @@ function AssistantIcon() {
   );
 }
 
-function Chat() {
-  const navigate = useNavigate();
+function Chat(props) {
+  const { setRoomID } = props;
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -60,7 +59,7 @@ function Chat() {
     // 메시지를 제출했을 때 Button이 보이도록 스크롤합니다.
     buttonRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' });
     if (messages.length / 2 > 6) {
-      navigate(`/result`);
+      setRoomID("result");
       window.scrollTo({top: 0, behavior: 'smooth'});
     }
   }, [messages])

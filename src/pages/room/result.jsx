@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../styles/result.css";
-import "../styles/outer-div.css";
+import "../../styles/result.css";
+import "../../styles/outer-div.css";
 
 const SliderInput = ({ label, sliderValue, setSliderValue }) => {
   return (
@@ -49,7 +49,8 @@ const sections = [
   },
 ];
 
-const Result = () => {
+const Result = (props) => {
+  const { setRoomID } = props;
   const [sliderValues, setSliderValues] = useState(
     Array(sections.reduce((a, b) => a + b.labels.length, 0)).fill(50)
   );
