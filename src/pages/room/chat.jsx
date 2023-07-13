@@ -4,6 +4,8 @@ import "../../styles/outer-div.css";
 import "../../styles/chat.css";
 import userIcon from "../../assets/human-icon.png";
 import botIcon from "../../assets/bot-icon.png";
+import {useRecoilState} from "recoil";
+import {roomIdAtom} from "../../store/room_atom";
 
 function UserIcon() {
   return (
@@ -17,8 +19,8 @@ function AssistantIcon() {
   );
 }
 
-function Chat(props) {
-  const { setRoomID } = props;
+function Chat() {
+  const [, setRoomID] = useRecoilState(roomIdAtom);
   const [messages, setMessages] = useState([
     {
       role: "assistant",
