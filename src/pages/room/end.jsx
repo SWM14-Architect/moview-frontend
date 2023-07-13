@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import "chart.js/auto";
 import { Radar, Bar } from "react-chartjs-2";
-import "../styles/outer-div.css";
-import "../styles/end.css";
-import "../styles/button.css";
+import "../../styles/outer-div.css";
+import "../../styles/end.css";
+import "../../styles/button.css";
 
 const RadarChart = () => {
   const data = {

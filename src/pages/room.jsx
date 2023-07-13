@@ -1,8 +1,8 @@
 
-import Input from "./input";
-import Chat from "./chat";
-import Result from "./result";
-import EndPage from "./end";
+import Input from "./room/input";
+import Chat from "./room/chat";
+import Result from "./room/result";
+import EndPage from "./room/end";
 
 function Room(props) {
   const { roomID, setRoomID } = props;

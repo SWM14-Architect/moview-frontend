@@ -1,9 +1,9 @@
 import React, {useState, useRef, useEffect} from "react";
-import "../styles/button.css";
-import "../styles/outer-div.css";
-import "../styles/chat.css";
-import userIcon from "../assets/human-icon.png";
-import botIcon from "../assets/bot-icon.png";
+import "../../styles/button.css";
+import "../../styles/outer-div.css";
+import "../../styles/chat.css";
+import userIcon from "../../assets/human-icon.png";
+import botIcon from "../../assets/bot-icon.png";
 
 function UserIcon() {
   return (

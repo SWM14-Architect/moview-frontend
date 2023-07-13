@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../styles/button.css";
-import "../styles/outer-div.css";
-import "../styles/form.css";
-import "../styles/divider.css";
+import "../../styles/button.css";
+import "../../styles/outer-div.css";
+import "../../styles/form.css";
+import "../../styles/divider.css";
 
 function Input(props) {
   const { setRoomID } = props;

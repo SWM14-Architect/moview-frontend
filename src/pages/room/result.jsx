@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../styles/result.css";
-import "../styles/outer-div.css";
+import "../../styles/result.css";
+import "../../styles/outer-div.css";
 
 const SliderInput = ({ label, sliderValue, setSliderValue }) => {
   return (
