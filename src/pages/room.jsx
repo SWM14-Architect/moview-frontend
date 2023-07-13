@@ -22,7 +22,8 @@ function Room(props) {
     if (!pages.hasOwnProperty(roomID)) {
       navigate("/error");
     }
-  }, [roomID])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomID, navigate])
 
 
   return(

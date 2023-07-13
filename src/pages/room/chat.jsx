@@ -35,16 +35,16 @@ function Chat(props) {
     setInputText(e.target.value);
   };
 
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (inputText) {
-      setMessages([...messages, { role: "user", text: inputText }]);
-      setInputText("");
-      // 이후에는 챗봇의 로직에 따라 'assistant'의 메시지를 추가합니다.
-      inputRef.current?.focus();
-      buttonRef.current?.scrollIntoView({ block: "nearest", behavior: 'smooth' });
-    }
-  };
+  // const handleSend = (e) => {
+  //   e.preventDefault();
+  //   if (inputText) {
+  //     setMessages([...messages, { role: "user", text: inputText }]);
+  //     setInputText("");
+  //     // 이후에는 챗봇의 로직에 따라 'assistant'의 메시지를 추가합니다.
+  //     inputRef.current?.focus();
+  //     buttonRef.current?.scrollIntoView({ block: "nearest", behavior: 'smooth' });
+  //   }
+  // };
 
   const handleAddChatMessage = (e) => {
     e.preventDefault();
@@ -62,7 +62,7 @@ function Chat(props) {
       setRoomID("result");
       window.scrollTo({top: 0, behavior: 'smooth'});
     }
-  }, [messages])
+  }, [messages, setRoomID])
 
   return (
     <div className="outer-div">

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import "chart.js/auto";
 import { Radar, Bar } from "react-chartjs-2";
 import "../../styles/outer-div.css";
