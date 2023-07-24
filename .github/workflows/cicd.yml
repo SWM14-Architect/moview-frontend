@@ -46,10 +46,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-  # Push가 발생했을 경우에는, 테스트 커버리지가 70% 이상인 경우에 S3로의 배포를 진행한다. -> 지금은 테스트 없이 배포만 진행
+  # Push 혹은 Run workflow가 발생했을 경우에는, 테스트 커버리지가 70% 이상인 경우에 S3로의 배포를 진행한다. -> 지금은 테스트 없이 배포만 진행
   deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
