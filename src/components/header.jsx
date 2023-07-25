@@ -1,10 +1,32 @@
-import React from "react";
-import "../styles/header.css";
+import React, {useEffect, useState} from "react";
+import style from "../styles/header.module.css";
+import InterviewButton from "./interviewButton";
+import {useLocation} from "react-router-dom";
 
 function Header() {
+  const location = useLocation()
+  const [isRoom, setIsRoom] = useState(false);
+
+  useEffect(() => {
+      if (window.location.pathname === "/room") {
+        setIsRoom(true);
+      }
+      else {
+        setIsRoom(false);
+      }
+  }, [location])
+
   return (
-    <header className="header">
-      취준생을 위한 면접 연습 서비스
+    <header>
+      <div className={`container`}>
+        <div className={`${style.navbar}`}>
+          <nav className={`${style.nav}`}>
+            <ul>Services</ul>
+            <ul>Pricing</ul>
+          </nav>
+          {!isRoom ? <InterviewButton text={"면접시작"} style={{marginRight:"15px"}}/> : <InterviewButton text={"면접종료"} style={{marginRight:"15px"}}/>}
+        </div>
+      </div>
     </header>
   );
 }

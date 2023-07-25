@@ -1,0 +1,14 @@
+.layout-flex-row {
+    display:flex;
+    flex-direction: row;
+}
+
+.layout-flex-row .layout-flex-row-item {
+    width: 40%;
+}
+
+@media  screen and (max-width: 768px) {
+    .layout-flex-row .layout-flex-row-item {
+        width: 90%;
+    }
+}

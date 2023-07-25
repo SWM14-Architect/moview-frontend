@@ -1,0 +1,20 @@
+
+@font-face {
+    font-family: 'GMarketSansLight';
+    src: url('../fonts/GmarketSansTTFLight.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'GMarketSansMedium';
+    src: url('../fonts/GmarketSansTTFMedium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'GMarketSansBold';
+    src: url('../fonts/GmarketSansTTFBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'NanumGothic';
+    src: url('../fonts/NanumGothic.ttf') format('truetype');
+}
