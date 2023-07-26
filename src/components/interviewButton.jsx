@@ -14,12 +14,12 @@ function InterviewButton({text, style}){
 
   const moveToHome = () => {
     alert("정말로 면접을 종료하시겠습니까?\n나중에 alert 말고, 선택지로 해서 취소도 가능하게 만들기");
-    setRoomID("interviewForm");
+    setRoomID("interviewInput");
     navigate("/");
   }
 
   return (
-    <button className={`squareBlackButton`} style={style} onClick={window.location.pathname !== '/room' ? () => moveToPage("interviewForm") : () => moveToHome()}>{text}</button>
+    <button className={`blackButton`} style={style} onClick={window.location.pathname !== '/room' ? () => moveToPage("interviewInput") : () => moveToHome()}>{text}</button>
   );
 }
 

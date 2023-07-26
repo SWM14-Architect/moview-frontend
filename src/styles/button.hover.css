@@ -1,5 +1,5 @@
 
-.squareBlackButton {
+.blackButton {
     font-family: "NanumGothic";
     width: 100px;
     height: 40px;
@@ -8,6 +8,19 @@
     transition: all 0.4s;
 }
 
-.squareBlackButton:hover {
+.blackButton:hover {
     background-color: #363636;
+}
+
+.blueButton {
+    font-family: "NanumGothic";
+    width: 100px;
+    height: 40px;
+    background-color: #8695c9;
+    color: #fff;
+    transition: all 0.4s;
+}
+
+.blueButton:hover {
+    background-color: #36406b;
 }

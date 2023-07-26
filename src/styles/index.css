@@ -38,3 +38,22 @@ section {
     padding-top: 30px;
     padding-bottom: 30px;
 }
+
+textarea {
+    resize: none;
+    outline-color: #fff;
+    transition: outline 0.4s;
+}
+
+textarea:focus {
+    outline: #8695c9 1px solid;
+}
+
+input {
+    outline-color: #fff;
+    transition: outline 0.4s;
+}
+
+input:focus {
+    outline: #8695c9 1px solid;
+}
