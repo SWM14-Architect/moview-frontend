@@ -6,6 +6,7 @@ import ErrorPage from "./pages/error_page";
 import {RecoilRoot} from "recoil";
 
 import "./styles/font.css";
+import "./styles/animation.css";
 import "./styles/index.css";
 import "./styles/layout.css";
 import "./styles/button.hover.css";
