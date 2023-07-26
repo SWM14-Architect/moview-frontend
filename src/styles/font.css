@@ -18,3 +18,8 @@
     font-family: 'NanumGothic';
     src: url('../fonts/NanumGothic.ttf') format('truetype');
 }
+
+@font-face {
+    font-family: 'IBMPlexSansKR-Regular';
+    src: url('../fonts/IBMPlexSansKR-Regular.ttf') format('truetype');
+}
