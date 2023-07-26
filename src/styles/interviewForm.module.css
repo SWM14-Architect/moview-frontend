@@ -1,0 +1,67 @@
+.header {
+    text-align: center;
+    font-family: "GmarketSansBold";
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.input_form_box {
+    margin: 10px;
+}
+
+.input_title {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    font-family: "GMarketSansBold";
+    font-size: 1.2em;
+}
+
+.input_form_textbox {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-family: "NamunGothic";
+    font-size: 0.9em;
+}
+
+.input_coverletter_box {
+    position: relative;
+    border: #7c7c7c 2px dashed;
+    border-radius: 10px;
+    padding-top: 25px;
+    margin-bottom: 20px;
+}
+
+.input_coverletter_button {
+    position: absolute;
+    background-color: black;
+    width: 25px;
+    height: 25px;
+    color: white;
+    border-radius: 5px;
+    top: 5px;
+    transition: background-color 0.4s;
+}
+
+.coverletter_plus_button {
+    right: 40px;
+}
+
+.coverletter_plus_button_first {
+    right: 10px;
+}
+
+.coverletter_minus_button {
+    right: 10px;
+}
+
+.coverletter_plus_button:hover {
+    background-color: #8695c9;
+}
+
+.coverletter_minus_button:hover {
+    background-color: crimson;
+}
