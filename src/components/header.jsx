@@ -21,10 +21,11 @@ function Header() {
       <div className={`container`}>
         <div className={`${style.navbar}`}>
           <nav className={`${style.nav}`}>
+            <ul>모두의인터뷰</ul>
             <ul>Services</ul>
             <ul>Pricing</ul>
           </nav>
-          {!isRoom ? <InterviewButton text={"면접시작"} style={{marginRight:"15px"}}/> : <InterviewButton text={"면접종료"} style={{marginRight:"15px"}}/>}
+          {!isRoom ? <InterviewButton text={"면접시작 >"} style={{marginRight:"15px"}}/> : <InterviewButton text={"면접종료"} style={{marginRight:"15px"}}/>}
         </div>
       </div>
     </header>

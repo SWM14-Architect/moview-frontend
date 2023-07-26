@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    --navbar-height: 70px;
 }
 
 p {
@@ -24,13 +25,13 @@ button {
 }
 
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .contentWrapper {
-  flex: 1;
+    flex: 1;
 }
 
 section {
