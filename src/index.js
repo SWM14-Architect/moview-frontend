@@ -15,7 +15,6 @@ import Room from "./pages/room";
 
 
 function Index(){
-  // roomID는 room 페이지에서 표시할 컴포넌트 이름
   const router = createBrowserRouter([
     {
       path: "/", element: <App />,
