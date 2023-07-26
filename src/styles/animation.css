@@ -10,18 +10,39 @@
 }
 
 .fadeInUpEffect {
+    opacity: 0;
     animation:fadeInUp 1s;
     animation-fill-mode: forwards;
 }
 
-.animation-delay-0 {
-    animation-delay: 0s;
-}
-
 .animation-delay-1 {
-    animation-delay: 0.5s;
+    animation-delay: 0.4s;
 }
 
 .animation-delay-2 {
-    animation-delay: 1.5s;
+    animation-delay: 0.8s;
+}
+
+.animation-delay-3 {
+    animation-delay: 1.2s;
+}
+
+.animation-delay-4 {
+    animation-delay: 1.6s;
+}
+
+.animation-delay-5 {
+    animation-delay: 2.0s;
+}
+
+.animation-delay-6 {
+    animation-delay: 2.4s;
+}
+
+.animation-delay-7 {
+    animation-delay: 2.8s;
+}
+
+.animation-delay-8 {
+    animation-delay: 3.2s;
 }
