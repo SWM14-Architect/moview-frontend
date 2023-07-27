@@ -78,7 +78,7 @@ jobs:
       - name: Deploy to S3
         run: aws s3 sync --region ${{ secrets.AWS_REGION }} build/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
-#      # 추후에 CloudFront 추가시 사용 (새로운 배포시 기존의 캐시 무효화)
-#      - name: Invalidate CloudFront cache
-#        run: |
-#          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+      # 배포시 기존의 CloudFront 캐시 무효화
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
