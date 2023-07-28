@@ -164,7 +164,7 @@ function InterviewInput(){
   }
 
   return (
-    <section style={{backgroundColor:"#f4f7fb"}}>
+    <section style={{backgroundColor:"#f4f7fb", flex:1}}>
       <div className={`container`} style={{flexDirection:"column"}}>
         <div className={`${style.header}`}>면접 정보</div>
         <div className={`layout-flex-grid-3 fadeInUpEffect`}>
@@ -200,7 +200,7 @@ function InterviewInput(){
           <CoverLetterComponent coverLetters={coverLetters} setCoverLetters={setCoverLetters}/>
         </div>
         <div className={`fadeInUpEffect animation-delay-2`} style={{display:"flex", justifyContent:"center"}}>
-          <button className={`blueButton`} style={{borderRadius:"10px", width:"10%"}}>다음으로</button>
+          <button className={`blueButton`} style={{borderRadius:"10px", width:"100px"}}>다음으로</button>
         </div>
       </div>
     </section>

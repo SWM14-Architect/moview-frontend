@@ -52,7 +52,7 @@ function secondSection(){
 
 function Main(){
   return (
-    <div>
+    <section style={{flex: 1}}>
       <section style={{backgroundColor:"#f4f7fb"}}>
         <div className={`container`} style={{flexDirection:"column"}}>
           {firstSection()}
@@ -63,7 +63,7 @@ function Main(){
           {secondSection()}
         </div>
       </section>
-    </div>
+    </section>
   );
 }
 
