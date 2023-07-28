@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import style from "../../styles/interviewForm.module.css";
+import style from "../../styles/interviewInput.module.css";
 import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
 import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../../store/room_atom";
