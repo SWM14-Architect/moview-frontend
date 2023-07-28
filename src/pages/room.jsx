@@ -22,11 +22,7 @@ function Room() {
   }, [roomID, navigate])
 
 
-  return(
-    <div>
-      {pages[roomID] ? pages[roomID] : null}
-    </div>
-  )
+  return pages[roomID] ? pages[roomID] : null
 }
 
 export default Room;
