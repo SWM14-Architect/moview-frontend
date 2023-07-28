@@ -8,7 +8,7 @@ function InputForm({placeholder, item, index, onChange}){
       className={`${style.input_form_textbox}`}
       type="text"
       placeholder={placeholder}
-      onChange={e => onChange(e, index)}
+      onChange={e => index !== null ? onChange(e, index) : onChange(e)}
       value={item}
     />
   );
@@ -24,7 +24,7 @@ function InputComponent({title, placeholder, item, onChange}){
 }
 
 function TextareaForm({placeholder, item, index, onChange, styles={}}){
-  const textRef = useRef();
+  const textRef = useRef(null);
 
   // Textarea height auto resize
   const handleResizeHeight = useCallback(() => {
@@ -37,7 +37,7 @@ function TextareaForm({placeholder, item, index, onChange, styles={}}){
       className={`${style.input_form_textbox}`}
       placeholder={placeholder}
       onInput={handleResizeHeight}
-      onChange={e => onChange(e, index)}
+      onChange={e => index !== null ? onChange(e, index) : onChange(e)}
       style={styles}
       value={item}
     />
@@ -141,20 +141,25 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 
 function InterviewInput(){
   // 사용자에게서 입력받는 데이터들
+  const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
   const [interviewCompany, setInterviewCompany] = useState("");
   const [interviewPosition, setInterviewPosition] = useState("");
   const [interviewRecruitment, setInterviewRecruitment] = useState("");
   const [coverLetters, setCoverLetters] = useState([{"id":0, "question":"", "content":""}]);
 
-  function handleInterviewCompanyChange(e, index) {
+  function handleIntervieweeNameChange(e) {
+    setIntervieweeName(e.target.value);
+  }
+
+  function handleInterviewCompanyChange(e) {
     setInterviewCompany(e.target.value);
   }
 
-  function handleInterviewPositionChange(e, index) {
+  function handleInterviewPositionChange(e) {
     setInterviewPosition(e.target.value);
   }
 
-  function handleInterviewRecruitmentChange(e, index) {
+  function handleInterviewRecruitmentChange(e) {
     setInterviewRecruitment(e.target.value);
   }
 
@@ -162,7 +167,13 @@ function InterviewInput(){
     <section style={{backgroundColor:"#f4f7fb"}}>
       <div className={`container`} style={{flexDirection:"column"}}>
         <div className={`${style.header}`}>면접 정보</div>
-        <div className={`layout-flex-grid-2 fadeInUpEffect`}>
+        <div className={`layout-flex-grid-3 fadeInUpEffect`}>
+          <InputComponent
+            title={"이름"}
+            placeholder={"지원자의 이름을 입력해주세요."}
+            item={intervieweeName}
+            onChange={handleIntervieweeNameChange}
+          />
           <InputComponent
             title={"회사"}
             placeholder={"지원하고자 하는 회사를 입력하세요."}
