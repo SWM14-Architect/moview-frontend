@@ -1,6 +1,8 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewForm.module.css";
 import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
+import {useRecoilState} from "recoil";
+import {roomIdAtom} from "../../store/room_atom";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -151,6 +153,7 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 }
 
 function InterviewInput(){
+  const [, setRoomID] = useRecoilState(roomIdAtom);
   // 사용자에게서 입력받는 데이터들
   const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
   const [interviewCompany, setInterviewCompany] = useState("");
@@ -172,6 +175,18 @@ function InterviewInput(){
 
   function handleInterviewRecruitmentChange(e) {
     setInterviewRecruitment(e.target.value);
+  }
+
+  function handleNextButtonClick(e) {
+    e.preventDefault();
+    if(intervieweeName === "") return alert("이름을 입력해주세요.");
+    if(interviewCompany === "") return alert("지원하고자 하는 회사를 입력해주세요.");
+    if(interviewPosition === "") return alert("지원하고자 하는 직군을 입력해주세요.");
+    if(interviewRecruitment === "") return alert("모집공고를 입력해주세요.");
+    if(coverLetters.map((item, index) => item.question === "" || item.content === "").includes(true)) {
+      return alert("자소서 항목을 모두 입력해주세요.");
+    }
+    setRoomID("interviewChat");
   }
 
   return (
@@ -211,7 +226,7 @@ function InterviewInput(){
           <CoverLetterComponent coverLetters={coverLetters} setCoverLetters={setCoverLetters}/>
         </div>
         <div className={`fadeInUpEffect animation-delay-2`} style={{display:"flex", justifyContent:"center"}}>
-          <button className={`blueButton`} style={{borderRadius:"10px", width:"100px"}}>다음으로</button>
+          <button className={`blueButton`} style={{borderRadius:"10px", width:"100px"}} onClick={(e) => handleNextButtonClick(e)}>면접시작</button>
         </div>
       </div>
     </section>
