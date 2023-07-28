@@ -11,7 +11,7 @@ function firstSection(){
         <div>을 느끼고 계신가요?</div>
       </div>
       <div className={`fadeInUpEffect animation-delay-1 ${style.title_content}`}>
-        <div>더 이상 당황스럽게 질문에 답하지 않아도 됩니다.</div>
+        <div>더 이상 면접 질문에 당황하지 마세요!</div>
         <div>면접자의 자소서와 원하는 회사의 채용 공고를 분석하여, 어떠한 질문도 놀라지 않고 대응할 수 있는 개인화된 질문 리스트를 제공합니다. 현실감 넘치는 면접 시뮬레이션을 통해 진짜 면접에 대비하세요.</div>
       </div>
       <img className={`fadeInUpEffect animation-delay-2`} src={MainImage} alt="main" style={{width:"100%", marginTop:"2em"}} />
@@ -39,7 +39,7 @@ function secondSection(){
 
   return (
     <div style={{width:"100%"}}>
-      <h1 className={`${style.feature_header}`}>핵심기능 둘러보기</h1>
+      <h1 className={`${style.feature_header}`}>핵심기능 소개</h1>
       <div className={`layout-flex-grid-2`}>
         {featureComponent("자소서 및 채용 공고 분석", "면접자의 자소서와 원하는 회사의 채용 공고를 꼼꼼하게 분석합니다. 이 분석을 통해, 어떠한 질문도 예상하고 준비할 수 있게 도와줍니다.")}
         {featureComponent("개인화된 질문 리스트 생성", "분석된 결과를 토대로, 개인화된 질문 리스트를 제공합니다. 이를 통해 면접에서 당황하지 않고, 실제 면접에서 자주 묻는 질문에 대해 미리 준비할 수 있게 합니다.")}
