@@ -30,11 +30,9 @@ function Index(){
   ]);
 
   return(
-      <div>
-        <RecoilRoot>
-          <RouterProvider router={router}/>
-        </RecoilRoot>
-      </div>
+    <RecoilRoot>
+      <RouterProvider router={router}/>
+    </RecoilRoot>
   )
 }
 
