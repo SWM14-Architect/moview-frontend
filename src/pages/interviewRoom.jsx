@@ -2,9 +2,9 @@ import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../store/room_atom";
-import InterviewInput from "./room/interviewInput";
+import InterviewInput from "./interviewRoom/interviewInput";
 
-function Room() {
+function InterviewRoom() {
   const [roomID, setRoomID] = useRecoilState(roomIdAtom);
   const navigate = useNavigate();
 
@@ -25,4 +25,4 @@ function Room() {
   return pages[roomID] ? pages[roomID] : null
 }
 
-export default Room;
+export default InterviewRoom;
