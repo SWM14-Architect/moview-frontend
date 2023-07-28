@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewForm.module.css";
 import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
 
@@ -54,9 +54,9 @@ function TextareaComponent({title, placeholder, item, onChange}){
   );
 }
 
-function CoverLetterForm({index, length, item, onQuestionChange, onContentChange, addCoverletter, deleteCoverletter}){
+function CoverLetterForm({refs, index, length, item, onQuestionChange, onContentChange, addCoverletter, deleteCoverletter}){
   return (
-    <div className={`${style.input_coverletter_box}`}>
+    <div ref={refs} className={`${style.input_coverletter_box}`}>
       {
         length-1 === index && MAXIMUM_COVERLETTER_NUMBER > length ?
         <button
@@ -90,7 +90,14 @@ function CoverLetterForm({index, length, item, onQuestionChange, onContentChange
 }
 
 function CoverLetterComponent({coverLetters, setCoverLetters}){
+  const lastCoverletterRef = useRef(null);
   const nextID = useRef(1);
+
+  useEffect(() => {
+    if(lastCoverletterRef.current !== null) {
+      lastCoverletterRef.current.scrollIntoView({behavior: "smooth"});
+    }
+  }, [coverLetters]);
 
   function addCoverletter() {
     if(coverLetters.length >= MAXIMUM_COVERLETTER_NUMBER) return;
@@ -128,6 +135,7 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
     <div>
       {coverLetters.map((item, index) => (
         <CoverLetterForm
+          refs={lastCoverletterRef}
           key={index}
           length={coverLetters.length}
           index={index}
