@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    --navbar-height: 70px;
+}
+
+p {
+    margin-block: 0;
+    margin-inline: 0;
+}
+
+button {
+    appearance: none;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.contentWrapper {
+    flex: 1;
+}
+
+section {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+textarea {
+    resize: none;
+    outline-color: #fff;
+    transition: outline 0.4s;
+}
+
+textarea:focus {
+    outline: #8695c9 1px solid;
+}
+
+input {
+    outline-color: #fff;
+    transition: outline 0.4s;
+}
+
+input:focus {
+    outline: #8695c9 1px solid;
+}

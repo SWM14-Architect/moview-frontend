@@ -1,0 +1,21 @@
+.layout-flex-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+}
+
+.layout-flex-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+}
+
+@media  screen and (max-width: 768px) {
+    .layout-flex-grid-2 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .layout-flex-grid-3 {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
