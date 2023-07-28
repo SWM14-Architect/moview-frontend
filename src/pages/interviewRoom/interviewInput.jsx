@@ -1,5 +1,6 @@
 import React, {useCallback, useRef, useState} from "react";
 import style from "../../styles/interviewForm.module.css";
+import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -57,7 +58,7 @@ function CoverLetterForm({index, length, item, onQuestionChange, onContentChange
   return (
     <div className={`${style.input_coverletter_box}`}>
       {
-        length-1 === index ?
+        length-1 === index && MAXIMUM_COVERLETTER_NUMBER > length ?
         <button
           className={`${style.input_coverletter_button} ${style.coverletter_plus_button} ${length === 1 ? style.coverletter_plus_button_first : null}`}
           onClick={() => addCoverletter()}
@@ -92,6 +93,8 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
   const nextID = useRef(1);
 
   function addCoverletter() {
+    if(coverLetters.length >= MAXIMUM_COVERLETTER_NUMBER) return;
+
     const input = {
       id: nextID.current,
       question: '',
