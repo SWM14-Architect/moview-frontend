@@ -17,6 +17,7 @@
     "react-scripts": "^5.0.1",
     "recoil": "^0.7.7",
     "sort-by": "^1.2.0",
+    "typeit-react": "^2.6.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
