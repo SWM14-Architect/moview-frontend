@@ -3,6 +3,7 @@ import {useEffect} from "react";
 import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../store/room_atom";
 import InterviewInput from "./interviewRoom/interviewInput";
+import InterviewChat from "./interviewRoom/interviewChat";
 
 function InterviewRoom() {
   const [roomID, setRoomID] = useRecoilState(roomIdAtom);
@@ -10,6 +11,7 @@ function InterviewRoom() {
 
   const pages = {
     "interviewInput": <InterviewInput />,
+    "interviewChat": <InterviewChat />,
   };
 
   useEffect(() => {
