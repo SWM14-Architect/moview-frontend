@@ -1,6 +1,8 @@
 import InterviewButton from "../components/interviewButton";
 import MainImage from "../assets/recruitment-6838250_1920.png";
 import style from "../styles/main.module.css";
+import {useTitle} from "../utils/useTitle";
+import {SERVICE_TITLE} from "../constants/serviceConst";
 
 function firstSection(){
   return (
@@ -51,6 +53,8 @@ function secondSection(){
 }
 
 function Main(){
+  useTitle(`${SERVICE_TITLE}`);
+
   return (
     <section style={{flex: 1}}>
       <section style={{backgroundColor:"#f4f7fb"}}>

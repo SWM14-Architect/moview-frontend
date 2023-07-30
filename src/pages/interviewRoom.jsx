@@ -4,6 +4,9 @@ import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../store/room_atom";
 import InterviewInput from "./interviewRoom/interviewInput";
 import InterviewChat from "./interviewRoom/interviewChat";
+import InterviewFeedback from "./interviewRoom/interviewFeedback";
+import {useTitle} from "../utils/useTitle";
+import {SERVICE_TITLE} from "../constants/serviceConst";
 
 function InterviewRoom() {
   const [roomID, setRoomID] = useRecoilState(roomIdAtom);
@@ -12,6 +15,7 @@ function InterviewRoom() {
   const pages = {
     "interviewInput": <InterviewInput />,
     "interviewChat": <InterviewChat />,
+    "interviewFeedback": <InterviewFeedback />,
   };
 
   useEffect(() => {
@@ -23,6 +27,7 @@ function InterviewRoom() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomID, navigate])
 
+  useTitle(`${SERVICE_TITLE} - 가상면접`);
 
   return pages[roomID] ? pages[roomID] : null
 }
