@@ -51,12 +51,22 @@ function InterviewChat(){
     intervieweeAnswerRef.current.scrollIntoView({behavior: "smooth"});
   }
 
+  const handleInterviewerQuestion = (e, questionContent) => {
+    // e.preventDefault();
+    const question = {type:"AI", content: questionContent};
+    setInterviewTalks([...interviewTalks, question]);
+  }
+
   // 0.1초마다 입력이 완료되었는지 체크합니다.
   useInterval(() => {
     if(isTyping !== null && isTyping.instance.is("completed")){
       if(isTyping.type === "AI"){
         // AI의 질문이 완료되었을 때, 인터뷰어가 답변을 입력할 수 있도록 합니다.
         setInterviewTurn(true);
+      }
+      else{
+        // 유저의 답변이 완료되었을 때,
+        handleInterviewerQuestion(null, "아무말 대잔치 하는 중");
       }
       setIsTyping(null);
       return;
