@@ -37,14 +37,14 @@ function InterviewChat(){
   const [intervieweeAnswer, setIntervieweeAnswer] = useState("");
   const [interviewTurn, setInterviewTurn] = useState(false);
 
-  const isCanNotPlayerTalking = () => {
+  const canNotPlayerTalking = () => {
     if(intervieweeAnswer === "" || interviewTurn === false || isTyping !== null) return true;
     return false;
   }
 
   const handleIntervieweeAnswerButton = (e, answerContent) => {
     e.preventDefault();
-    if(isCanNotPlayerTalking()) return;
+    if(canNotPlayerTalking()) return;
     const answer = {type:"human", content: answerContent};
     setInterviewTalks([...interviewTalks, answer]);
     setIntervieweeAnswer("");
@@ -57,7 +57,7 @@ function InterviewChat(){
     setInterviewTalks([...interviewTalks, question]);
   }
 
-  // 0.1초마다 입력이 완료되었는지 체크합니다.
+  // 1초마다 입력이 완료되었는지 체크합니다.
   useInterval(() => {
     if(isTyping !== null && isTyping.instance.is("completed")){
       if(isTyping.type === "AI"){
@@ -68,10 +68,11 @@ function InterviewChat(){
         // 유저의 답변이 완료되었을 때,
         handleInterviewerQuestion(null, "아무말 대잔치 하는 중");
       }
+      isTyping.instance.destroy();
       setIsTyping(null);
       return;
     }
-  }, 100, [isTyping]);
+  }, 1000, [isTyping]);
 
   return (
     <section style={{backgroundColor:"#f4f7fb", flex:1}}>
@@ -90,7 +91,7 @@ function InterviewChat(){
             </div>
             <TypeIt
               className={`${style.chat_message}`}
-              options={{cursor: false, speed: 40}}
+              options={{speed: 40}}
               getBeforeInit={(instance) => {
                 // 마지막 대화에 대해서만 typing을 체크합니다.
                 if(index === interviewTalks.length-1) {
@@ -112,7 +113,7 @@ function InterviewChat(){
             onChange={(e) => {setIntervieweeAnswer(e.target.value)}}
           />
           <button
-            className={`${style.input_form_button} ${isCanNotPlayerTalking() ? style.input_form_disabled : null}`}
+            className={`${style.input_form_button} ${canNotPlayerTalking() ? style.input_form_disabled : null}`}
             onClick={(e) => handleIntervieweeAnswerButton(e, intervieweeAnswer)}
           >
             답변 제출하기
