@@ -1,5 +1,9 @@
-import React, {useCallback, useRef, useState} from "react";
-import style from "../../styles/interviewForm.module.css";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import style from "../../styles/interviewInput.module.css";
+import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
+import {useRecoilState} from "recoil";
+import {roomIdAtom} from "../../store/room_atom";
+import {interviewDataAtom} from "../../store/room_atom";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -53,11 +57,11 @@ function TextareaComponent({title, placeholder, item, onChange}){
   );
 }
 
-function CoverLetterForm({index, length, item, onQuestionChange, onContentChange, addCoverletter, deleteCoverletter}){
+function CoverLetterForm({refs, index, length, item, onQuestionChange, onContentChange, addCoverletter, deleteCoverletter}){
   return (
-    <div className={`${style.input_coverletter_box}`}>
+    <div ref={refs} className={`${style.input_coverletter_box}`}>
       {
-        length-1 === index ?
+        length-1 === index && MAXIMUM_COVERLETTER_NUMBER > length ?
         <button
           className={`${style.input_coverletter_button} ${style.coverletter_plus_button} ${length === 1 ? style.coverletter_plus_button_first : null}`}
           onClick={() => addCoverletter()}
@@ -89,9 +93,18 @@ function CoverLetterForm({index, length, item, onQuestionChange, onContentChange
 }
 
 function CoverLetterComponent({coverLetters, setCoverLetters}){
+  const lastCoverletterRef = useRef(null);
   const nextID = useRef(1);
 
+  useEffect(() => {
+    if(lastCoverletterRef.current !== null) {
+      lastCoverletterRef.current.scrollIntoView({behavior: "smooth"});
+    }
+  }, [coverLetters]);
+
   function addCoverletter() {
+    if(coverLetters.length >= MAXIMUM_COVERLETTER_NUMBER) return;
+
     const input = {
       id: nextID.current,
       question: '',
@@ -125,6 +138,7 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
     <div>
       {coverLetters.map((item, index) => (
         <CoverLetterForm
+          refs={lastCoverletterRef}
           key={index}
           length={coverLetters.length}
           index={index}
@@ -140,31 +154,54 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 }
 
 function InterviewInput(){
+  const [, setRoomID] = useRecoilState(roomIdAtom);
   // 사용자에게서 입력받는 데이터들
   const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
-  const [interviewCompany, setInterviewCompany] = useState("");
-  const [interviewPosition, setInterviewPosition] = useState("");
+  const [interviewTargetCompany, setInterviewTargetCompany] = useState("");
+  const [interviewTargetPosition, setInterviewTargetPosition] = useState("");
   const [interviewRecruitment, setInterviewRecruitment] = useState("");
-  const [coverLetters, setCoverLetters] = useState([{"id":0, "question":"", "content":""}]);
+  const [interviewCoverLetters, setInterviewCoverLetters] = useState([{"id":0, "question":"", "content":""}]);
+
+  // 사용자에게 입력받은 데이터를 전역상태로 저장
+  const [interviewData, setInterivewData] = useRecoilState(interviewDataAtom);
 
   function handleIntervieweeNameChange(e) {
     setIntervieweeName(e.target.value);
   }
 
   function handleInterviewCompanyChange(e) {
-    setInterviewCompany(e.target.value);
+    setInterviewTargetCompany(e.target.value);
   }
 
   function handleInterviewPositionChange(e) {
-    setInterviewPosition(e.target.value);
+    setInterviewTargetPosition(e.target.value);
   }
 
   function handleInterviewRecruitmentChange(e) {
     setInterviewRecruitment(e.target.value);
   }
 
+  function handleNextButtonClick(e) {
+    e.preventDefault();
+    if(intervieweeName === "") return alert("이름을 입력해주세요.");
+    if(interviewTargetCompany === "") return alert("지원하고자 하는 회사를 입력해주세요.");
+    if(interviewTargetPosition === "") return alert("지원하고자 하는 직군을 입력해주세요.");
+    if(interviewRecruitment === "") return alert("모집공고를 입력해주세요.");
+    if(interviewCoverLetters.map((item, index) => item.question === "" || item.content === "").includes(true)) {
+      return alert("자소서 항목을 모두 입력해주세요.");
+    }
+    setRoomID("interviewChat");
+    setInterivewData({
+      "intervieweeName": intervieweeName,
+      "interviewTargetCompany": interviewTargetCompany,
+      "interviewTargetPosition": interviewTargetPosition,
+      "interviewRecruitment": interviewRecruitment,
+      "interviewCoverLetters": interviewCoverLetters
+    })
+  }
+
   return (
-    <section style={{backgroundColor:"#f4f7fb"}}>
+    <section style={{backgroundColor:"#f4f7fb", flex:1}}>
       <div className={`container`} style={{flexDirection:"column"}}>
         <div className={`${style.header}`}>면접 정보</div>
         <div className={`layout-flex-grid-3 fadeInUpEffect`}>
@@ -177,13 +214,13 @@ function InterviewInput(){
           <InputComponent
             title={"회사"}
             placeholder={"지원하고자 하는 회사를 입력하세요."}
-            item={interviewCompany}
+            item={interviewTargetCompany}
             onChange={handleInterviewCompanyChange}
           />
           <InputComponent
             title={"직군"}
             placeholder={"지원하고자 하는 직군을 입력하세요."}
-            item={interviewPosition}
+            item={interviewTargetPosition}
             onChange={handleInterviewPositionChange}
           />
         </div>
@@ -197,10 +234,10 @@ function InterviewInput(){
         </div>
         <div className={`fadeInUpEffect animation-delay-2`} style={{margin:"10px"}}>
           <div className={`${style.input_title}`}>자소서 입력</div>
-          <CoverLetterComponent coverLetters={coverLetters} setCoverLetters={setCoverLetters}/>
+          <CoverLetterComponent coverLetters={interviewCoverLetters} setCoverLetters={setInterviewCoverLetters}/>
         </div>
         <div className={`fadeInUpEffect animation-delay-2`} style={{display:"flex", justifyContent:"center"}}>
-          <button className={`blueButton`} style={{borderRadius:"10px", width:"10%"}}>다음으로</button>
+          <button className={`blueButton`} style={{borderRadius:"10px", width:"100px"}} onClick={(e) => handleNextButtonClick(e)}>면접시작</button>
         </div>
       </div>
     </section>

@@ -1,0 +1,94 @@
+.header {
+    text-align: center;
+    font-family: "GmarketSansBold";
+    font-size: 2em;
+    color: #333;
+}
+
+.sub_header {
+    text-align: center;
+    font-family: "NamunGothic";
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.chat_box {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    font-family: NamunGothic;
+    font-size: 1em;
+}
+
+.profile_box {
+    display: flex;
+    flex-direction: column;
+    width: 70px;
+    align-items: center;
+    font-family: IBMPlexSansKR-Regular;
+    font-size: 0.9em;
+}
+
+.profile_back {
+    order: 1;
+}
+
+.profile_image {
+    width: 50px;
+    height: 50px;
+}
+
+.chat_message {
+    margin-left: 10px;
+    margin-right: 10px;
+    flex: 1;
+}
+
+.input_form {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+.input_form_textbox {
+    outline: #fff 1px solid;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    margin : 0px;
+    border: none;
+    border-radius: 10px 10px 0px 0px;
+    font-family: "NamunGothic";
+    font-size: 0.9em;
+}
+
+.input_form_button {
+    background-color: #3f3f3f;
+    outline: #3f3f3f 1px solid;
+    color: white;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    margin: 0px;
+    border: none;
+    border-radius: 0px 0px 10px 10px;
+    font-family: "NamunGothic";
+    font-size: 0.9em;
+    transition: all 0.4s;
+}
+
+.input_form_button:hover {
+    background-color: #8695c9;
+    outline-color: #8695c9;
+}
+
+.input_form_disabled {
+    background-color: grey !important;
+    outline-color: grey !important;
+    cursor: default;
+}

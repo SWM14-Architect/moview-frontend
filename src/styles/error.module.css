@@ -9,3 +9,17 @@
 .error_page p i {
     color: #8b8b8b;
 }
+
+.back_button {
+    margin-top: 20px;
+    font-family: "NanumGothic";
+    background-color: #8695c9;
+    width: 100px;
+    height: 40px;
+    color: #fff;
+    transition: all 0.4s;
+}
+
+.back_button:hover {
+    background-color: #36406b;
+}

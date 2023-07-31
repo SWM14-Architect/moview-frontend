@@ -2,14 +2,20 @@ import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../store/room_atom";
-import InterviewInput from "./room/interviewInput";
+import InterviewInput from "./interviewRoom/interviewInput";
+import InterviewChat from "./interviewRoom/interviewChat";
+import InterviewFeedback from "./interviewRoom/interviewFeedback";
+import {useTitle} from "../utils/useTitle";
+import {SERVICE_TITLE} from "../constants/serviceConst";
 
-function Room() {
+function InterviewRoom() {
   const [roomID, setRoomID] = useRecoilState(roomIdAtom);
   const navigate = useNavigate();
 
   const pages = {
     "interviewInput": <InterviewInput />,
+    "interviewChat": <InterviewChat />,
+    "interviewFeedback": <InterviewFeedback />,
   };
 
   useEffect(() => {
@@ -21,12 +27,9 @@ function Room() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomID, navigate])
 
+  useTitle(`${SERVICE_TITLE} - 가상면접`);
 
-  return(
-    <div>
-      {pages[roomID] ? pages[roomID] : null}
-    </div>
-  )
+  return pages[roomID] ? pages[roomID] : null
 }
 
-export default Room;
+export default InterviewRoom;

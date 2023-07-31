@@ -11,7 +11,7 @@ import "./styles/index.css";
 import "./styles/layout.css";
 import "./styles/button.hover.css";
 import Main from "./pages/main";
-import Room from "./pages/room";
+import InterviewRoom from "./pages/interviewRoom";
 
 
 function Index(){
@@ -20,7 +20,7 @@ function Index(){
       path: "/", element: <App />,
       children: [
         { path: "/", element: <Main /> },
-        { path: "/room", element: <Room /> },
+        { path: "/room", element: <InterviewRoom /> },
       ],
       errorElement: <ErrorPage />,
     },
