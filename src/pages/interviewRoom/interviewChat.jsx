@@ -77,11 +77,13 @@ function InterviewChat(){
     <section style={{backgroundColor:"#f4f7fb", flex:1}}>
       <div className={`container`} style={{flexDirection:"column"}}>
         {/* 타이틀 컴포넌트 */}
-        <div className={`${style.header}`}>{interviewData.interviewTargetCompany} 가상면접</div>
-        <div className={`${style.sub_header}`}>{interviewData.interviewTargetPosition}</div>
+        <div className={`fadeInUpEffect`}>
+          <div className={`${style.header}`}>{interviewData.interviewTargetCompany} 가상면접</div>
+          <div className={`${style.sub_header}`}>{interviewData.interviewTargetPosition}</div>
+        </div>
         {/* 인터뷰 채팅 히스토리 컴포넌트 */}
         {interviewTalks.map((item, index) => (
-          <div key={index} className={`${style.chat_box}`}>
+          <div key={index} className={`${style.chat_box} fadeInUpEffect`}>
             <div className={`${style.profile_box} ${item.type === "AI" ? null : style.profile_back}`}>
               <img src={item.type === "AI" ? AIProfileImage : HumanProfileImage} className={`${style.profile_image}`}/>
               <span>{item.type === "AI" ? "AI면접관" : "나"}</span>
@@ -103,7 +105,7 @@ function InterviewChat(){
           </div>
         ))}
         {/* 답변 작성 컴포넌트 */}
-        <div ref={intervieweeAnswerRef} className={`${style.input_form}`}>
+        <div ref={intervieweeAnswerRef} className={`${style.input_form} fadeInUpEffect animation-delay-1`}>
           <TextareaForm
             placeholder={"질문에 대한 답변을 작성하세요."}
             item={intervieweeAnswer}
