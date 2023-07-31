@@ -163,7 +163,7 @@ function InterviewInput(){
   const [interviewCoverLetters, setInterviewCoverLetters] = useState([{"id":0, "question":"", "content":""}]);
 
   // 사용자에게 입력받은 데이터를 전역상태로 저장
-  const [interviewData, setInterivewData] = useRecoilState(interviewDataAtom);
+  const [, setInterivewData] = useRecoilState(interviewDataAtom);
 
   function handleIntervieweeNameChange(e) {
     setIntervieweeName(e.target.value);
