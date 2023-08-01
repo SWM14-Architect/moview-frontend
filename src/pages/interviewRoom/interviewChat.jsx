@@ -6,6 +6,7 @@ import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
 import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
 import TypeIt from "typeit-react";
 import {useInterval} from "../../utils/useInterval";
+import {ScrollToTop} from "../../utils/scrollRestoration";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -28,6 +29,7 @@ function TextareaForm({placeholder, item, onChange}){
 }
 
 function InterviewChat(){
+  ScrollToTop();
   const intervieweeAnswerRef = useRef(null);
   const [interviewData, ] = useRecoilState(interviewDataAtom);
   const [interviewTalks, setInterviewTalks] = useState([
@@ -37,14 +39,14 @@ function InterviewChat(){
   const [intervieweeAnswer, setIntervieweeAnswer] = useState("");
   const [interviewTurn, setInterviewTurn] = useState(false);
 
-  const isCanNotPlayerTalking = () => {
+  const canNotPlayerTalking = () => {
     if(intervieweeAnswer === "" || interviewTurn === false || isTyping !== null) return true;
     return false;
   }
 
   const handleIntervieweeAnswerButton = (e, answerContent) => {
     e.preventDefault();
-    if(isCanNotPlayerTalking()) return;
+    if(canNotPlayerTalking()) return;
     const answer = {type:"human", content: answerContent};
     setInterviewTalks([...interviewTalks, answer]);
     setIntervieweeAnswer("");
@@ -57,7 +59,7 @@ function InterviewChat(){
     setInterviewTalks([...interviewTalks, question]);
   }
 
-  // 0.1초마다 입력이 완료되었는지 체크합니다.
+  // 1초마다 입력이 완료되었는지 체크합니다.
   useInterval(() => {
     if(isTyping !== null && isTyping.instance.is("completed")){
       if(isTyping.type === "AI"){
@@ -71,7 +73,7 @@ function InterviewChat(){
       setIsTyping(null);
       return;
     }
-  }, 100, [isTyping]);
+  }, 1000, isTyping);
 
   return (
     <section style={{backgroundColor:"#f4f7fb", flex:1}}>
@@ -85,7 +87,7 @@ function InterviewChat(){
         {interviewTalks.map((item, index) => (
           <div key={index} className={`${style.chat_box} fadeInUpEffect`}>
             <div className={`${style.profile_box} ${item.type === "AI" ? null : style.profile_back}`}>
-              <img src={item.type === "AI" ? AIProfileImage : HumanProfileImage} className={`${style.profile_image}`}/>
+              <img src={item.type === "AI" ? AIProfileImage : HumanProfileImage} className={`${style.profile_image}`} alt={"profile"}/>
               <span>{item.type === "AI" ? "AI면접관" : "나"}</span>
             </div>
             <TypeIt
@@ -112,7 +114,7 @@ function InterviewChat(){
             onChange={(e) => {setIntervieweeAnswer(e.target.value)}}
           />
           <button
-            className={`${style.input_form_button} ${isCanNotPlayerTalking() ? style.input_form_disabled : null}`}
+            className={`${style.input_form_button} ${canNotPlayerTalking() ? style.input_form_disabled : null}`}
             onClick={(e) => handleIntervieweeAnswerButton(e, intervieweeAnswer)}
           >
             답변 제출하기

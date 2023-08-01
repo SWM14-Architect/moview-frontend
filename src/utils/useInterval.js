@@ -6,7 +6,7 @@ export const useInterval = (callback, interval, memo) => {
 
   useEffect(() => {
     savedCallback.current = callback;
-  }, memo);
+  }, [memo, callback]);
 
   useEffect(() => {
     function tick() {

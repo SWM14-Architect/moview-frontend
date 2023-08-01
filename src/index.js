@@ -10,6 +10,8 @@ import "./styles/animation.css";
 import "./styles/index.css";
 import "./styles/layout.css";
 import "./styles/button.hover.css";
+import "./styles/radio.input.css";
+import "./styles/range.input.css";
 import Main from "./pages/main";
 import InterviewRoom from "./pages/interviewRoom";
 
