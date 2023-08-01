@@ -6,6 +6,7 @@ import "chart.js/auto";
 import { Radar } from "react-chartjs-2";
 import {FEEDBACK_RANGE_DEFAULT_VALUE} from "../../constants/interviewFeedbackConst";
 import {useNavigate} from "react-router-dom";
+import {ScrollToTop} from "../../utils/scrollRestoration";
 
 function RadarChart() {
   const data = {
@@ -87,6 +88,7 @@ function SliderInput({name, index, onChange}){
 }
 
 function InterviewFeedback(){
+  ScrollToTop();
   const navigate = useNavigate();
   const [interviewData, ] = useRecoilState(interviewDataAtom);
   const [interviewRecords, setInterviewRecords] = useState([]);

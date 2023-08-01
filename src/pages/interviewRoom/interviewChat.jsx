@@ -6,6 +6,7 @@ import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
 import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
 import TypeIt from "typeit-react";
 import {useInterval} from "../../utils/useInterval";
+import {ScrollToTop} from "../../utils/scrollRestoration";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -28,6 +29,7 @@ function TextareaForm({placeholder, item, onChange}){
 }
 
 function InterviewChat(){
+  ScrollToTop();
   const intervieweeAnswerRef = useRef(null);
   const [interviewData, ] = useRecoilState(interviewDataAtom);
   const [interviewTalks, setInterviewTalks] = useState([

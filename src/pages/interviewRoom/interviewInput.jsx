@@ -4,6 +4,7 @@ import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst"
 import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../../store/room_atom";
 import {interviewDataAtom} from "../../store/room_atom";
+import {ScrollToTop} from "../../utils/scrollRestoration";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -154,6 +155,7 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 }
 
 function InterviewInput(){
+  ScrollToTop();
   const [, setRoomID] = useRecoilState(roomIdAtom);
   // 사용자에게서 입력받는 데이터들
   const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름

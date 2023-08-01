@@ -3,6 +3,7 @@ import MainImage from "../assets/recruitment-6838250_1920.png";
 import style from "../styles/main.module.css";
 import {useTitle} from "../utils/useTitle";
 import {SERVICE_TITLE} from "../constants/serviceConst";
+import {ScrollToTop} from "../utils/scrollRestoration";
 
 function firstSection(){
   return (
@@ -54,6 +55,7 @@ function secondSection(){
 
 function Main(){
   useTitle(`${SERVICE_TITLE}`);
+  ScrollToTop();
 
   return (
     <section style={{flex: 1}}>
