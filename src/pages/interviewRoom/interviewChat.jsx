@@ -73,7 +73,7 @@ function InterviewChat(){
       setIsTyping(null);
       return;
     }
-  }, 1000, [isTyping]);
+  }, 1000, isTyping);
 
   return (
     <section style={{backgroundColor:"#f4f7fb", flex:1}}>
@@ -87,7 +87,7 @@ function InterviewChat(){
         {interviewTalks.map((item, index) => (
           <div key={index} className={`${style.chat_box} fadeInUpEffect`}>
             <div className={`${style.profile_box} ${item.type === "AI" ? null : style.profile_back}`}>
-              <img src={item.type === "AI" ? AIProfileImage : HumanProfileImage} className={`${style.profile_image}`}/>
+              <img src={item.type === "AI" ? AIProfileImage : HumanProfileImage} className={`${style.profile_image}`} alt={"profile"}/>
               <span>{item.type === "AI" ? "AI면접관" : "나"}</span>
             </div>
             <TypeIt
