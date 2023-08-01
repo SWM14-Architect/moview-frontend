@@ -1,0 +1,91 @@
+.header {
+    text-align: center;
+    font-family: "GmarketSansBold";
+    font-size: 2em;
+    color: #333;
+}
+
+.sub_header {
+    text-align: center;
+    font-family: "NamunGothic";
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.radar_chart_box {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 8px;
+}
+
+.radar_chart {
+    height: 400px;
+    width: 100%;
+}
+
+.record_box {
+    /*border: #333 1px dashed;*/
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.interview_box {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.interview_box div {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    padding: 5px;
+}
+
+.interview_box div span:first-child {
+    font-family: "IBMPlexSansKR-Regular";
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.interview_box div span:not(:first-child) {
+    font-family: "NamunGothic";
+    font-size: 0.9em;
+}
+
+.interview_box div:not(:last-child) {
+    padding-bottom: 15px;
+    border-bottom: #bdbdbd 2px dashed;
+}
+
+.feedback_box {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.slider_form {
+    max-width: 300px;
+}
+
+.slider_form datalist {
+    margin-top: -5px;
+    font-family: IBMPlexSansKR-Regular;
+    font-size: 0.8em;
+}
+
+.feedback_end_button {
+    margin-bottom: 2em;
+}
