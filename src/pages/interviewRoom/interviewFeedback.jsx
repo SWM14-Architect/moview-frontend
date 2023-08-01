@@ -55,12 +55,12 @@ function RadarChart() {
   );
 }
 
-function GetQuestionCount(recrods){
-  const total_question = recrods.length;
-  const follow_up_question = recrods.filter(record => record.follow_up_qeustion_id !== 0).length;
-  const init_question = total_question - follow_up_question;
-  return {total_question:total_question, init_question:init_question, follow_up_question:follow_up_question};
-}
+// function GetQuestionCount(recrods){
+//   const total_question = recrods.length;
+//   const follow_up_question = recrods.filter(record => record.follow_up_qeustion_id !== 0).length;
+//   const init_question = total_question - follow_up_question;
+//   return {total_question:total_question, init_question:init_question, follow_up_question:follow_up_question};
+// }
 
 function SliderInput({name, index, onChange}){
   return (
@@ -94,7 +94,7 @@ function InterviewFeedback(){
   const [interviewRecords, setInterviewRecords] = useState([]);
   const [interviewFeedbacks, setInterviewFeedbacks] = useState([]);
 
-  const questionCount = GetQuestionCount(interviewRecords);
+  // const questionCount = GetQuestionCount(interviewRecords);
 
   function handleFeedbackChange(index, value){
     const newFeedbacks = [...interviewFeedbacks];
