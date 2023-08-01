@@ -68,7 +68,6 @@ function InterviewChat(){
         // 유저의 답변이 완료되었을 때,
         handleInterviewerQuestion(null, "아무말 대잔치 하는 중");
       }
-      isTyping.instance.destroy();
       setIsTyping(null);
       return;
     }
@@ -91,7 +90,7 @@ function InterviewChat(){
             </div>
             <TypeIt
               className={`${style.chat_message}`}
-              options={{speed: 40}}
+              options={{cursor: false, speed: 40}}
               getBeforeInit={(instance) => {
                 // 마지막 대화에 대해서만 typing을 체크합니다.
                 if(index === interviewTalks.length-1) {
