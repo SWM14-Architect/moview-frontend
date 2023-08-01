@@ -24,7 +24,6 @@ export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) =>
   if (typeof jobGroup !== 'string'
       || typeof recruitmentAnnouncement !== 'string'
       || !isValidCoverLetterList(coverLetterList)) {
-    console.error('Invalid input');
     throw new Error('Invalid input');
   }
 
@@ -34,7 +33,6 @@ export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) =>
   return apiClient.post('/input', requestBody)
   .then(response => response.data)
   .catch(error => {
-    console.error('input API error:', error);
     throw error;
   });
 };
@@ -46,7 +44,6 @@ export const answer = ( {initialQuestionIndex, followUpQuestionIndex, currentQue
       || typeof followUpQuestionIndex !== 'number'
       || typeof currentQuestion !== 'string'
       || typeof intervieweeAnswer !== 'string') {
-    console.error('Invalid input');
     throw new Error('Invalid input');
   }
 
@@ -56,7 +53,6 @@ export const answer = ( {initialQuestionIndex, followUpQuestionIndex, currentQue
   return apiClient.post('/answer', requestBody)
   .then(response => response.data)
   .catch(error => {
-    console.error('answer API error:', error);
     throw error;
   });
 };
@@ -65,7 +61,6 @@ export const answer = ( {initialQuestionIndex, followUpQuestionIndex, currentQue
 export const feedback = ( {feedbackList} ) => {
   // 입력 검증: feedbackList는 객체의 배열이어야 함
   if (!Array.isArray(feedbackList) || !feedbackList.every(item => typeof item === 'object')) {
-    console.error('Invalid feedbackList input');
     throw new Error('Invalid feedbackList input');
   }
 
@@ -74,7 +69,6 @@ export const feedback = ( {feedbackList} ) => {
 
   return apiClient.post('/feedback', requestBody)
   .catch(error => {
-    console.error('feedback API error:', error);
     throw error;
   });
 };
