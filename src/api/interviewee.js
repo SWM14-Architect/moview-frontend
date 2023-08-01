@@ -7,7 +7,7 @@ const apiClient = axios.create({
 });
 
 // 자소서 분석, 초기 질문리스트 생성
-export const input = (jobGroup, recruitmentAnnouncement, coverLetterList) => {
+export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) => {
   // selfIntroductionList의 형식을 검사하는 함수
   const isValidCoverLetterList = list => {
     if (!Array.isArray(list)) return false;
@@ -40,7 +40,7 @@ export const input = (jobGroup, recruitmentAnnouncement, coverLetterList) => {
 };
 
 // 인터뷰 플래그에 따른 응답
-export const answer = (initialQuestionIndex, followUpQuestionIndex, currentQuestion, intervieweeAnswer) => {
+export const answer = ( {initialQuestionIndex, followUpQuestionIndex, currentQuestion, intervieweeAnswer} ) => {
   // 입력 검증
   if (typeof initialQuestionIndex !== 'number'
       || typeof followUpQuestionIndex !== 'number'
@@ -62,7 +62,7 @@ export const answer = (initialQuestionIndex, followUpQuestionIndex, currentQuest
 };
 
 // 유저의 서비스평가를 받고, 종료
-export const feedback = (feedbackList) => {
+export const feedback = ( {feedbackList} ) => {
   // 입력 검증: feedbackList는 객체의 배열이어야 함
   if (!Array.isArray(feedbackList) || !feedbackList.every(item => typeof item === 'object')) {
     console.error('Invalid feedbackList input');
