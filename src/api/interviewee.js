@@ -15,8 +15,8 @@ export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) =>
     return list.every(item => {
       // 각 항목이 객체이고 'question', 'answer' 키를 가지고 있는지 확인
       return typeof item === 'object'
-          && typeof item.coverLetterQuestion === 'string'
-          && typeof item.coverLetterAnswer === 'string';
+          && typeof item.question === 'string'
+          && typeof item.content === 'string';
     });
   };
 
@@ -29,7 +29,11 @@ export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) =>
     throw new Error('Invalid input: Cover Letter List');
 
   // JSON 형식으로 requestBody 구성
-  const requestBody = { jobGroup, recruitmentAnnouncement, coverLetterList };
+  const requestBody = {
+    "jobGroup":jobGroup,
+    "recruitmentAnnouncement":recruitmentAnnouncement,
+    "coverLetterList":coverLetterList
+  };
 
   return apiClient.post('/input', requestBody)
   .then(response => response.data)
@@ -51,7 +55,12 @@ export const answer = ( {initialQuestionIndex, followUpQuestionIndex, currentQue
     throw new Error('Invalid input: Interviewee Answer');
 
   // JSON 형식으로 requestBody 구성
-  const requestBody = { initialQuestionIndex, followUpQuestionIndex, currentQuestion, intervieweeAnswer };
+  const requestBody = {
+    "initialQuestionIndex": initialQuestionIndex,
+    "followUpQuestionIndex": followUpQuestionIndex,
+    "currentQuestion": currentQuestion,
+    "intervieweeAnswer": intervieweeAnswer
+  };
 
   return apiClient.post('/answer', requestBody)
   .then(response => response.data)
@@ -79,7 +88,9 @@ export const feedback = ( {feedbackList} ) => {
     throw new Error('Invalid input: Feedback List');
 
   // JSON 형식으로 requestBody 구성
-  const requestBody = { feedbackList };
+  const requestBody = {
+    "feedbackList": feedbackList
+  };
 
   return apiClient.post('/feedback', requestBody)
   .catch(error => {
