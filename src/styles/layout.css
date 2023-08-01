@@ -10,7 +10,13 @@
     grid-gap: 10px;
 }
 
-@media  screen and (max-width: 768px) {
+@media screen and (max-width: 1280px) {
+    .layout-flex-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
     .layout-flex-grid-2 {
         grid-template-columns: repeat(1, 1fr);
     }
