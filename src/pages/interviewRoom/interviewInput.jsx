@@ -5,6 +5,7 @@ import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../../store/room_atom";
 import {interviewDataAtom} from "../../store/room_atom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
+import {input} from "../../api/interviewee";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -193,6 +194,7 @@ function InterviewInput(){
       return alert("자소서 항목을 모두 입력해주세요.");
     }
     setRoomID("interviewChat");
+
     setInterivewData({
       "intervieweeName": intervieweeName,
       "interviewTargetCompany": interviewTargetCompany,
@@ -200,6 +202,18 @@ function InterviewInput(){
       "interviewRecruitment": interviewRecruitment,
       "interviewCoverLetters": interviewCoverLetters
     })
+    const coverLettersCopy = interviewCoverLetters.map(({ id, ...item }) => item);
+    input({
+      jobGroup:interviewTargetPosition,
+      recruitmentAnnouncement: interviewRecruitment,
+      coverLetterList: coverLettersCopy
+    }).then((res) => {
+      // TODO: 받아온 데이터를 어떻게 관리할지
+      console.log(res);
+    }).catch((err) => {
+      // TODO: Toast 메시지 띄우기
+      console.log(err);
+    });
   }
 
   return (
