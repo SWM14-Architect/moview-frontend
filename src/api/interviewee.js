@@ -21,11 +21,12 @@ export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) =>
   };
 
   // 입력 검증
-  if (typeof jobGroup !== 'string'
-      || typeof recruitmentAnnouncement !== 'string'
-      || !isValidCoverLetterList(coverLetterList)) {
-    throw new Error('Invalid input');
-  }
+  if (typeof jobGroup !== 'string')
+    throw new Error('Invalid input: Job Group')
+  if (typeof recruitmentAnnouncement !== 'string')
+    throw new Error('Invalid input: Recruitment Announcement')
+  if (!isValidCoverLetterList(coverLetterList))
+    throw new Error('Invalid input: Cover Letter List');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = { jobGroup, recruitmentAnnouncement, coverLetterList };
@@ -40,12 +41,14 @@ export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) =>
 // 인터뷰 플래그에 따른 응답
 export const answer = ( {initialQuestionIndex, followUpQuestionIndex, currentQuestion, intervieweeAnswer} ) => {
   // 입력 검증
-  if (typeof initialQuestionIndex !== 'number'
-      || typeof followUpQuestionIndex !== 'number'
-      || typeof currentQuestion !== 'string'
-      || typeof intervieweeAnswer !== 'string') {
-    throw new Error('Invalid input');
-  }
+  if (typeof initialQuestionIndex !== 'number')
+    throw new Error('Invalid input: Initial Question Index')
+  if (typeof followUpQuestionIndex !== 'number')
+    throw new Error('Invalid input: Followup Question Index')
+  if (typeof currentQuestion !== 'string')
+    throw new Error('Invalid input: Current Question')
+  if (typeof intervieweeAnswer !== 'string')
+    throw new Error('Invalid input: Interviewee Answer');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = { initialQuestionIndex, followUpQuestionIndex, currentQuestion, intervieweeAnswer };
@@ -59,10 +62,21 @@ export const answer = ( {initialQuestionIndex, followUpQuestionIndex, currentQue
 
 // 유저의 서비스평가를 받고, 종료
 export const feedback = ( {feedbackList} ) => {
-  // 입력 검증: feedbackList는 객체의 배열이어야 함
-  if (!Array.isArray(feedbackList) || !feedbackList.every(item => typeof item === 'object')) {
-    throw new Error('Invalid feedbackList input');
-  }
+  // feedbackList의 형식을 검사하는 함수
+  const isValidFeedbackList = list => {
+    if (!Array.isArray(list)) return false;
+
+    return list.every(item => {
+      // 각 항목이 객체이고 'category', 'content' 키를 가지고 있는지 확인
+      return typeof item === 'object'
+          && typeof item.feedbackCategory === 'string'
+          && typeof item.feedbackContent === 'string';
+    });
+  };
+
+  // 입력 검증
+  if (!isValidFeedbackList(feedbackList))
+    throw new Error('Invalid input: Feedback List');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = { feedbackList };
