@@ -4,20 +4,23 @@ import style from "../styles/main.module.css";
 import {useTitle} from "../utils/useTitle";
 import {SERVICE_TITLE} from "../constants/serviceConst";
 import {ScrollToTop} from "../utils/scrollRestoration";
+import TypeIt from "typeit-react";
 
 function firstSection(){
+
   return (
     <div style={{width: "100%", textAlign:"center"}}>
-      <div className={`fadeInUpEffect ${style.title_header}`}>
+      <TypeIt className={`${style.title_header}`} options={{speed: 30}}>
         <div>아직도 면접에 </div>
         <div style={{marginLeft:"5px", color:"#9a3838"}}>두려움</div>
         <div>을 느끼고 계신가요?</div>
-      </div>
-      <div className={`fadeInUpEffect animation-delay-1 ${style.title_content}`}>
+      </TypeIt>
+      <img className={`fadeInUpEffect animation-delay-1`} src={MainImage} alt="main" style={{width:"100%", marginBottom:"2em"}} />
+      <div className={`fadeInUpEffect animation-delay-2 ${style.title_content}`}>
         <div>더 이상 면접 질문에 당황하지 마세요!</div>
         <div>면접자의 자소서와 원하는 회사의 채용 공고를 분석하여, 어떠한 질문도 놀라지 않고 대응할 수 있는 개인화된 질문 리스트를 제공합니다. 현실감 넘치는 면접 시뮬레이션을 통해 진짜 면접에 대비하세요.</div>
       </div>
-      <img className={`fadeInUpEffect animation-delay-2`} src={MainImage} alt="main" style={{width:"100%", marginTop:"2em"}} />
+      <div className={`line fadeInUpEffect animation-delay-3`} />
       <div className={`fadeInUpEffect animation-delay-3 ${style.title_content_start}`}>
         <div>시작을 위해서는 계정이 필요합니다.</div>
         <div>지금은 구현되어 있지 않습니다.</div>
@@ -58,7 +61,7 @@ function Main(){
   ScrollToTop();
 
   return (
-    <section style={{flex: 1}}>
+    <section style={{flex: 1, paddingTop:"0px"}}>
       <section style={{backgroundColor:"#f4f7fb"}}>
         <div className={`container`} style={{flexDirection:"column"}}>
           {firstSection()}
