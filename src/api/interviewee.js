@@ -6,6 +6,14 @@ const apiClient = axios.create({
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
 });
 
+export const session = () => {
+  return apiClient.post('/session')
+  .then(response => response.data)
+  .catch(error => {
+    throw error;
+  });
+}
+
 // 자소서 분석, 초기 질문리스트 생성
 export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) => {
   // selfIntroductionList의 형식을 검사하는 함수
