@@ -1,11 +1,13 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewInput.module.css";
-import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
+import {MAXIMUM_COVERLETTER_NUMBER} from "../../constants/interviewInputConst";
 import {useRecoilState} from "recoil";
-import {roomIdAtom} from "../../store/room_atom";
-import {interviewDataAtom} from "../../store/room_atom";
+import {interviewDataAtom, roomIdAtom} from "../../store/room_atom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
 import {input} from "../../api/interviewee";
+import {toast} from "react-toastify";
+import {chatHistoryAtom} from "../../store/chat_atom";
+import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -158,15 +160,17 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 function InterviewInput(){
   ScrollToTop();
   const [, setRoomID] = useRecoilState(roomIdAtom);
+  // 사용자에게 입력받은 데이터를 전역상태로 저장
+  const [, setInterivewData] = useRecoilState(interviewDataAtom);
+  // 채팅방 대화 기록 (이전에 저장된 대화를 삭제하기 위해서 setter만 불러옴)
+  const [, setChatHistory] = useRecoilState(chatHistoryAtom);
+
   // 사용자에게서 입력받는 데이터들
   const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
   const [interviewTargetCompany, setInterviewTargetCompany] = useState("");
   const [interviewTargetPosition, setInterviewTargetPosition] = useState("");
   const [interviewRecruitment, setInterviewRecruitment] = useState("");
   const [interviewCoverLetters, setInterviewCoverLetters] = useState([{"id":0, "question":"", "content":""}]);
-
-  // 사용자에게 입력받은 데이터를 전역상태로 저장
-  const [, setInterivewData] = useRecoilState(interviewDataAtom);
 
   function handleIntervieweeNameChange(e) {
     setIntervieweeName(e.target.value);
@@ -186,14 +190,19 @@ function InterviewInput(){
 
   function handleNextButtonClick(e) {
     e.preventDefault();
-    if(intervieweeName === "") return alert("이름을 입력해주세요.");
-    if(interviewTargetCompany === "") return alert("지원하고자 하는 회사를 입력해주세요.");
-    if(interviewTargetPosition === "") return alert("지원하고자 하는 직군을 입력해주세요.");
-    if(interviewRecruitment === "") return alert("모집공고를 입력해주세요.");
-    if(interviewCoverLetters.map((item, index) => item.question === "" || item.content === "").includes(true)) {
-      return alert("자소서 항목을 모두 입력해주세요.");
+
+    const toastWarning = (text) => {
+      // toast에 공통 옵션을 줄 수도 있어서 함수화했습니다.
+      toast.warn(text, {});
     }
-    setRoomID("interviewChat");
+
+    if(intervieweeName === "") return toastWarning("이름을 입력해주세요.");
+    if(interviewTargetCompany === "") return toastWarning("지원하고자 하는 회사를 입력해주세요.");
+    if(interviewTargetPosition === "") return toastWarning("지원하고자 하는 직군을 입력해주세요.");
+    if(interviewRecruitment === "") return toastWarning("모집공고를 입력해주세요.");
+    if(interviewCoverLetters.map((item, index) => item.question === "" || item.content === "").includes(true)) {
+      return toastWarning("자소서 항목을 모두 입력해주세요.");
+    }
 
     setInterivewData({
       "intervieweeName": intervieweeName,
@@ -207,12 +216,17 @@ function InterviewInput(){
       jobGroup:interviewTargetPosition,
       recruitmentAnnouncement: interviewRecruitment,
       coverLetterList: coverLettersCopy
-    }).then((res) => {
+    })
+    .then((res) => {
       // TODO: 받아온 데이터를 어떻게 관리할지
-      console.log(res);
-    }).catch((err) => {
-      // TODO: Toast 메시지 띄우기
-      console.log(err);
+      setRoomID("interviewChat");
+      setChatHistory(CHAT_HISTORY_DEFAULT_VALUE);
+    })
+    .catch((err) => {
+      toast.error(`${err.message}`, {});
+      // TODO: 테스트를 위해 임시로 페이지 넘어가게 해둠. 정식배포 전에 지워야함..
+      setRoomID("interviewChat");
+      setChatHistory(CHAT_HISTORY_DEFAULT_VALUE);
     });
   }
 
