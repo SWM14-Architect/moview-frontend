@@ -1,0 +1,13 @@
+.footer_box {
+    margin-bottom: 1em;
+}
+
+.footer_list {
+    display: flex;
+    flex-direction: column;
+    font-family: "IBMPlexSansKR-Regular";
+}
+
+.footer_list span {
+    margin-bottom: 1em;
+}
