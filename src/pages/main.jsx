@@ -1,13 +1,15 @@
-import InterviewButton from "../components/interviewButton";
+import React from "react";
 import MainImage from "../assets/recruitment-6838250_1920.png";
 import style from "../styles/main.module.css";
 import {useTitle} from "../utils/useTitle";
 import {SERVICE_TITLE} from "../constants/serviceConst";
 import {ScrollToTop} from "../utils/scrollRestoration";
 import TypeIt from "typeit-react";
+import {useNavigate} from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {roomIdAtom} from "../store/room_atom";
 
-function firstSection(){
-
+function firstSection({handleButtonClick}){
   return (
     <div style={{width: "100%", textAlign:"center"}}>
       <TypeIt className={`${style.title_header}`} options={{speed: 30}}>
@@ -26,7 +28,7 @@ function firstSection(){
         <div>지금은 구현되어 있지 않습니다.</div>
       </div>
       <div className={`fadeInUpEffect animation-delay-3`}>
-        <InterviewButton text={"면접시작 >"} style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}} />
+        <button className={`blackButton`} style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}} onClick={(e) => handleButtonClick(e)}>{"면접시작 >"}</button>
       </div>
     </div>
   );
@@ -59,12 +61,20 @@ function secondSection(){
 function Main(){
   useTitle(`${SERVICE_TITLE}`);
   ScrollToTop();
+  const navigate = useNavigate();
+  const [, setRoomID] = useRecoilState(roomIdAtom);
+
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    setRoomID("interviewInput");
+    navigate("/room");
+  }
 
   return (
     <section style={{flex: 1, paddingTop:"0px"}}>
       <section style={{backgroundColor:"#f4f7fb"}}>
         <div className={`container`} style={{flexDirection:"column"}}>
-          {firstSection()}
+          {firstSection({handleButtonClick: handleButtonClick})}
         </div>
       </section>
       <section style={{backgroundColor:"#ffffff"}}>
