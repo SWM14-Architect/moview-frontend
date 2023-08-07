@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 기본 URL 설정
 const apiClient = axios.create({
-  baseURL: '/api/interviewee',
+  baseURL: `${process.env.REACT_APP_API_ENDPOINT}/api/interviewee`,
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
 });
 
@@ -32,6 +32,7 @@ export const input = ({intervieweeName, jobGroup, recruitAnnouncement, coverLett
     "cover_letter_answers":coverLetterAnswers,
   };
 
+  // response {flag,content}
   return apiClient.post('/input', requestBody)
   .then(response => response.data)
   .catch(error => {
