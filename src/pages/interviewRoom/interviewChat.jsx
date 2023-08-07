@@ -1,13 +1,14 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import style from "../../styles/interviewChat.module.css";
 import {useRecoilState} from "recoil";
-import {interviewDataAtom, roomIdAtom} from "../../store/room_atom";
+import {interviewDataAtom, interviewResultAtom, roomIdAtom} from "../../store/interviewRoomAtom";
 import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
 import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
 import TypeIt from "typeit-react";
 import {useInterval} from "../../utils/useInterval";
 import {ScrollToTop} from "../../utils/scrollRestoration";
-import {chatHistoryAtom} from "../../store/chat_atom";
+import {chatHistoryAtom} from "../../store/interviewChatAtom";
+import {answer} from "../../api/interviewee";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -34,28 +35,23 @@ function InterviewChat(){
   const intervieweeAnswerRef = useRef(null);
   const [, setRoomID] = useRecoilState(roomIdAtom);
   const [interviewData, ] = useRecoilState(interviewDataAtom);
-  const [chatHistory, setChatHistory] = useRecoilState(chatHistoryAtom);
+  const [chatHistory, setChatHistory] = useRecoilState(chatHistoryAtom); // 채팅내역
+  const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
   const [isTyping, setIsTyping] = useState(null);
-  const [intervieweeAnswer, setIntervieweeAnswer] = useState("");
-  const [interviewTurn, setInterviewTurn] = useState(false);
-  const [interviewFlag, setInterviewFlag] = useState(false);
+  const [intervieweeAnswer, setIntervieweeAnswer] = useState(""); //
+  const [interviewTurn, setInterviewTurn] = useState(false); // [false: AI 질문 중 true: Interviewee 답변 가능]
+  const [interviewFlag, setInterviewFlag] = useState(false); // [false: 인터뷰 진행 중 true: 인터뷰 종료]
 
   const canNotPlayerTalking = () => {
     if(intervieweeAnswer === "" || interviewTurn === false || isTyping !== null) return true;
     return false;
   }
 
-  const isInterviewEnd = () => {
-    const talkLength = chatHistory.length;
-    return talkLength >= 10 && chatHistory[talkLength - 1].type === "AI";
-  }
-
   const handleIntervieweeAnswerButton = (e, answerContent) => {
     e.preventDefault();
     if(canNotPlayerTalking()) return;
 
-    const answer = {type:"Human", content: answerContent};
-    setChatHistory([...chatHistory, answer]);
+    setChatHistory([...chatHistory, {type:"Human", content: answerContent}]);
     setIntervieweeAnswer("");
     intervieweeAnswerRef.current.scrollIntoView({behavior: "smooth"});
   }
@@ -75,21 +71,28 @@ function InterviewChat(){
       }
       else{
         // 유저의 답변이 완료되었을 때,
-        handleInterviewerQuestion(null, "아무말 대잔치 하는 중");
+        answer({answer: chatHistory[isTyping.index].content})
+        .then((res) => {
+          if(res.message.flag === "InterviewerActionEnum.END_INTERVIEW") {
+            // INTERVIEW_END, 결과 페이지로 이동합니다.
+            handleInterviewerQuestion(null, "수고하셨습니다! 면접은 여기서 종료하겠습니다.");
+            setInterviewFlag(true);
+            setInterviewResult(res.message.content); // 결과내용을 interviewResultAtom에 저장합니다.
+          }
+          else{
+            // NEXT_QUESTION, 다음 질문을 받아옵니다.
+            handleInterviewerQuestion(null, res.message.content);
+          }
+        })
+        .catch((err) => {
+          handleInterviewerQuestion(null, "에러가 발생했네요.");
+          console.log(err);
+        });
       }
       setIsTyping(null);
       return;
     }
   }, 1000, isTyping);
-
-  useEffect(() => {
-    // 인터뷰가 끝났을 때, 결과 페이지로 이동합니다.
-    // TODO: 종료타이밍을 임의의 기준으로 만듬.
-    if(!interviewFlag && isInterviewEnd(chatHistory)){
-      setInterviewFlag(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatHistory]);
 
   return (
     <section style={{backgroundColor:"#f4f7fb", flex:1}}>
@@ -115,7 +118,7 @@ function InterviewChat(){
                 getBeforeInit={(instance) => {
                   // 마지막 대화에 대해서만 typing을 체크합니다.
                   if(index === chatHistory.length-1) {
-                    setIsTyping({type:item.type, instance:instance});
+                    setIsTyping({index: index, type:item.type, instance:instance});
                   }
                   setInterviewTurn(false);
                   return instance;
@@ -147,7 +150,7 @@ function InterviewChat(){
           <div className={`${style.input_form}`}>
             <button
               className={`${style.input_form_button} ${style.result_form_button}`}
-              onClick={(e) => setRoomID("interviewFeedback")}
+              onClick={() => setRoomID("interviewFeedback")}
             >
               결과 확인하기
             </button>
