@@ -4,6 +4,25 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../store/room_atom";
 
+
+function HeaderMenu() {
+  return (
+    <>
+      <ul>모두의인터뷰</ul>
+      <ul>Services</ul>
+      <ul>Pricing</ul>
+    </>
+  );
+}
+
+function InterviewMenu({}) {
+  return (
+    <>
+      <ul>{"이름"}</ul>
+    </>
+  )
+}
+
 function Header() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,11 +56,11 @@ function Header() {
       <div className={`container`}>
         <div className={`${style.navbar}`}>
           <nav className={`${style.nav}`}>
-            <ul>모두의인터뷰</ul>
-            <ul>Services</ul>
-            <ul>Pricing</ul>
+            {!isRoom ? <HeaderMenu /> : <InterviewMenu />}
           </nav>
-          <button className={`blackButton`} style={{marginRight:"15px"}} onClick={(e) => handleButtonClick(e)}>{!isRoom ? "면접시작 >" : "면접종료 >"}</button>
+          <button className={`blackButton`} style={{marginRight:"15px"}} onClick={(e) => handleButtonClick(e)}>
+            {!isRoom ? "면접시작 >" : "면접종료 >"}
+          </button>
         </div>
       </div>
     </header>
