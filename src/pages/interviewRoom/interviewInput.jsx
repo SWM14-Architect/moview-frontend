@@ -4,7 +4,7 @@ import {MAXIMUM_COVERLETTER_NUMBER} from "../../constants/interviewInputConst";
 import {useRecoilState} from "recoil";
 import {interviewDataAtom, roomIdAtom} from "../../store/interviewRoomAtom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
-import {input} from "../../api/interviewee";
+import {input, session} from "../../api/interviewee";
 import {toast} from "react-toastify";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
@@ -212,20 +212,29 @@ function InterviewInput(){
       "interviewCoverLetters": interviewCoverLetters
     })
     const coverLettersCopy = interviewCoverLetters.map(({ id, ...item }) => item);
-    input({
-      intervieweeName: intervieweeName,
-      jobGroup: interviewTargetPosition,
-      recruitAnnouncement: interviewRecruitment,
-      coverLetterQuestions: coverLettersCopy.map(({question, content}) => question),
-      coverLetterAnswers: coverLettersCopy.map(({question, content}) => content)
-    })
-    .then((res) => {
-      // TODO: 받아온 데이터를 어떻게 관리할지
-      setRoomID("interviewChat");
-      setChatHistory([...CHAT_HISTORY_DEFAULT_VALUE, {type:"AI", content:res.message.content}]);
-    })
-    .catch((err) => {
+
+    // REFACTORING: 원래 이렇게 지져분하게 안짜고 싶었는데, promise 방식을 쓰고 있어서인지
+    // try-catch문으로 error가 안잡혀서 아래와 같이 처리했습니다. 리팩토링 해야함...
+    session().then(() => {
+      // session을 성공적으로 생성했을 때, input API를 호출합니다.
+      input({
+        intervieweeName: intervieweeName,
+        jobGroup: interviewTargetPosition,
+        recruitAnnouncement: interviewRecruitment,
+        coverLetterQuestions: coverLettersCopy.map(({question, content}) => question),
+        coverLetterAnswers: coverLettersCopy.map(({question, content}) => content)
+      })
+      .then((res) => {
+        setRoomID("interviewChat");
+        setChatHistory([...CHAT_HISTORY_DEFAULT_VALUE, {type:"AI", content:res.message.content}]);
+      })
+      .catch((err) => {
+        toast.error(`오류가 발생했습니다!\n${err.message}`, {});
+      });
+
+    }).catch((err) => {
       toast.error(`오류가 발생했습니다!\n${err.message}`, {});
+      return Promise.reject(err);
     });
   }
 
