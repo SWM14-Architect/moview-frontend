@@ -2,11 +2,11 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewInput.module.css";
 import {MAXIMUM_COVERLETTER_NUMBER} from "../../constants/interviewInputConst";
 import {useRecoilState} from "recoil";
-import {interviewDataAtom, roomIdAtom} from "../../store/room_atom";
+import {interviewDataAtom, roomIdAtom} from "../../store/interviewRoomAtom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
 import {input} from "../../api/interviewee";
 import {toast} from "react-toastify";
-import {chatHistoryAtom} from "../../store/chat_atom";
+import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
 
 
@@ -213,20 +213,19 @@ function InterviewInput(){
     })
     const coverLettersCopy = interviewCoverLetters.map(({ id, ...item }) => item);
     input({
-      jobGroup:interviewTargetPosition,
-      recruitmentAnnouncement: interviewRecruitment,
-      coverLetterList: coverLettersCopy
+      intervieweeName: intervieweeName,
+      jobGroup: interviewTargetPosition,
+      recruitAnnouncement: interviewRecruitment,
+      coverLetterQuestions: coverLettersCopy.map(({question, content}) => question),
+      coverLetterAnswers: coverLettersCopy.map(({question, content}) => content)
     })
     .then((res) => {
       // TODO: 받아온 데이터를 어떻게 관리할지
       setRoomID("interviewChat");
-      setChatHistory(CHAT_HISTORY_DEFAULT_VALUE);
+      setChatHistory([...CHAT_HISTORY_DEFAULT_VALUE, {type:"AI", content:res.message.content}]);
     })
     .catch((err) => {
-      toast.error(`${err.message}`, {});
-      // TODO: 테스트를 위해 임시로 페이지 넘어가게 해둠. 정식배포 전에 지워야함..
-      setRoomID("interviewChat");
-      setChatHistory(CHAT_HISTORY_DEFAULT_VALUE);
+      toast.error(`오류가 발생했습니다!\n${err.message}`, {});
     });
   }
 
