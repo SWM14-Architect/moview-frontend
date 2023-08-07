@@ -15,32 +15,21 @@ export const session = () => {
 }
 
 // 자소서 분석, 초기 질문리스트 생성
-export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) => {
-  // selfIntroductionList의 형식을 검사하는 함수
-  const isValidCoverLetterList = list => {
-    if (!Array.isArray(list)) return false;
-
-    return list.every(item => {
-      // 각 항목이 객체이고 'question', 'answer' 키를 가지고 있는지 확인
-      return typeof item === 'object'
-          && typeof item.question === 'string'
-          && typeof item.content === 'string';
-    });
-  };
-
+export const input = ({intervieweeName, jobGroup, recruitAnnouncement, coverLetterQuestions, coverLetterAnswers}) => {
   // 입력 검증
-  if (typeof jobGroup !== 'string')
-    throw new Error('Invalid input: Job Group')
-  if (typeof recruitmentAnnouncement !== 'string')
-    throw new Error('Invalid input: Recruitment Announcement')
-  if (!isValidCoverLetterList(coverLetterList))
-    throw new Error('Invalid input: Cover Letter List');
+  if (typeof intervieweeName !== 'string') throw new Error("Invalid input: Interviewee Name");
+  if (typeof jobGroup !== 'string') throw new Error('Invalid input: Job Group');
+  if (typeof recruitAnnouncement !== 'string') throw new Error('Invalid input: Recruitment Announcement');
+  if (!Array.isArray(coverLetterQuestions)) throw new Error('Invalid input: Cover Letter Questions');
+  if (!Array.isArray(coverLetterAnswers)) throw new Error('Invalid input: Cover Letter Answers');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
-    "jobGroup":jobGroup,
-    "recruitmentAnnouncement":recruitmentAnnouncement,
-    "coverLetterList":coverLetterList
+    "interviewee_name":intervieweeName,
+    "job_group":jobGroup,
+    "recruit_announcement":recruitAnnouncement,
+    "cover_letter_questions":coverLetterQuestions,
+    "cover_letter_answers":coverLetterAnswers,
   };
 
   return apiClient.post('/input', requestBody)
@@ -51,23 +40,14 @@ export const input = ( {jobGroup, recruitmentAnnouncement, coverLetterList} ) =>
 };
 
 // 인터뷰 플래그에 따른 응답
-export const answer = ( {initialQuestionIndex, followUpQuestionIndex, currentQuestion, intervieweeAnswer} ) => {
+export const answer = ({answer}) => {
   // 입력 검증
-  if (typeof initialQuestionIndex !== 'number')
-    throw new Error('Invalid input: Initial Question Index')
-  if (typeof followUpQuestionIndex !== 'number')
-    throw new Error('Invalid input: Followup Question Index')
-  if (typeof currentQuestion !== 'string')
-    throw new Error('Invalid input: Current Question')
-  if (typeof intervieweeAnswer !== 'string')
+  if (typeof answer !== 'string')
     throw new Error('Invalid input: Interviewee Answer');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
-    "initialQuestionIndex": initialQuestionIndex,
-    "followUpQuestionIndex": followUpQuestionIndex,
-    "currentQuestion": currentQuestion,
-    "intervieweeAnswer": intervieweeAnswer
+    "answer": answer,
   };
 
   return apiClient.post('/answer', requestBody)
