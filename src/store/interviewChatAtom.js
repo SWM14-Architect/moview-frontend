@@ -6,6 +6,6 @@ const {persistAtom} = recoilPersist();
 
 export const chatHistoryAtom = atom({
   key: "chatHistoryState",
-  default: CHAT_HISTORY_DEFAULT_VALUE,
+  default: CHAT_HISTORY_DEFAULT_VALUE, // list({type:"AI" or "Human", isShown: boolean, content: string}, ...)
   effects_UNSTABLE: [persistAtom],
 });

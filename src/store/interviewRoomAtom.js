@@ -15,3 +15,8 @@ export const interviewDataAtom = atom({
   default: INTERVIEW_INPUT_FORM_DEFAULT_VALUE,
   effects_UNSTABLE: [persistAtom],
 });
+
+export const interviewResultAtom = atom({
+  key: "interviewResultState",
+  default: null
+});

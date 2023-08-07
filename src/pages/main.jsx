@@ -7,7 +7,7 @@ import {ScrollToTop} from "../utils/scrollRestoration";
 import TypeIt from "typeit-react";
 import {useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
-import {roomIdAtom} from "../store/room_atom";
+import {roomIdAtom} from "../store/interviewRoomAtom";
 
 function firstSection({handleButtonClick}){
   return (

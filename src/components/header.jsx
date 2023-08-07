@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import style from "../styles/header.module.css";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
-import {roomIdAtom} from "../store/room_atom";
+import {roomIdAtom} from "../store/interviewRoomAtom";
 
 
 function HeaderMenu() {
@@ -15,10 +15,10 @@ function HeaderMenu() {
   );
 }
 
-function InterviewMenu({}) {
+function InterviewMenu({intervieweeName="이름"}) {
   return (
     <>
-      <ul>{"이름"}</ul>
+      <ul>{intervieweeName}</ul>
     </>
   )
 }
