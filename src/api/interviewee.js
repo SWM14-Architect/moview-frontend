@@ -41,13 +41,16 @@ export const input = ({intervieweeName, jobGroup, recruitAnnouncement, coverLett
 };
 
 // 인터뷰 플래그에 따른 응답
-export const answer = ({answer}) => {
+export const answer = ({question, answer}) => {
   // 입력 검증
+  if (typeof question !== 'string')
+    throw new Error('Invalid input: Interviewer Question');
   if (typeof answer !== 'string')
     throw new Error('Invalid input: Interviewee Answer');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
+    "question": question,
     "answer": answer,
   };
 
@@ -59,26 +62,14 @@ export const answer = ({answer}) => {
 };
 
 // 유저의 서비스평가를 받고, 종료
-export const feedback = ( {feedbackList} ) => {
-  // feedbackList의 형식을 검사하는 함수
-  const isValidFeedbackList = list => {
-    if (!Array.isArray(list)) return false;
-
-    return list.every(item => {
-      // 각 항목이 객체이고 'category', 'content' 키를 가지고 있는지 확인
-      return typeof item === 'object'
-          && typeof item.feedbackCategory === 'string'
-          && typeof item.feedbackContent === 'string';
-    });
-  };
-
+export const feedback = ( {feedbacks} ) => {
   // 입력 검증
-  if (!isValidFeedbackList(feedbackList))
+  if (!Array.isArray(feedbacks))
     throw new Error('Invalid input: Feedback List');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
-    "feedbackList": feedbackList
+    "feedbacks": feedbacks
   };
 
   return apiClient.post('/feedback', requestBody)
