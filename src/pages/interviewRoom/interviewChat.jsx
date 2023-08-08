@@ -39,12 +39,14 @@ function InterviewChat(){
   const [chatHistory, setChatHistory] = useRecoilState(chatHistoryAtom); // 채팅내역
   const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
   const [isTyping, setIsTyping] = useState(null);
-  const [intervieweeAnswer, setIntervieweeAnswer] = useState(""); //
+  const [intervieweeAnswerFormText, setIntervieweeAnswerFormText] = useState(""); // Form Value
+  const [interviewerQuestion, setInterviewerQuestion] = useState("");
+  const [intervieweeAnswer, setIntervieweeAnswer] = useState("");
   const [interviewTurn, setInterviewTurn] = useState(false); // [false: AI 질문 중 true: Interviewee 답변 가능]
   const [interviewFlag, setInterviewFlag] = useState(false); // [false: 인터뷰 진행 중 true: 인터뷰 종료]
 
   const canNotPlayerTalking = () => {
-    if(intervieweeAnswer === "" || interviewTurn === false || isTyping !== null) return true;
+    if(intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null) return true;
     return false;
   }
 
@@ -53,7 +55,8 @@ function InterviewChat(){
     if(canNotPlayerTalking()) return;
 
     setChatHistory([...chatHistory, {type:"Human", content: answerContent}]);
-    setIntervieweeAnswer("");
+    setIntervieweeAnswer(answerContent);
+    setIntervieweeAnswerFormText("");
     intervieweeAnswerRef.current.scrollIntoView({behavior: "smooth"});
   }
 
@@ -61,6 +64,7 @@ function InterviewChat(){
     // e.preventDefault();
     const question = {type:"AI", content: questionContent};
     setChatHistory([...chatHistory, question]);
+    setInterviewerQuestion(questionContent);
   }
 
   // 1초마다 입력이 완료되었는지 체크합니다.
@@ -72,21 +76,23 @@ function InterviewChat(){
       }
       else{
         // 유저의 답변이 완료되었을 때,
-        answer({answer: chatHistory[isTyping.index].content})
+        answer({question: interviewerQuestion, answer: intervieweeAnswer})
         .then((res) => {
           if(res.message.flag === "InterviewerActionEnum.END_INTERVIEW") {
             // INTERVIEW_END, 결과 페이지로 이동합니다.
             handleInterviewerQuestion(null, "수고하셨습니다!");
             setInterviewFlag(true);
+            console.log(res);
             setInterviewResult(interviewSummaryGenerator(res.message.content)); // 결과내용을 interviewResultAtom에 저장합니다.
           }
           else{
-            // NEXT_QUESTION, 다음 질문을 받아옵니다.
+            // NEXT_QUESTION, 다음 질문을 출력합니다.
             handleInterviewerQuestion(null, res.message.content);
           }
         })
         .catch((err) => {
-          handleInterviewerQuestion(null, "에러가 발생했네요.");
+          handleInterviewerQuestion(null, "다시 한번 더 말씀해주실 수 있나요?");
+          setIntervieweeAnswerFormText(intervieweeAnswer);
           console.log(err);
         });
       }
@@ -138,12 +144,12 @@ function InterviewChat(){
           <div ref={intervieweeAnswerRef} className={`${style.input_form} fadeInUpEffect animation-delay-1`}>
             <TextareaForm
               placeholder={"질문에 대한 답변을 작성하세요."}
-              item={intervieweeAnswer}
-              onChange={(e) => {setIntervieweeAnswer(e.target.value)}}
+              item={intervieweeAnswerFormText}
+              onChange={(e) => {setIntervieweeAnswerFormText(e.target.value)}}
             />
             <button
               className={`${style.input_form_button} ${canNotPlayerTalking() ? style.input_form_disabled : null}`}
-              onClick={(e) => handleIntervieweeAnswerButton(e, intervieweeAnswer)}
+              onClick={(e) => handleIntervieweeAnswerButton(e, intervieweeAnswerFormText)}
             >
               답변 제출하기
             </button>
