@@ -234,7 +234,6 @@ function InterviewInput(){
 
     }).catch((err) => {
       toast.error(`오류가 발생했습니다!\n${err.message}`, {});
-      return Promise.reject(err);
     });
   }
 
