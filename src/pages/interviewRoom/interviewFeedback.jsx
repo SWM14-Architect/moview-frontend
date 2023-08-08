@@ -1,37 +1,33 @@
 import React, {useEffect, useState} from 'react';
 import style from "../../styles/interviewFeedback.module.css";
 import {useRecoilState} from "recoil";
-import {interviewDataAtom} from "../../store/interviewRoomAtom";
+import {interviewDataAtom, interviewResultAtom} from "../../store/interviewRoomAtom";
 import "chart.js/auto";
 import { Radar } from "react-chartjs-2";
 import {FEEDBACK_RANGE_DEFAULT_VALUE} from "../../constants/interviewFeedbackConst";
 import {useNavigate} from "react-router-dom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
+import {feedback} from "../../api/interviewee";
+import {toast} from "react-toastify";
 
-function RadarChart() {
+function RadarChart({labels, datasets}) {
   const data = {
-    labels: [
-      "Behavioral Questions",
-      "Situational Questions",
-      "Technical Job-related Questions",
-      "Cultural Fit Questions",
-      "Personal Character Questions",
-    ],
+    labels: labels,
     datasets: [
       {
-        data: [4, 3, 5, 2, 4],
+        data: datasets,
         backgroundColor: "rgba(0, 123, 255, 0.25)",
         borderColor: "rgb(0,123,255)",
         borderWidth: 1,
-        label: "내 점수"
+        label: "내 평균점수"
       },
-      {
-        data: [4, 4, 4, 3, 5],
-        backgroundColor: "rgba(110,110,110, 0.25)",
-        borderColor: "rgb(110,110,110)",
-        borderWidth: 1,
-        label: "평균 점수"
-      },
+      // {
+      //   data: [4, 4, 4, 3, 5],
+      //   backgroundColor: "rgba(110,110,110, 0.25)",
+      //   borderColor: "rgb(110,110,110)",
+      //   borderWidth: 1,
+      //   label: "평균 점수"
+      // },
     ],
   };
 
@@ -41,8 +37,8 @@ function RadarChart() {
     scale: {
       ticks: { beginAtZero: true, display:false },
       r: {
-        min: 0, max: 5,
-        ticks: { stepSize: 1 },
+        min: 0, max: 100,
+        ticks: { stepSize: 20 },
       }
     },
   }
@@ -54,13 +50,6 @@ function RadarChart() {
     />
   );
 }
-
-// function GetQuestionCount(records){
-//   const total_question = records.length;
-//   const follow_up_question = records.filter(record => record.follow_up_qeustion_id !== 0).length;
-//   const init_question = total_question - follow_up_question;
-//   return {total_question:total_question, init_question:init_question, follow_up_question:follow_up_question};
-// }
 
 function SliderInput({name, index, onChange}){
   return (
@@ -91,6 +80,7 @@ function InterviewFeedback(){
   ScrollToTop();
   const navigate = useNavigate();
   const [interviewData, ] = useRecoilState(interviewDataAtom);
+  const [interviewResults, ] = useRecoilState(interviewResultAtom);
   const [interviewRecords, setInterviewRecords] = useState([]);
   const [interviewFeedbacks, setInterviewFeedbacks] = useState([]);
 
@@ -104,23 +94,17 @@ function InterviewFeedback(){
 
   function handleEndButtonClick(e) {
     e.preventDefault();
-    // TODO: API 호출 포인트
-    alert(`면접이 종료되었습니다.\n${interviewFeedbacks}`);
-    navigate("/");
+    feedback({feedbacks: interviewFeedbacks})
+    .then(res => {
+      alert(`면접이 종료되었습니다.`);
+      navigate("/");
+    })
+    .catch(err => toast.error(`오류가 발생했습니다!\n${err.message}`, {}));
   }
 
   useEffect(() => {
-    const testData = [
-      {init_question_id:1, follow_up_qeustion_id:0, question:"왜 이렇게 프로젝트를 잘 만드셨습니까?", answer:"팀빌딩할 때는 몰랐는데 다들 불도저였더라구요.", analysis:"팀분석이 정확했음.", score:55},
-      {init_question_id:1, follow_up_qeustion_id:1, question:"팀원이 모두 불도저라고 생각했던 이유는 뭔가요?", answer:"주말에도 일해요. 무서워요. 물론 장난입니다. 하하.", analysis:"근거를 잘 이야기했고, 감정을 잘 표현함.", score:67},
-      {init_question_id:2, follow_up_qeustion_id:0, question:"이 프로젝트는 주제가 뭔가요?", answer:"섹시한 가상면접 서비스.", analysis:"호우 좀 치는데?", score:100},
-
-      {init_question_id:2, follow_up_qeustion_id:0, question:"이 프로젝트는 주제가 뭔가요?", answer:"섹시한 가상면접 서비스.", analysis:"호우 좀 치는데?", score:100},
-      {init_question_id:1, follow_up_qeustion_id:0, question:"왜 이렇게 프로젝트를 잘 만드셨습니까?", answer:"팀빌딩할 때는 몰랐는데 다들 불도저였더라구요.", analysis:"팀분석이 정확했음.", score:55},
-      {init_question_id:1, follow_up_qeustion_id:1, question:"팀원이 모두 불도저라고 생각했던 이유는 뭔가요?", answer:"주말에도 일해요. 무서워요. 물론 장난입니다. 하하.", analysis:"근거를 잘 이야기했고, 감정을 잘 표현함.", score:67},
-    ];
-    setInterviewRecords(testData);
-    setInterviewFeedbacks(new Array(testData.length).fill(FEEDBACK_RANGE_DEFAULT_VALUE));
+    setInterviewRecords(interviewResults.interviewResults);
+    setInterviewFeedbacks(new Array(interviewResults.interviewResults.length).fill(FEEDBACK_RANGE_DEFAULT_VALUE));
   }, []);
 
   return(
@@ -131,14 +115,14 @@ function InterviewFeedback(){
           <div className={`${style.header}`}>{interviewData.interviewTargetCompany} 가상면접 결과</div>
           <div className={`${style.sub_header}`}>{interviewData.interviewTargetPosition}</div>
         </div>
-        <div className={`fadeInUpEffect animation-delay-1 ${style.radar_chart_box}`}>
-          <div className={`${style.radar_chart}`}>
-            <RadarChart />
-          </div>
-        </div>
-        <div className={`layout-flex-grid-3`} style={{marginTop:"1.5em"}}>
+        {/*<div className={`fadeInUpEffect animation-delay-1 ${style.radar_chart_box}`}>*/}
+        {/*  <div className={`${style.radar_chart}`}>*/}
+        {/*    <RadarChart labels={interviewResults.categories} datasets={interviewResults.categoryAverages} />*/}
+        {/*  </div>*/}
+        {/*</div>*/}
+        <div className={`layout-flex-grid-2`} style={{marginTop:"1.5em"}}>
           {interviewRecords.map((record, index) => (
-            <div key={index} className={`fadeInUpEffect ${style.record_box}`} style={{animationDelay:`${0.8 + index*0.4}s`}}>
+            <div key={index} className={`fadeInUpEffect ${style.record_box}`} style={{animationDelay:`${0.4 + index*0.4}s`}}>
               <div className={`${style.interview_box}`}>
                 <div>
                   <span>질문</span>
@@ -154,7 +138,7 @@ function InterviewFeedback(){
                 </div>
                 <div>
                   <span>점수</span>
-                  <span>{record.score}점</span>
+                  <span>{record.score}</span>
                 </div>
               </div>
               <div className={`${style.feedback_box}`}>
@@ -166,7 +150,7 @@ function InterviewFeedback(){
             </div>
           ))}
         </div>
-        <div className={`fadeInUpEffect ${style.feedback_end_button}`} style={{display:"flex", justifyContent:"center", animationDelay:`${0.8 + interviewRecords.length*0.4}s`}}>
+        <div className={`fadeInUpEffect ${style.feedback_end_button}`} style={{display:"flex", justifyContent:"center", animationDelay:`${0.4 + interviewRecords.length*0.4}s`}}>
           <button className={`blueButton`} style={{borderRadius:"10px", width:"100%"}} onClick={(e) => handleEndButtonClick(e)}>면접종료</button>
         </div>
       </div>

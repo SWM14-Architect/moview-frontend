@@ -60,6 +60,7 @@
 .interview_box div span:not(:first-child) {
     font-family: "NamunGothic";
     font-size: 0.9em;
+    white-space: pre-wrap; /* 텍스트에 개행 적용 */
 }
 
 .interview_box div:not(:last-child) {
@@ -74,6 +75,15 @@
     background-color: white;
     border-radius: 10px;
     padding: 15px;
+}
+
+.feedback_box div {
+    padding: 5px;
+}
+
+.feedback_box div span {
+    font-family: "IBMPlexSansKR-Regular";
+    font-weight: bold;
 }
 
 .slider_form {
