@@ -30,8 +30,8 @@ function interviewSummaryGenerator(interviewResults){
   for(let i = 0; i < interviewResults.length; i++){
     const item = interviewResults[i];
     item[2] = ParsingCategory(item[2]);
-    const parsedItem ={question: item[0], answer: item[1], category: item[2], score: parseInt(item[3]), analysis: item[4]};
-    categoryScores[parsedItem.category.mainCategory].push(parsedItem.score);
+    const parsedItem ={question: item[0], answer: item[1], category: item[2], score: item[3], analysis: item[4]}; //score: parseInt(item[3]),
+    // categoryScores[parsedItem.category.mainCategory].push(parsedItem.score);
     parsingInterviewResults.push(parsedItem);
   }
 
