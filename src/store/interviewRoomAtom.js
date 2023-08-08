@@ -18,5 +18,6 @@ export const interviewDataAtom = atom({
 
 export const interviewResultAtom = atom({
   key: "interviewResultState",
-  default: {interviewResults:[], categoryScores: {}, categoryAverages: [], categories: []}
+  default: {interviewResults:[], categoryScores: {}, categoryAverages: [], categories: []},
+  effects_UNSTABLE: [persistAtom],
 });
