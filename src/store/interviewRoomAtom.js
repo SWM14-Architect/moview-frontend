@@ -18,5 +18,5 @@ export const interviewDataAtom = atom({
 
 export const interviewResultAtom = atom({
   key: "interviewResultState",
-  default: null
+  default: {interviewResults:[], categoryScores: {}, categoryAverages: [], categories: []}
 });

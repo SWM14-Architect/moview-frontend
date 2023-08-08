@@ -9,6 +9,7 @@ import {useInterval} from "../../utils/useInterval";
 import {ScrollToTop} from "../../utils/scrollRestoration";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {answer} from "../../api/interviewee";
+import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -75,9 +76,9 @@ function InterviewChat(){
         .then((res) => {
           if(res.message.flag === "InterviewerActionEnum.END_INTERVIEW") {
             // INTERVIEW_END, 결과 페이지로 이동합니다.
-            handleInterviewerQuestion(null, "수고하셨습니다! 면접은 여기서 종료하겠습니다.");
+            handleInterviewerQuestion(null, "수고하셨습니다!");
             setInterviewFlag(true);
-            setInterviewResult(res.message.content); // 결과내용을 interviewResultAtom에 저장합니다.
+            setInterviewResult(interviewSummaryGenerator(res.message.content)); // 결과내용을 interviewResultAtom에 저장합니다.
           }
           else{
             // NEXT_QUESTION, 다음 질문을 받아옵니다.
