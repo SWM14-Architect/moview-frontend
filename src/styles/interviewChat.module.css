@@ -92,3 +92,7 @@
     outline-color: grey !important;
     cursor: default;
 }
+
+.result_form_button {
+    border-radius: 10px;
+}

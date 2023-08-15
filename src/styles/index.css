@@ -59,3 +59,10 @@ input {
 input:focus {
     outline: #8695c9 1px solid;
 }
+
+.line {
+    height: 1px;
+    background-color: #cecece;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}

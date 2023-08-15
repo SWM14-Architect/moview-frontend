@@ -1,10 +1,13 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewInput.module.css";
-import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
+import {MAXIMUM_COVERLETTER_NUMBER} from "../../constants/interviewInputConst";
 import {useRecoilState} from "recoil";
-import {roomIdAtom} from "../../store/room_atom";
-import {interviewDataAtom} from "../../store/room_atom";
+import {interviewDataAtom, roomIdAtom} from "../../store/interviewRoomAtom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
+import {input, session} from "../../api/interviewee";
+import {toast} from "react-toastify";
+import {chatHistoryAtom} from "../../store/interviewChatAtom";
+import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -157,15 +160,17 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 function InterviewInput(){
   ScrollToTop();
   const [, setRoomID] = useRecoilState(roomIdAtom);
+  // 사용자에게 입력받은 데이터를 전역상태로 저장
+  const [, setInterivewData] = useRecoilState(interviewDataAtom);
+  // 채팅방 대화 기록 (이전에 저장된 대화를 삭제하기 위해서 setter만 불러옴)
+  const [, setChatHistory] = useRecoilState(chatHistoryAtom);
+
   // 사용자에게서 입력받는 데이터들
   const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
   const [interviewTargetCompany, setInterviewTargetCompany] = useState("");
   const [interviewTargetPosition, setInterviewTargetPosition] = useState("");
   const [interviewRecruitment, setInterviewRecruitment] = useState("");
   const [interviewCoverLetters, setInterviewCoverLetters] = useState([{"id":0, "question":"", "content":""}]);
-
-  // 사용자에게 입력받은 데이터를 전역상태로 저장
-  const [, setInterivewData] = useRecoilState(interviewDataAtom);
 
   function handleIntervieweeNameChange(e) {
     setIntervieweeName(e.target.value);
@@ -185,14 +190,20 @@ function InterviewInput(){
 
   function handleNextButtonClick(e) {
     e.preventDefault();
-    if(intervieweeName === "") return alert("이름을 입력해주세요.");
-    if(interviewTargetCompany === "") return alert("지원하고자 하는 회사를 입력해주세요.");
-    if(interviewTargetPosition === "") return alert("지원하고자 하는 직군을 입력해주세요.");
-    if(interviewRecruitment === "") return alert("모집공고를 입력해주세요.");
-    if(interviewCoverLetters.map((item, index) => item.question === "" || item.content === "").includes(true)) {
-      return alert("자소서 항목을 모두 입력해주세요.");
+
+    const toastWarning = (text) => {
+      // toast에 공통 옵션을 줄 수도 있어서 함수화했습니다.
+      toast.warn(text, {});
     }
-    setRoomID("interviewChat");
+
+    if(intervieweeName === "") return toastWarning("이름을 입력해주세요.");
+    if(interviewTargetCompany === "") return toastWarning("지원하고자 하는 회사를 입력해주세요.");
+    if(interviewTargetPosition === "") return toastWarning("지원하고자 하는 직군을 입력해주세요.");
+    if(interviewRecruitment === "") return toastWarning("모집공고를 입력해주세요.");
+    if(interviewCoverLetters.map((item, index) => item.question === "" || item.content === "").includes(true)) {
+      return toastWarning("자소서 항목을 모두 입력해주세요.");
+    }
+
     setInterivewData({
       "intervieweeName": intervieweeName,
       "interviewTargetCompany": interviewTargetCompany,
@@ -200,6 +211,30 @@ function InterviewInput(){
       "interviewRecruitment": interviewRecruitment,
       "interviewCoverLetters": interviewCoverLetters
     })
+    const coverLettersCopy = interviewCoverLetters.map(({ id, ...item }) => item);
+
+    // REFACTORING: 원래 이렇게 지져분하게 안짜고 싶었는데, promise 방식을 쓰고 있어서인지
+    // try-catch문으로 error가 안잡혀서 아래와 같이 처리했습니다. 리팩토링 해야함...
+    session().then(() => {
+      // session을 성공적으로 생성했을 때, input API를 호출합니다.
+      input({
+        intervieweeName: intervieweeName,
+        jobGroup: interviewTargetPosition,
+        recruitAnnouncement: interviewRecruitment,
+        coverLetterQuestions: coverLettersCopy.map(({question, content}) => question),
+        coverLetterAnswers: coverLettersCopy.map(({question, content}) => content)
+      })
+      .then((res) => {
+        setRoomID("interviewChat");
+        setChatHistory([...CHAT_HISTORY_DEFAULT_VALUE, {type:"AI", content:res.message.content}]);
+      })
+      .catch((err) => {
+        toast.error(`오류가 발생했습니다!\n${err.message}`, {});
+      });
+
+    }).catch((err) => {
+      toast.error(`오류가 발생했습니다!\n${err.message}`, {});
+    });
   }
 
   return (

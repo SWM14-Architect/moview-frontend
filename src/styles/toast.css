@@ -1,0 +1,4 @@
+
+.Toastify__toast-body div:last-child {
+    white-space: pre-wrap; /* 텍스트에 개행 적용 */
+}

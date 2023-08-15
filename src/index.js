@@ -12,8 +12,11 @@ import "./styles/layout.css";
 import "./styles/button.hover.css";
 import "./styles/radio.input.css";
 import "./styles/range.input.css";
+import "react-toastify/dist/ReactToastify.css";
+import "./styles/toast.css";
 import Main from "./pages/main";
 import InterviewRoom from "./pages/interviewRoom";
+import ToastContainerComponent from "./utils/toastContainer";
 
 
 function Index(){
@@ -33,6 +36,7 @@ function Index(){
 
   return(
     <RecoilRoot>
+      <ToastContainerComponent/>
       <RouterProvider router={router}/>
     </RecoilRoot>
   )

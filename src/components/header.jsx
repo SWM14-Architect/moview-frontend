@@ -1,11 +1,33 @@
 import React, {useEffect, useState} from "react";
 import style from "../styles/header.module.css";
-import InterviewButton from "./interviewButton";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {roomIdAtom} from "../store/interviewRoomAtom";
+
+
+function HeaderMenu() {
+  return (
+    <>
+      <ul>모두의인터뷰</ul>
+      <ul>Services</ul>
+      <ul>Pricing</ul>
+    </>
+  );
+}
+
+function InterviewMenu({intervieweeName="이름"}) {
+  return (
+    <>
+      <ul>{intervieweeName}</ul>
+    </>
+  )
+}
 
 function Header() {
-  const location = useLocation()
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isRoom, setIsRoom] = useState(false);
+  const [, setRoomID] = useRecoilState(roomIdAtom);
 
   useEffect(() => {
       if (window.location.pathname === "/room") {
@@ -16,16 +38,29 @@ function Header() {
       }
   }, [location])
 
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    if (!isRoom) {
+      setRoomID("interviewInput");
+      navigate("/room");
+    }
+    else{
+      alert("정말로 면접을 종료하시겠습니까?\n나중에 alert 말고, 선택지로 해서 취소도 가능하게 만들기");
+      setRoomID("interviewInput");
+      navigate("/");
+    }
+  }
+
   return (
     <header>
       <div className={`container`}>
         <div className={`${style.navbar}`}>
           <nav className={`${style.nav}`}>
-            <ul>모두의인터뷰</ul>
-            <ul>Services</ul>
-            <ul>Pricing</ul>
+            {!isRoom ? <HeaderMenu /> : <InterviewMenu />}
           </nav>
-          {!isRoom ? <InterviewButton text={"면접시작 >"} style={{marginRight:"15px"}}/> : <InterviewButton text={"면접종료"} style={{marginRight:"15px"}}/>}
+          <button className={`blackButton`} style={{marginRight:"15px"}} onClick={(e) => handleButtonClick(e)}>
+            {!isRoom ? "면접시작 >" : "면접종료 >"}
+          </button>
         </div>
       </div>
     </header>
