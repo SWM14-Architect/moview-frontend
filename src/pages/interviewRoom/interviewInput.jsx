@@ -36,6 +36,7 @@ function TextareaForm({placeholder, item, index, onChange, styles={}}){
 
   // Textarea height auto resize
   const handleResizeHeight = useCallback(() => {
+    textRef.current.style.height = "auto";
     textRef.current.style.height = textRef.current.scrollHeight + "px";
   }, []);
 
@@ -89,7 +90,7 @@ function CoverLetterForm({refs, index, length, item, onQuestionChange, onContent
           item={item.content}
           index={index}
           onChange={onContentChange}
-          styles={{marginTop:"20px", height:"100px"}}
+          styles={{marginTop:"20px", minHeight:"100px"}}
         />
       </div>
     </div>
