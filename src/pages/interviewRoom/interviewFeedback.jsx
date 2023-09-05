@@ -3,53 +3,53 @@ import style from "../../styles/interviewFeedback.module.css";
 import {useRecoilState} from "recoil";
 import {interviewDataAtom, interviewResultAtom} from "../../store/interviewRoomAtom";
 import "chart.js/auto";
-import { Radar } from "react-chartjs-2";
+// import { Radar } from "react-chartjs-2";
 import {FEEDBACK_RANGE_DEFAULT_VALUE} from "../../constants/interviewFeedbackConst";
 import {useNavigate} from "react-router-dom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
 import {feedback} from "../../api/interviewee";
 import {toast} from "react-toastify";
 
-function RadarChart({labels, datasets}) {
-  const data = {
-    labels: labels,
-    datasets: [
-      {
-        data: datasets,
-        backgroundColor: "rgba(0, 123, 255, 0.25)",
-        borderColor: "rgb(0,123,255)",
-        borderWidth: 1,
-        label: "내 평균점수"
-      },
-      // {
-      //   data: [4, 4, 4, 3, 5],
-      //   backgroundColor: "rgba(110,110,110, 0.25)",
-      //   borderColor: "rgb(110,110,110)",
-      //   borderWidth: 1,
-      //   label: "평균 점수"
-      // },
-    ],
-  };
-
-  const options = {
-    responsive: true, // 차트 크기가 컨테이너의 크기에 반응하도록 활성화합니다.
-    maintainAspectRatio: false, // 종횡비를 유지하지 않도록 설정합니다.
-    scale: {
-      ticks: { beginAtZero: true, display:false },
-      r: {
-        min: 0, max: 100,
-        ticks: { stepSize: 20 },
-      }
-    },
-  }
-
-  return (
-    <Radar
-      data={data}
-      options={options}
-    />
-  );
-}
+// function RadarChart({labels, datasets}) {
+//   const data = {
+//     labels: labels,
+//     datasets: [
+//       {
+//         data: datasets,
+//         backgroundColor: "rgba(0, 123, 255, 0.25)",
+//         borderColor: "rgb(0,123,255)",
+//         borderWidth: 1,
+//         label: "내 평균점수"
+//       },
+//       // {
+//       //   data: [4, 4, 4, 3, 5],
+//       //   backgroundColor: "rgba(110,110,110, 0.25)",
+//       //   borderColor: "rgb(110,110,110)",
+//       //   borderWidth: 1,
+//       //   label: "평균 점수"
+//       // },
+//     ],
+//   };
+//
+//   const options = {
+//     responsive: true, // 차트 크기가 컨테이너의 크기에 반응하도록 활성화합니다.
+//     maintainAspectRatio: false, // 종횡비를 유지하지 않도록 설정합니다.
+//     scale: {
+//       ticks: { beginAtZero: true, display:false },
+//       r: {
+//         min: 0, max: 100,
+//         ticks: { stepSize: 20 },
+//       }
+//     },
+//   }
+//
+//   return (
+//     <Radar
+//       data={data}
+//       options={options}
+//     />
+//   );
+// }
 
 function SliderInput({name, index, onChange}){
   return (
@@ -105,6 +105,7 @@ function InterviewFeedback(){
   useEffect(() => {
     setInterviewRecords(interviewResults.interviewResults);
     setInterviewFeedbacks(new Array(interviewResults.interviewResults.length).fill(FEEDBACK_RANGE_DEFAULT_VALUE));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return(
