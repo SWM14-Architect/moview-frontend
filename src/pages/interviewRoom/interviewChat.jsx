@@ -16,6 +16,7 @@ function TextareaForm({placeholder, item, onChange}){
 
   // Textarea height auto resize
   const handleResizeHeight = useCallback(() => {
+    textRef.current.style.height = "auto";
     textRef.current.style.height = textRef.current.scrollHeight + "px";
   }, []);
 
@@ -38,10 +39,10 @@ function InterviewChat(){
   const [interviewData, ] = useRecoilState(interviewDataAtom);
   const [chatHistory, setChatHistory] = useRecoilState(chatHistoryAtom); // 채팅내역
   const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
-  const [isTyping, setIsTyping] = useState(null);
+  const [isTyping, setIsTyping] = useState(null); // isTyping: Optional[{index: index, type:item.type(AI or Human), instance:TypeIt instance}]
   const [intervieweeAnswerFormText, setIntervieweeAnswerFormText] = useState(""); // Form Value
-  const [interviewerQuestion, setInterviewerQuestion] = useState("");
-  const [intervieweeAnswer, setIntervieweeAnswer] = useState("");
+  const [interviewerQuestion, setInterviewerQuestion] = useState(""); // 면접관의 현재 질문 내용 (API로 보내기 위해 추적)
+  const [intervieweeAnswer, setIntervieweeAnswer] = useState(""); // 사용자의 현재 질문에 대한 답변 내용
   const [interviewTurn, setInterviewTurn] = useState(false); // [false: AI 질문 중 true: Interviewee 답변 가능]
   const [interviewFlag, setInterviewFlag] = useState(false); // [false: 인터뷰 진행 중 true: 인터뷰 종료]
 
