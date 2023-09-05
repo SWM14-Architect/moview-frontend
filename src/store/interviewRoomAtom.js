@@ -19,7 +19,7 @@ export const roomIdAtom = atom({
 export const interviewDataAtom = atom({
   key: "interviewDataState",
   default: INTERVIEW_INPUT_FORM_DEFAULT_VALUE,
-  // {
+  // INTERVIEW_INPUT_FORM_DEFAULT_VALUE = {
   //   "intervieweeName": "",
   //   "interviewTargetCompany": "",
   //   "interviewTargetPosition": "",
