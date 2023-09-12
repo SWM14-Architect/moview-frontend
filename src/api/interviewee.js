@@ -6,7 +6,7 @@ const apiClient = axios.create({
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
 });
 
-export const session = () => {
+export const session_api = () => {
   return apiClient.post('/session')
   .then(response => response.data)
   .catch(error => {
@@ -15,9 +15,10 @@ export const session = () => {
 }
 
 // 자소서 분석, 초기 질문리스트 생성
-export const input = ({intervieweeName, jobGroup, recruitAnnouncement, coverLetterQuestions, coverLetterAnswers}) => {
+export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnouncement, coverLetterQuestions, coverLetterAnswers}) => {
   // 입력 검증
   if (typeof intervieweeName !== 'string') throw new Error("Invalid input: Interviewee Name");
+  if (typeof companyName !== 'string') throw new Error('Invalid input: Company Name')
   if (typeof jobGroup !== 'string') throw new Error('Invalid input: Job Group');
   if (typeof recruitAnnouncement !== 'string') throw new Error('Invalid input: Recruitment Announcement');
   if (!Array.isArray(coverLetterQuestions)) throw new Error('Invalid input: Cover Letter Questions');
@@ -41,7 +42,7 @@ export const input = ({intervieweeName, jobGroup, recruitAnnouncement, coverLett
 };
 
 // 인터뷰 플래그에 따른 응답
-export const answer = ({question, answer}) => {
+export const answer_api = ({question, answer}) => {
   // 입력 검증
   if (typeof question !== 'string')
     throw new Error('Invalid input: Interviewer Question');
@@ -62,7 +63,7 @@ export const answer = ({question, answer}) => {
 };
 
 // 유저의 서비스평가를 받고, 종료
-export const feedback = ( {feedbacks} ) => {
+export const feedback_api = ( {feedbacks} ) => {
   // 입력 검증
   if (!Array.isArray(feedbacks))
     throw new Error('Invalid input: Feedback List');
