@@ -2,12 +2,12 @@ import axios from 'axios';
 
 // 기본 URL 설정
 const apiClient = axios.create({
-  baseURL: `${process.env.REACT_APP_API_ENDPOINT}/api/interviewee`,
+  baseURL: `${process.env.REACT_APP_API_ENDPOINT}`,
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
 });
 
 export const session_api = () => {
-  return apiClient.post('/session')
+  return apiClient.post('/interview/session')
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -34,7 +34,7 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   };
 
   // response {flag,content}
-  return apiClient.post('/input', requestBody)
+  return apiClient.post('/interview/input', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -55,7 +55,7 @@ export const answer_api = ({question, answer}) => {
     "answer": answer,
   };
 
-  return apiClient.post('/answer', requestBody)
+  return apiClient.post('/interview/answer', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -73,7 +73,7 @@ export const feedback_api = ( {feedbacks} ) => {
     "feedbacks": feedbacks
   };
 
-  return apiClient.post('/feedback', requestBody)
+  return apiClient.post('/interview/feedback', requestBody)
   .catch(error => {
     throw error;
   });
