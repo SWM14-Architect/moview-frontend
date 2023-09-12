@@ -27,6 +27,7 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   // JSON 형식으로 requestBody 구성
   const requestBody = {
     "interviewee_name":intervieweeName,
+    "company_name":companyName,
     "job_group":jobGroup,
     "recruit_announcement":recruitAnnouncement,
     "cover_letter_questions":coverLetterQuestions,
