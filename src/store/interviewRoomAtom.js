@@ -28,6 +28,21 @@ export const interviewDataAtom = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+
+export const interviewQuestionAtom = atom({
+  key: "interviewQuestionState",
+  default: {
+    /** @type {Array<{_id: string, content: string, feedback: number, is_initial: boolean, is_done: boolean}>} */
+    "initialQuestions": [],
+    "askedQuestions": [],
+    "lastIndex": 0,
+    "lastContent": "",
+    "initialQuestionIndex": 0,
+    "followupQuestionCount": 0,
+  },
+  effects_UNSTABLE: [persistAtom],
+})
+
 export const interviewResultAtom = atom({
   key: "interviewResultState",
   default: {interviewResults:[], categoryScores: {}, categoryAverages: [], categories: []},
