@@ -4,7 +4,7 @@ import {MAXIMUM_COVERLETTER_NUMBER} from "../../constants/interviewInputConst";
 import {useRecoilState} from "recoil";
 import {interviewDataAtom, roomIdAtom} from "../../store/interviewRoomAtom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
-import {input, session} from "../../api/interviewee";
+import {input_api, session_api} from "../../api/interview";
 import {toast} from "react-toastify";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
@@ -216,10 +216,11 @@ function InterviewInput(){
 
     // REFACTORING: 원래 이렇게 지져분하게 안짜고 싶었는데, promise 방식을 쓰고 있어서인지
     // try-catch문으로 error가 안잡혀서 아래와 같이 처리했습니다. 리팩토링 해야함...
-    session().then(() => {
+    session_api().then(() => {
       // session을 성공적으로 생성했을 때, input API를 호출합니다.
-      input({
+      input_api({
         intervieweeName: intervieweeName,
+        companyName: interviewTargetCompany,
         jobGroup: interviewTargetPosition,
         recruitAnnouncement: interviewRecruitment,
         coverLetterQuestions: coverLettersCopy.map(({question, content}) => question),

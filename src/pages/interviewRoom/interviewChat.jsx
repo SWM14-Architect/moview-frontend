@@ -8,7 +8,7 @@ import TypeIt from "typeit-react";
 import {useInterval} from "../../utils/useInterval";
 import {ScrollToTop} from "../../utils/scrollRestoration";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
-import {answer} from "../../api/interviewee";
+import {answer_api} from "../../api/interview";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
 
 function TextareaForm({placeholder, item, onChange}){
@@ -62,7 +62,6 @@ function InterviewChat(){
   }
 
   const handleInterviewerQuestion = (e, questionContent) => {
-    // e.preventDefault();
     const question = {type:"AI", content: questionContent};
     setChatHistory([...chatHistory, question]);
     setInterviewerQuestion(questionContent);
@@ -77,7 +76,7 @@ function InterviewChat(){
       }
       else{
         // 유저의 답변이 완료되었을 때,
-        answer({question: interviewerQuestion, answer: intervieweeAnswer})
+        answer_api({question: interviewerQuestion, answer: intervieweeAnswer})
         .then((res) => {
           if(res.message.flag === "InterviewerActionEnum.END_INTERVIEW") {
             // INTERVIEW_END, 결과 페이지로 이동합니다.

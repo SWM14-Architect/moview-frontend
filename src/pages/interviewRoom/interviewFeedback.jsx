@@ -7,7 +7,7 @@ import "chart.js/auto";
 import {FEEDBACK_RANGE_DEFAULT_VALUE} from "../../constants/interviewFeedbackConst";
 import {useNavigate} from "react-router-dom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
-import {feedback} from "../../api/interviewee";
+import {feedback_api} from "../../api/interview";
 import {toast} from "react-toastify";
 
 // function RadarChart({labels, datasets}) {
@@ -94,7 +94,7 @@ function InterviewFeedback(){
 
   function handleEndButtonClick(e) {
     e.preventDefault();
-    feedback({feedbacks: interviewFeedbacks})
+    feedback_api({feedbacks: interviewFeedbacks})
     .then(res => {
       alert(`면접이 종료되었습니다.`);
       navigate("/");
