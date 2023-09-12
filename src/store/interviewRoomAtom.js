@@ -18,14 +18,13 @@ export const roomIdAtom = atom({
 
 export const interviewDataAtom = atom({
   key: "interviewDataState",
+  /** @type {{
+   * intervieweeName: string,
+   * interviewTargetCompany: string,
+   * interviewTargetPosition: string,
+   * interviewRecruitment: string,
+   * interviewCoverLetters: Array<{question: string, content: string}>}}*/
   default: INTERVIEW_INPUT_FORM_DEFAULT_VALUE,
-  // INTERVIEW_INPUT_FORM_DEFAULT_VALUE = {
-  //   "intervieweeName": "",
-  //   "interviewTargetCompany": "",
-  //   "interviewTargetPosition": "",
-  //   "interviewRecruitment": "",
-  //   "interviewCoverLetters": [],
-  // }
   effects_UNSTABLE: [persistAtom],
 });
 
