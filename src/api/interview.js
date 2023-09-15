@@ -68,6 +68,23 @@ export const answer_api = ({interview_id, question_id, question_content, answer_
   });
 };
 
+export const evaluation_api = ({interview_id}) => {
+  // 입력 검증
+  const regex = /^[a-z0-9]+$/;
+  if (!regex.test(interview_id)) throw new Error('Invalid input: Interview ID');
+
+  // JSON 형식으로 requestBody 구성
+  const requestBody = {
+    "interview_id": interview_id,
+  };
+
+  return apiClient.post('/interview/evaluation', requestBody)
+  .then(response => response.data)
+  .catch(error => {
+    throw error;
+  });
+}
+
 // 유저의 서비스평가를 받고, 종료
 export const feedback_api = ( {feedbacks} ) => {
   // 입력 검증
