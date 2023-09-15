@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import style from "../../styles/interviewFeedback.module.css";
 import {useRecoilState} from "recoil";
-import {interviewDataAtom, interviewResultAtom} from "../../store/interviewRoomAtom";
+import {interviewDataAtom, interviewIdAtom, interviewResultAtom} from "../../store/interviewRoomAtom";
 import "chart.js/auto";
 // import { Radar } from "react-chartjs-2";
 import {FEEDBACK_RANGE_DEFAULT_VALUE} from "../../constants/interviewFeedbackConst";
@@ -81,6 +81,7 @@ function InterviewFeedback(){
   const navigate = useNavigate();
   const [interviewData, ] = useRecoilState(interviewDataAtom);
   const [interviewResults, ] = useRecoilState(interviewResultAtom);
+  const [interviewId, ] = useRecoilState(interviewIdAtom);
   const [interviewRecords, setInterviewRecords] = useState([]);
   const [interviewFeedbacks, setInterviewFeedbacks] = useState([]);
 
@@ -94,8 +95,11 @@ function InterviewFeedback(){
 
   function handleEndButtonClick(e) {
     e.preventDefault();
-    feedback_api({feedbacks: interviewFeedbacks})
-    .then(res => {
+    feedback_api({
+      interview_id: interviewId,
+      question_ids: [],
+      feedback_scores: interviewFeedbacks
+    }).then(() => {
       alert(`면접이 종료되었습니다.`);
       navigate("/");
     })

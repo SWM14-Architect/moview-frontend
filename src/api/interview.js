@@ -86,14 +86,21 @@ export const evaluation_api = ({interview_id}) => {
 }
 
 // 유저의 서비스평가를 받고, 종료
-export const feedback_api = ( {feedbacks} ) => {
+export const feedback_api = ( {interview_id, question_ids, feedback_scores} ) => {
   // 입력 검증
-  if (!Array.isArray(feedbacks))
-    throw new Error('Invalid input: Feedback List');
+  const regex = /^[a-z0-9]+$/;
+  if (!regex.test(interview_id)) throw new Error('Invalid input: Interview ID');
+  if (!Array.isArray(question_ids)) throw new Error('Invalid input: Question IDs');
+  for (let question_id of question_ids) {
+    if (!regex.test(question_id)) throw new Error('Invalid input: Question ID');
+  }
+  if (!Array.isArray(feedback_scores)) throw new Error('Invalid input: Feedback Scores');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
-    "feedbacks": feedbacks
+    "interview_id": interview_id,
+    "question_ids": question_ids,
+    "feedback_scores": feedback_scores,
   };
 
   return apiClient.post('/interview/feedback', requestBody)
