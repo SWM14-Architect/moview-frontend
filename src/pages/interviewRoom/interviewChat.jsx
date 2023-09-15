@@ -16,6 +16,7 @@ import {ScrollToTop} from "../../utils/scrollRestoration";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {answer_api, evaluation_api} from "../../api/interview";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
+import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -41,6 +42,8 @@ function TextareaForm({placeholder, item, onChange}){
 function InterviewChat(){
   ScrollToTop();
   const intervieweeAnswerRef = useRef(null);
+  const [, setIsLoading] = useRecoilState(loadingAtom);
+  const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
   const [, setRoomID] = useRecoilState(roomIdAtom);
   const [interviewData, ] = useRecoilState(interviewDataAtom);
   const [chatHistory, setChatHistory] = useRecoilState(chatHistoryAtom); // 채팅내역
@@ -126,6 +129,21 @@ function InterviewChat(){
     }
   }
 
+  const handleInterviewEnd = () => {
+    setIsLoading(true);
+    setLoadingMessage("면접 결과를 분석하고 있습니다");
+    evaluation_api({interview_id: interviewId}).then((res) => {
+      console.log(res.message.evaluations);
+
+      setIsLoading(false);
+      setInterviewResult(interviewSummaryGenerator(res.message.evaluations)); // 결과내용을 interviewResultAtom에 저장합니다.
+      setRoomID("interviewFeedback");
+    }).catch((err) => {
+      setIsLoading(false);
+      console.log(err);
+    });
+  }
+
   // 1초마다 입력이 완료되었는지 체크합니다.
   useInterval(() => {
     if(isTyping !== null && isTyping.instance.is("completed")){
@@ -148,15 +166,9 @@ function InterviewChat(){
           setQuestionAsDone(currentIndex);
 
           if(isInterviewEnded(res.message)){
-            // INTERVIEW_END, 결과 페이지로 이동합니다.
-            evaluation_api({interview_id: interviewId}).then((evaluation_result) => {
-              console.log(evaluation_result.message.evaluations);
-              handleInterviewerQuestion(null, "수고하셨습니다!");
-              setInterviewFlag(true);
-              setInterviewResult(interviewSummaryGenerator(evaluation_result.message.evaluations)); // 결과내용을 interviewResultAtom에 저장합니다.
-            }).catch((err2) => {
-              console.log(err2);
-            });
+            // INTERVIEW_END, 결과 페이지로 이동할 수 있는 버튼이 활성화합니다.
+            setInterviewFlag(true);
+            handleInterviewerQuestion(null, "수고하셨습니다!");
           }
           else{
             // NEXT_QUESTION, 다음 질문을 출력합니다.
@@ -231,7 +243,7 @@ function InterviewChat(){
           <div className={`${style.input_form}`}>
             <button
               className={`${style.input_form_button} ${style.result_form_button}`}
-              onClick={() => setRoomID("interviewFeedback")}
+              onClick={() => handleInterviewEnd()}
             >
               결과 확인하기
             </button>

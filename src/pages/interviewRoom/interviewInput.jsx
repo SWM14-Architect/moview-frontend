@@ -9,6 +9,7 @@ import {toast} from "react-toastify";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
 import {INTERVIEW_STATE_DEFAULT_VALUE} from "../../constants/interviewRoomConst";
+import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -161,6 +162,8 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 
 function InterviewInput(){
   ScrollToTop();
+  const [, setIsLoading] = useRecoilState(loadingAtom);
+  const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
   // 사용자의 화면을 변경하기 위한 RoomID
   const [, setRoomID] = useRecoilState(roomIdAtom);
   // 사용자에게 입력받은 데이터를 전역상태로 저장
@@ -170,7 +173,7 @@ function InterviewInput(){
   // Interview ID
   const [, setInterviewId] = useRecoilState(interviewIdAtom);
   // 클라이언트 상태 관리
-  const [interviewState, setInterviewState] = useRecoilState(interviewStateAtom);
+  const [, setInterviewState] = useRecoilState(interviewStateAtom);
 
   // 사용자에게서 입력받는 데이터들
   const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
@@ -224,6 +227,8 @@ function InterviewInput(){
     // try-catch문으로 error가 안잡혀서 아래와 같이 처리했습니다. 리팩토링 해야함...
     session_api().then(() => {
       // session을 성공적으로 생성했을 때, input API를 호출합니다.
+      setIsLoading(true);
+      setLoadingMessage("잠시후 면접이 시작됩니다");
       input_api({
         intervieweeName: intervieweeName,
         companyName: interviewTargetCompany,
@@ -233,6 +238,7 @@ function InterviewInput(){
         coverLetterAnswers: coverLettersCopy.map(({question, content}) => content)
       })
       .then((res) => {
+        setIsLoading(false);
         setRoomID("interviewChat");
         const interviewStateCopy = JSON.parse(JSON.stringify(INTERVIEW_STATE_DEFAULT_VALUE));
         interviewStateCopy.askedQuestions = [];
@@ -250,6 +256,7 @@ function InterviewInput(){
         setChatHistory([...CHAT_HISTORY_DEFAULT_VALUE, {type:"AI", content:firstQuestion.content}]);
       })
       .catch((err) => {
+        setIsLoading(false);
         toast.error(`오류가 발생했습니다!\n${err.message}`, {});
       });
 

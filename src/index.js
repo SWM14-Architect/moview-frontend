@@ -12,6 +12,7 @@ import "./styles/layout.css";
 import "./styles/button.hover.css";
 import "./styles/radio.input.css";
 import "./styles/range.input.css";
+import "./styles/loading.css";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles/toast.css";
 import Main from "./pages/main";
