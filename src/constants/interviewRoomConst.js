@@ -26,10 +26,8 @@ const INTERVIEW_STATE_DEFAULT_VALUE = {
 };
 
 const INTERVIEW_RESULT_DEFAULT_VALUE = {
-  interviewResults:[],
-  categoryScores: {},
-  categoryAverages: [],
-  categories: []
+  coverletterResults: [],
+  interviewResults: [],
 }
 
 export { INTERVIEW_INPUT_FORM_DEFAULT_VALUE, QUESTION_CATEGORY_LIST_VALUE, INTERVIEW_STATE_DEFAULT_VALUE, INTERVIEW_RESULT_DEFAULT_VALUE };

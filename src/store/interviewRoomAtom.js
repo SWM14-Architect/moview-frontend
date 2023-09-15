@@ -57,11 +57,8 @@ export const interviewIdAtom = atom({
 export const interviewResultAtom = atom({
   key: "interviewResultState",
   /** @type {{
-   * interviewResults: Array<{question: string, answer: string, category: string, score: number, analysis: string}>,
-   * categoryScores: {},
-   * categoryAverages: [],
-   * categories: []}}
-   */
+   * coverletterResults: Array<{question: string, answer: string, analysis: string}>,
+   * interviewResults: Array<{question: string, answer: string, analysis: string}>}}*/
   default: INTERVIEW_RESULT_DEFAULT_VALUE,
   effects_UNSTABLE: [persistAtom],
 });

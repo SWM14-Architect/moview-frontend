@@ -135,11 +135,7 @@ function InterviewFeedback(){
                 </div>
                 <div>
                   <span>평가</span>
-                  <span>{record.analysis}</span>
-                </div>
-                <div>
-                  <span>점수</span>
-                  <span>{record.score}</span>
+                  <span>장점 분석<br/>{record.analysis[0]}<br/><br/>단점 분석<br/>{record.analysis[1]}</span>
                 </div>
               </div>
               <div className={`${style.feedback_box}`}>
