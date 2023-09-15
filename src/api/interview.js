@@ -43,17 +43,22 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
 };
 
 // 인터뷰 플래그에 따른 응답
-export const answer_api = ({question, answer}) => {
+export const answer_api = ({interview_id, question_id, question_content, answer_content}) => {
   // 입력 검증
-  if (typeof question !== 'string')
+  const regex = /^[a-z0-9]+$/;
+  if (!regex.test(interview_id)) throw new Error('Invalid input: Interview ID');
+  if (!regex.test(question_id)) throw new Error('Invalid input: Question ID');
+  if (typeof question_content !== 'string')
     throw new Error('Invalid input: Interviewer Question');
-  if (typeof answer !== 'string')
+  if (typeof answer_content !== 'string')
     throw new Error('Invalid input: Interviewee Answer');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
-    "question": question,
-    "answer": answer,
+    "interview_id": interview_id,
+    "question_id": question_id,
+    "question_content": question_content,
+    "answer_content": answer_content,
   };
 
   return apiClient.post('/interview/answer', requestBody)

@@ -2,12 +2,13 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewInput.module.css";
 import {MAXIMUM_COVERLETTER_NUMBER} from "../../constants/interviewInputConst";
 import {useRecoilState} from "recoil";
-import {interviewDataAtom, roomIdAtom} from "../../store/interviewRoomAtom";
+import {interviewDataAtom, interviewIdAtom, interviewStateAtom, roomIdAtom} from "../../store/interviewRoomAtom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
 import {input_api, session_api} from "../../api/interview";
 import {toast} from "react-toastify";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
+import {INTERVIEW_STATE_DEFAULT_VALUE} from "../../constants/interviewRoomConst";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -160,11 +161,16 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 
 function InterviewInput(){
   ScrollToTop();
+  // 사용자의 화면을 변경하기 위한 RoomID
   const [, setRoomID] = useRecoilState(roomIdAtom);
   // 사용자에게 입력받은 데이터를 전역상태로 저장
   const [, setInterivewData] = useRecoilState(interviewDataAtom);
   // 채팅방 대화 기록 (이전에 저장된 대화를 삭제하기 위해서 setter만 불러옴)
   const [, setChatHistory] = useRecoilState(chatHistoryAtom);
+  // Interview ID
+  const [, setInterviewId] = useRecoilState(interviewIdAtom);
+  // 클라이언트 상태 관리
+  const [interviewState, setInterviewState] = useRecoilState(interviewStateAtom);
 
   // 사용자에게서 입력받는 데이터들
   const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
@@ -228,7 +234,20 @@ function InterviewInput(){
       })
       .then((res) => {
         setRoomID("interviewChat");
-        setChatHistory([...CHAT_HISTORY_DEFAULT_VALUE, {type:"AI", content:res.message.content}]);
+        const interviewStateCopy = JSON.parse(JSON.stringify(INTERVIEW_STATE_DEFAULT_VALUE));
+        interviewStateCopy.askedQuestions = [];
+        interviewStateCopy.initialQuestions = res.message.initial_questions.map(({content, question_id}) => ({
+          _id: question_id,
+          content: content,
+          feedback: 0,
+          is_initial: true,
+          is_done: false,
+        }));
+        const firstQuestion = interviewStateCopy.initialQuestions[0];
+        interviewStateCopy.askedQuestions.push({_id:firstQuestion._id, content:firstQuestion.content});
+        setInterviewState(interviewStateCopy);
+        setInterviewId(res.message.interview_id);
+        setChatHistory([...CHAT_HISTORY_DEFAULT_VALUE, {type:"AI", content:firstQuestion.content}]);
       })
       .catch((err) => {
         toast.error(`오류가 발생했습니다!\n${err.message}`, {});
