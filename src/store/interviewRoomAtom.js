@@ -1,6 +1,10 @@
 import {atom} from "recoil";
 import {recoilPersist} from "recoil-persist";
-import {INTERVIEW_INPUT_FORM_DEFAULT_VALUE} from "../constants/interviewRoomConst";
+import {
+  INTERVIEW_INPUT_FORM_DEFAULT_VALUE,
+  INTERVIEW_RESULT_DEFAULT_VALUE,
+  INTERVIEW_STATE_DEFAULT_VALUE
+} from "../constants/interviewRoomConst";
 
 /*
 key: 키는 해당 전역변수를 구분하기 위한 유니크값
@@ -12,6 +16,7 @@ const {persistAtom} = recoilPersist();
 
 export const roomIdAtom = atom({
   key: "roomIDState",
+  /** @type {string} */
   default: "interviewChat",
   effects_UNSTABLE: [persistAtom],
 });
@@ -29,22 +34,34 @@ export const interviewDataAtom = atom({
 });
 
 
-export const interviewQuestionAtom = atom({
-  key: "interviewQuestionState",
-  default: {
-    /** @type {Array<{_id: string, content: string, feedback: number, is_initial: boolean, is_done: boolean}>} */
-    "initialQuestions": [],
-    "askedQuestions": [],
-    "lastIndex": 0,
-    "lastContent": "",
-    "initialQuestionIndex": 0,
-    "followupQuestionCount": 0,
-  },
+export const interviewStateAtom = atom({
+  key: "interviewStateState",
+  /** @type {{
+   * initialQuestions: Array<{_id: string, content: string, feedback: number, is_initial: boolean, is_done: boolean}>,
+   * askedQuestions: Array<{_id: string, content: string, feedback: number, is_initial: boolean, is_done: boolean}>,
+   * lastId: string,
+   * lastContent: string,
+   * initialQuestionIndex: number,
+   * followupQuestionCount: number}}*/
+  default: INTERVIEW_STATE_DEFAULT_VALUE,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const interviewIdAtom = atom({
+  key: "interviewIdState",
+  /** @type {string} */
+  default: "",
   effects_UNSTABLE: [persistAtom],
 })
 
 export const interviewResultAtom = atom({
   key: "interviewResultState",
-  default: {interviewResults:[], categoryScores: {}, categoryAverages: [], categories: []},
+  /** @type {{
+   * interviewResults: Array<{question: string, answer: string, category: string, score: number, analysis: string}>,
+   * categoryScores: {},
+   * categoryAverages: [],
+   * categories: []}}
+   */
+  default: INTERVIEW_RESULT_DEFAULT_VALUE,
   effects_UNSTABLE: [persistAtom],
 });

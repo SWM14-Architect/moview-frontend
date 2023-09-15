@@ -15,4 +15,21 @@ const QUESTION_CATEGORY_LIST_VALUE = {
   "Personal Character Questions": ["Thinking Style and Behavioral Patterns", "Growth and Development", "Motivation and Values"]
 };
 
-export { INTERVIEW_INPUT_FORM_DEFAULT_VALUE, QUESTION_CATEGORY_LIST_VALUE };
+/** @type {{initialQuestions: *[], askedQuestions: *[], initialQuestionIndex: number, followupQuestionCount: number, lastContent: string, lastId: string}} */
+const INTERVIEW_STATE_DEFAULT_VALUE = {
+  "initialQuestions": [],
+  "askedQuestions": [],
+  "lastId": "",
+  "lastContent": "",
+  "initialQuestionIndex": 0,
+  "followupQuestionCount": 0,
+};
+
+const INTERVIEW_RESULT_DEFAULT_VALUE = {
+  interviewResults:[],
+  categoryScores: {},
+  categoryAverages: [],
+  categories: []
+}
+
+export { INTERVIEW_INPUT_FORM_DEFAULT_VALUE, QUESTION_CATEGORY_LIST_VALUE, INTERVIEW_STATE_DEFAULT_VALUE, INTERVIEW_RESULT_DEFAULT_VALUE };
