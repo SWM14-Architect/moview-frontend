@@ -14,7 +14,7 @@ import TypeIt from "typeit-react";
 import {useInterval} from "../../utils/useInterval";
 import {ScrollToTop} from "../../utils/scrollRestoration";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
-import {answer_api} from "../../api/interview";
+import {answer_api, evaluation_api} from "../../api/interview";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
 
 function TextareaForm({placeholder, item, onChange}){
@@ -149,10 +149,14 @@ function InterviewChat(){
 
           if(isInterviewEnded(res.message)){
             // INTERVIEW_END, 결과 페이지로 이동합니다.
-            handleInterviewerQuestion(null, "수고하셨습니다!");
-            setInterviewFlag(true);
-            console.log(res);
-            setInterviewResult(interviewSummaryGenerator(res.message.content)); // 결과내용을 interviewResultAtom에 저장합니다.
+            evaluation_api({interview_id: interviewId}).then((evaluation_result) => {
+              console.log(evaluation_result.message.evaluations);
+              handleInterviewerQuestion(null, "수고하셨습니다!");
+              setInterviewFlag(true);
+              setInterviewResult(interviewSummaryGenerator(evaluation_result.message.evaluations)); // 결과내용을 interviewResultAtom에 저장합니다.
+            }).catch((err2) => {
+              console.log(err2);
+            });
           }
           else{
             // NEXT_QUESTION, 다음 질문을 출력합니다.
