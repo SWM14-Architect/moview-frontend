@@ -97,7 +97,7 @@ function InterviewFeedback(){
     e.preventDefault();
     feedback_api({
       interview_id: interviewId,
-      question_ids: [],
+      question_ids: interviewRecords.map(record => record.question_id),
       feedback_scores: interviewFeedbacks
     }).then(() => {
       alert(`면접이 종료되었습니다.`);
