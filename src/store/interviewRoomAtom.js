@@ -1,6 +1,10 @@
 import {atom} from "recoil";
 import {recoilPersist} from "recoil-persist";
-import {INTERVIEW_INPUT_FORM_DEFAULT_VALUE} from "../constants/interviewRoomConst";
+import {
+  INTERVIEW_INPUT_FORM_DEFAULT_VALUE,
+  INTERVIEW_RESULT_DEFAULT_VALUE,
+  INTERVIEW_STATE_DEFAULT_VALUE
+} from "../constants/interviewRoomConst";
 
 /*
 key: 키는 해당 전역변수를 구분하기 위한 유니크값
@@ -12,25 +16,49 @@ const {persistAtom} = recoilPersist();
 
 export const roomIdAtom = atom({
   key: "roomIDState",
+  /** @type {string} */
   default: "interviewChat",
   effects_UNSTABLE: [persistAtom],
 });
 
 export const interviewDataAtom = atom({
   key: "interviewDataState",
+  /** @type {{
+   * intervieweeName: string,
+   * interviewTargetCompany: string,
+   * interviewTargetPosition: string,
+   * interviewRecruitment: string,
+   * interviewCoverLetters: Array<{question: string, content: string}>}}*/
   default: INTERVIEW_INPUT_FORM_DEFAULT_VALUE,
-  // INTERVIEW_INPUT_FORM_DEFAULT_VALUE = {
-  //   "intervieweeName": "",
-  //   "interviewTargetCompany": "",
-  //   "interviewTargetPosition": "",
-  //   "interviewRecruitment": "",
-  //   "interviewCoverLetters": [],
-  // }
   effects_UNSTABLE: [persistAtom],
 });
 
+
+export const interviewStateAtom = atom({
+  key: "interviewStateState",
+  /** @type {{
+   * initialQuestions: Array<{_id: string, content: string, feedback: number, is_initial: boolean, is_done: boolean}>,
+   * askedQuestions: Array<{_id: string, content: string, feedback: number, is_initial: boolean, is_done: boolean}>,
+   * lastId: string,
+   * lastContent: string,
+   * initialQuestionIndex: number,
+   * followupQuestionCount: number}}*/
+  default: INTERVIEW_STATE_DEFAULT_VALUE,
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const interviewIdAtom = atom({
+  key: "interviewIdState",
+  /** @type {string} */
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+})
+
 export const interviewResultAtom = atom({
   key: "interviewResultState",
-  default: {interviewResults:[], categoryScores: {}, categoryAverages: [], categories: []},
+  /** @type {{
+   * coverletterResults: Array<{question: string, answer: string, analysis: string}>,
+   * interviewResults: Array<{question_id: string, question: string, answer: string, analysis: string}>}}*/
+  default: INTERVIEW_RESULT_DEFAULT_VALUE,
   effects_UNSTABLE: [persistAtom],
 });

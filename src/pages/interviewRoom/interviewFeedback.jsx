@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import style from "../../styles/interviewFeedback.module.css";
 import {useRecoilState} from "recoil";
-import {interviewDataAtom, interviewResultAtom} from "../../store/interviewRoomAtom";
+import {interviewDataAtom, interviewIdAtom, interviewResultAtom} from "../../store/interviewRoomAtom";
 import "chart.js/auto";
 // import { Radar } from "react-chartjs-2";
 import {FEEDBACK_RANGE_DEFAULT_VALUE} from "../../constants/interviewFeedbackConst";
 import {useNavigate} from "react-router-dom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
-import {feedback} from "../../api/interviewee";
+import {feedback_api} from "../../api/interview";
 import {toast} from "react-toastify";
 
 // function RadarChart({labels, datasets}) {
@@ -81,6 +81,7 @@ function InterviewFeedback(){
   const navigate = useNavigate();
   const [interviewData, ] = useRecoilState(interviewDataAtom);
   const [interviewResults, ] = useRecoilState(interviewResultAtom);
+  const [interviewId, ] = useRecoilState(interviewIdAtom);
   const [interviewRecords, setInterviewRecords] = useState([]);
   const [interviewFeedbacks, setInterviewFeedbacks] = useState([]);
 
@@ -94,8 +95,11 @@ function InterviewFeedback(){
 
   function handleEndButtonClick(e) {
     e.preventDefault();
-    feedback({feedbacks: interviewFeedbacks})
-    .then(res => {
+    feedback_api({
+      interview_id: interviewId,
+      question_ids: interviewRecords.map(record => record.question_id),
+      feedback_scores: interviewFeedbacks
+    }).then(() => {
       alert(`면접이 종료되었습니다.`);
       navigate("/");
     })
@@ -135,11 +139,7 @@ function InterviewFeedback(){
                 </div>
                 <div>
                   <span>평가</span>
-                  <span>{record.analysis}</span>
-                </div>
-                <div>
-                  <span>점수</span>
-                  <span>{record.score}</span>
+                  <span>장점 분석<br/>{record.analysis[0]}<br/><br/>단점 분석<br/>{record.analysis[1]}</span>
                 </div>
               </div>
               <div className={`${style.feedback_box}`}>

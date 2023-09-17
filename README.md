@@ -14,16 +14,80 @@ npm build
 ## 폴더구조
 
 ```bash
+windows cmd command : tree src /f
+mac os cmd command : tree src 
+```
+
+```bash
 src
-│ App.js # 화면을 렌더링하는 골격 컴포넌트
-│ index.js # Start Point
+│  App.js
+│  index.js
+│
 ├─api
+│      interview.js
+│
 ├─assets
+│      free-icon-man-3884851-p-500.png
+│      free-icon-man-4086624-p-500.png
+│      pexels-fauxels-3182765_gnR1cf24-p-1080.webp
+│      recruitment-6838250_1920.png
+│
 ├─components
-├─constants # 상수 관리
+│      footer.jsx
+│      header.jsx
+│      loading.jsx
+│
+├─constants
+│      interviewChatConst.js
+│      interviewFeedbackConst.js
+│      interviewInputConst.js
+│      interviewRoomConst.js
+│      serviceConst.js
+│
 ├─fonts
+│      GmarketSansTTFBold.ttf
+│      GmarketSansTTFLight.ttf
+│      GmarketSansTTFMedium.ttf
+│      IBMPlexSansKR-Regular.ttf
+│      NanumGothic.ttf
+│
 ├─pages
-├─store # recoil 관련 폴더
+│  │  error_page.jsx
+│  │  interviewRoom.jsx
+│  │  main.jsx
+│  │
+│  └─interviewRoom
+│          interviewChat.jsx
+│          interviewFeedback.jsx
+│          interviewInput.jsx
+│
+├─store
+│      interviewChatAtom.js
+│      interviewRoomAtom.js
+│      loadingAtom.js
+│
 ├─styles
-└─utils # 공통 코드 관리
+│      animation.css
+│      button.hover.css
+│      error.module.css
+│      font.css
+│      footer.module.css
+│      header.module.css
+│      index.css
+│      interviewChat.module.css
+│      interviewFeedback.module.css
+│      interviewInput.module.css
+│      layout.css
+│      loading.css
+│      main.module.css
+│      radio.input.css
+│      range.input.css
+│      toast.css
+│
+└─utils
+        interviewSummaryGenerator.js
+        scrollRestoration.jsx
+        toastContainer.jsx
+        useInterval.js
+        useTitle.js
 ```
