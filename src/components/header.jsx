@@ -15,10 +15,10 @@ function HeaderMenu() {
   );
 }
 
-function InterviewMenu({intervieweeName="이름"}) {
+function InterviewMenu() {
   return (
     <>
-      <ul>{intervieweeName}</ul>
+      <ul>가상면접</ul>
     </>
   )
 }
