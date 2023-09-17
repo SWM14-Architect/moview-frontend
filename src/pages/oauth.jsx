@@ -1,19 +1,154 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "../styles/oauth.module.css";
 import KakaoButton from "../assets/kakaolink_btn_small.png";
+import axios from 'axios';
+
+// 기본 URL 설정
+const apiClient = axios.create({
+  baseURL: `${process.env.REACT_APP_API_ENDPOINT}/oauth`,
+  withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
+});
+
 
 const OAuth = () => {
   const [isLogged, setIsLogged] = useState(false);
   const [nickname, setNickname] = useState("");
   const [thumbnailSrc, setThumbnailSrc] = useState("");
 
-  const handleLogin = () => {
-    // 로그인 로직
+  const openWindowPopup = (url, name) => {
+    var options =
+      "top=10, left=10, width=500, height=600, status=no, menubar=no, toolbar=no, resizable=no";
+    return window.open(url, name, options);
   };
 
-  const handleLogout = () => {
-    // 로그아웃 로직
+  const handleLogin = async () => {
+    document
+      .getElementById("loading")
+      .classList.remove(`${style.display_none}`);
+
+    const url = await apiClient.get("/oauth/url")
+      .then((res) => res.json())
+      .then((res) => res["kakao_oauth_url"]);
+
+    const newWindow = openWindowPopup(url, "카카오톡 로그인");
+
+    const checkConnect = setInterval(function () {
+      if (!newWindow || !newWindow.closed) return;
+      clearInterval(checkConnect);
+
+      if (getCookie("logined") === "true") {
+        
+      } else {
+        document
+          .getElementById("loading")
+          .classList.add(`${style.display_none}`);
+      }
+    }, 1000);
   };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/token/remove", {
+        headers: { "Content-Type": "application/json" },
+        method: "GET",
+      });
+
+      const data = await response.json();
+
+      if (data.result) {
+        console.log("로그아웃 성공");
+        alert("정상적으로 로그아웃이 되었습니다.");
+
+        setIsLogged(false);
+        setNickname("");
+        setThumbnailSrc("");
+      } else {
+        console.log("로그아웃 실패");
+      }
+    } catch (error) {
+      console.log(`Error: ${error}`);
+    }
+  };
+
+  const autoLogin = async () => {
+    let data = await fetch("/userinfo", {
+      headers: { "Content-Type": "application/json" },
+      method: "GET",
+    }).then((res) => res.json());
+
+    try {
+      if (!!data["msg"]) {
+        if (data["msg"] === 'Missing cookie "access_token_cookie"') {
+          console.log("자동로그인 실패");
+          return;
+        } else if (data["msg"] === "Token has expired") {
+          console.log("Access Token 만료");
+          refreshToken();
+          return;
+        }
+      } else {
+        console.log("자동로그인 성공");
+        setNickname(data.nickname);
+        setThumbnailSrc(data.profile);
+        setIsLogged(true);
+      }
+    } catch (error) {
+      console.log(`Error: ${error}`);
+      return;
+    }
+  };
+
+  const getCookie = (cookieName) => {
+    let cookieValue = null;
+
+    if (document.cookie) {
+      const array = document.cookie.split(escape(cookieName) + "=");
+
+      if (array.length >= 2) {
+        const arraySub = array[1].split(";");
+        cookieValue = unescape(arraySub[0]);
+      }
+    }
+
+    return cookieValue;
+  };
+
+  const refreshToken = async () => {
+    let data = await fetch("/token/refresh", {
+      headers: { "Content-Type": "application/json" },
+      method: "GET",
+    }).then((res) => res.json());
+
+    if (data.result) {
+      console.log("Access Token 갱신");
+      autoLogin(); // 이 부분에서 autoLogin을 호출합니다.
+    } else {
+      if (data.msg === "Token has expired") {
+        console.log("Refresh Token 만료");
+        setIsLogged(false);
+        setNickname("");
+        setThumbnailSrc("");
+        handleLogin();
+        return;
+      }
+
+      fetch("/token/remove", {
+        headers: { "Content-Type": "application/json" },
+        method: "GET",
+      });
+
+      alert("로그인을 다시 해주세요!");
+      setIsLogged(false);
+      setNickname("");
+      setThumbnailSrc("");
+    }
+  };
+
+  useEffect(() => {
+    // 자동 로그인 실행
+    autoLogin();
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className={`${style.oauth}`}>
@@ -28,7 +163,7 @@ const OAuth = () => {
               className={`${style.kakao_button}`}
               onClick={handleLogin}
             >
-              <img src={KakaoButton} />
+              <img src={KakaoButton} alt="kakao oauth" />
               <span>카카오 로그인</span>
             </div>
           ) : (
