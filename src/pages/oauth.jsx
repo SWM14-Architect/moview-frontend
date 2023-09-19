@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import style from "../styles/oauth.module.css";
 import KakaoButton from "../assets/kakaolink_btn_small.png";
-import axios from 'axios';
+import axios from "axios";
 
 // 기본 URL 설정
 const apiClient = axios.create({
-  baseURL: `${process.env.REACT_APP_API_ENDPOINT}/oauth`,
+  baseURL: `${process.env.REACT_APP_API_ENDPOINT}/interview`,
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
 });
-
 
 const OAuth = () => {
   const [isLogged, setIsLogged] = useState(false);
@@ -16,34 +15,33 @@ const OAuth = () => {
   const [thumbnailSrc, setThumbnailSrc] = useState("");
 
   const openWindowPopup = (url, name) => {
-    var options =
+    const options =
       "top=10, left=10, width=500, height=600, status=no, menubar=no, toolbar=no, resizable=no";
-    return window.open(url, name, options);
+    return window.open(url, name, options); // 리액트스럽지 않은 코드
   };
 
   const handleLogin = async () => {
-    document
-      .getElementById("loading")
-      .classList.remove(`${style.display_none}`);
+    //document.querySelector("#loading").classList.remove('display_none');
+    try {
+      const res = await apiClient.get("/oauth/url");
+      const url = res.data["kakao_oauth_url"];
+      console.log(url);
 
-    const url = await apiClient.get("/oauth/url")
-      .then((res) => res.json())
-      .then((res) => res["kakao_oauth_url"]);
+      const newWindow = openWindowPopup(url, "카카오톡 로그인");
 
-    const newWindow = openWindowPopup(url, "카카오톡 로그인");
+      const checkConnect = setInterval(function () {
+        if (!newWindow || !newWindow.closed) return;
+        clearInterval(checkConnect);
 
-    const checkConnect = setInterval(function () {
-      if (!newWindow || !newWindow.closed) return;
-      clearInterval(checkConnect);
-
-      if (getCookie("logined") === "true") {
-        
-      } else {
-        document
-          .getElementById("loading")
-          .classList.add(`${style.display_none}`);
-      }
-    }, 1000);
+        if (getCookie("logined") === "true") {
+          //window.location.reload();
+        }else{
+          //document.querySelector("#loading").classList.add('display_none');
+        }
+      }, 1000);
+    } catch (error) {
+      console.error("Error fetching OAuth URL:", error);
+    }
   };
 
   const handleLogout = async () => {
@@ -71,12 +69,10 @@ const OAuth = () => {
   };
 
   const autoLogin = async () => {
-    let data = await fetch("/userinfo", {
-      headers: { "Content-Type": "application/json" },
-      method: "GET",
-    }).then((res) => res.json());
 
     try {
+      const res = await apiClient.get("/userinfo");
+      const data = res.data;
       if (!!data["msg"]) {
         if (data["msg"] === 'Missing cookie "access_token_cookie"') {
           console.log("자동로그인 실패");
@@ -92,9 +88,9 @@ const OAuth = () => {
         setThumbnailSrc(data.profile);
         setIsLogged(true);
       }
+      // 이후 로직 (예: 상태 업데이트 또는 다른 함수 호출 등)
     } catch (error) {
-      console.log(`Error: ${error}`);
-      return;
+      console.error("Error fetching user info:", error);
     }
   };
 
