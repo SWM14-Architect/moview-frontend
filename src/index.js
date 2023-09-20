@@ -19,6 +19,7 @@ import Main from "./pages/main";
 import InterviewRoom from "./pages/interviewRoom";
 import OAuth from "./pages/oauth";
 import ToastContainerComponent from "./utils/toastContainer";
+import KakaoCallback from "./pages/login_callback";
 
 function Index() {
   const router = createBrowserRouter([
@@ -29,12 +30,17 @@ function Index() {
         { path: "/", element: <Main /> },
         { path: "/room", element: <InterviewRoom /> },
         { path: "/login", element: <OAuth /> },
+
       ],
       errorElement: <ErrorPage />,
     },
     {
       path: "/error",
       element: <ErrorPage />,
+    },
+    {
+      path: "/login/callback",
+      element: <KakaoCallback />,
     },
   ]);
 
