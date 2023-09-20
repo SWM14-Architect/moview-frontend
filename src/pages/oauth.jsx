@@ -14,31 +14,14 @@ const OAuth = () => {
   const [nickname, setNickname] = useState("");
   const [thumbnailSrc, setThumbnailSrc] = useState("");
 
-  const openWindowPopup = (url, name) => {
-    const options =
-      "top=10, left=10, width=500, height=600, status=no, menubar=no, toolbar=no, resizable=no";
-    return window.open(url, name, options); // 리액트스럽지 않은 코드
-  };
-
   const handleLogin = async () => {
-    //document.querySelector("#loading").classList.remove('display_none');
     try {
       const res = await apiClient.get("/oauth/url");
       const url = res.data["kakao_oauth_url"];
       console.log(url);
 
-      const newWindow = openWindowPopup(url, "카카오톡 로그인");
+      window.location.href=url;
 
-      const checkConnect = setInterval(function () {
-        if (!newWindow || !newWindow.closed) return;
-        clearInterval(checkConnect);
-
-        if (getCookie("logined") === "true") {
-          //window.location.reload();
-        }else{
-          //document.querySelector("#loading").classList.add('display_none');
-        }
-      }, 1000);
     } catch (error) {
       console.error("Error fetching OAuth URL:", error);
     }
@@ -140,11 +123,13 @@ const OAuth = () => {
     }
   };
 
+
+
   useEffect(() => {
     // 자동 로그인 실행
     autoLogin();
     // eslint-disable-next-line
-  }, []);
+  });
 
   return (
     <div className={`${style.oauth}`}>
