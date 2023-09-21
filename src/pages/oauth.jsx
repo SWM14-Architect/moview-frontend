@@ -16,8 +16,8 @@ const OAuth = () => {
 
   const handleLogin = async () => {
     try {
-      const res = await apiClient.get("/oauth/url");
-      const url = res.data["kakao_oauth_url"];
+      const response = await apiClient.get("/oauth/url");
+      const url = response.data["kakao_oauth_url"];
       window.location.href=url;
 
     } catch (error) {
@@ -27,22 +27,14 @@ const OAuth = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("/token/remove", {
-        headers: { "Content-Type": "application/json" },
-        method: "GET",
-      });
+      const response = await apiClient.post("/token/remove");
 
-      const data = await response.json();
-
-      if (data.result) {
-        console.log("로그아웃 성공");
+      if (response) {
         alert("정상적으로 로그아웃이 되었습니다.");
 
         setIsLogged(false);
         setNickname("");
         setThumbnailSrc("");
-      } else {
-        console.log("로그아웃 실패");
       }
     } catch (error) {
       console.log(`Error: ${error}`);
