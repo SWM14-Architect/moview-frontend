@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import style from "../styles/oauth.module.css";
 import KakaoButton from "../assets/kakaolink_btn_small.png";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // 기본 URL 설정
 const apiClient = axios.create({
@@ -10,18 +11,16 @@ const apiClient = axios.create({
 });
 
 const OAuth = () => {
+  const navigate = useNavigate();
+
   const [isLogged, setIsLogged] = useState(false);
   const [nickname, setNickname] = useState("");
   const [thumbnailSrc, setThumbnailSrc] = useState("");
 
   const handleLogin = async () => {
-    try {
-      const response = await apiClient.get("/oauth/url");
-      const url = response.data["kakao_oauth_url"];
-      window.location.href = url;
-    } catch (error) {
-      console.error("Error fetching OAuth URL:", error);
-    }
+    const response = await apiClient.get("/oauth/url");
+    const url = response.data["kakao_oauth_url"];
+    window.location.href = url;
   };
 
   const handleLogout = async () => {
@@ -34,24 +33,46 @@ const OAuth = () => {
       setNickname("");
       setThumbnailSrc("");
     }
+    navigate("/");
   };
 
   const autoLogin = async () => {
-      const res = await apiClient.get("/userinfo");
-      const data = res.data;
-      if (!!data["msg"]) {
-        if (data["msg"] === 'Missing cookie "access_token_cookie"') {
-          return;
-        } else if (data["msg"] === "Token has expired") {
-          refreshToken();
-          return;
-        }
-      } else {
-        setNickname(data.nickname);
-        setThumbnailSrc(data.thumbnail_image_url);
-        setIsLogged(true);
+    const res = await apiClient.get("/userinfo");
+    const data = res.data;
+    console.log(res);
+    if (!!data["msg"]) {
+      if (data["msg"] === 'Missing cookie "access_token_cookie"') {
+        return;
+      } else if (data["msg"] === "Token has expired") {
+        refreshToken();
+        return;
       }
-      // 이후 로직 (예: 상태 업데이트 또는 다른 함수 호출 등)
+    } else {
+      setNickname(data.nickname);
+      setThumbnailSrc(data.thumbnail_image_url);
+      setIsLogged(true);
+    }
+  };
+
+  const refreshToken = async () => {
+    let data = await apiClient.post("/token/refresh");
+
+    if (data.result) {
+      autoLogin(); // 이 부분에서 autoLogin을 호출합니다.
+    } else {
+      if (data.msg === "Token has expired") {
+        setIsLogged(false);
+        setNickname("");
+        setThumbnailSrc("");
+        handleLogin();
+        return;
+      }
+      await apiClient.post("/token/remove");
+
+      alert("로그인을 다시 해주세요!");
+      setIsLogged(false);
+      setNickname("");
+      setThumbnailSrc("");
     }
   };
 
@@ -68,37 +89,6 @@ const OAuth = () => {
     }
 
     return cookieValue;
-  };
-
-  const refreshToken = async () => {
-    let data = await fetch("/token/refresh", {
-      headers: { "Content-Type": "application/json" },
-      method: "GET",
-    }).then((res) => res.json());
-
-    if (data.result) {
-      console.log("Access Token 갱신");
-      autoLogin(); // 이 부분에서 autoLogin을 호출합니다.
-    } else {
-      if (data.msg === "Token has expired") {
-        console.log("Refresh Token 만료");
-        setIsLogged(false);
-        setNickname("");
-        setThumbnailSrc("");
-        handleLogin();
-        return;
-      }
-
-      fetch("/token/remove", {
-        headers: { "Content-Type": "application/json" },
-        method: "GET",
-      });
-
-      alert("로그인을 다시 해주세요!");
-      setIsLogged(false);
-      setNickname("");
-      setThumbnailSrc("");
-    }
   };
 
   useEffect(() => {
