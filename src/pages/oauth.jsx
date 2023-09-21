@@ -18,8 +18,6 @@ const OAuth = () => {
     try {
       const res = await apiClient.get("/oauth/url");
       const url = res.data["kakao_oauth_url"];
-      console.log(url);
-
       window.location.href=url;
 
     } catch (error) {
@@ -68,7 +66,7 @@ const OAuth = () => {
       } else {
         console.log("자동로그인 성공");
         setNickname(data.nickname);
-        setThumbnailSrc(data.profile);
+        setThumbnailSrc(data.thumbnail_image_url);
         setIsLogged(true);
       }
       // 이후 로직 (예: 상태 업데이트 또는 다른 함수 호출 등)

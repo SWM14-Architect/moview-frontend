@@ -34,7 +34,7 @@ function Index(){
       children: [
         { path: "/", element: <Main /> },
         { path: "/room", element: <InterviewRoom /> },
-        { path: "/login", element: <OAuth /> },
+        { path: "/auth", element: <OAuth /> },
 
       ],
       errorElement: <ErrorPage />,
