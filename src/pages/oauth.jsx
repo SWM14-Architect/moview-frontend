@@ -37,42 +37,51 @@ const OAuth = () => {
   };
 
   const autoLogin = async () => {
-    const res = await apiClient.get("/userinfo");
-    const data = res.data;
-    console.log(res);
-    if (!!data["msg"]) {
-      if (data["msg"] === 'Missing cookie "access_token_cookie"') {
+    let response;
+    try {
+      response = await apiClient.get("/userinfo");
+      console.log(response);
+      setNickname(response.data.nickname);
+      setThumbnailSrc(response.data.thumbnail_image_url);
+      setIsLogged(true);
+    } catch (error) {
+      if (
+        error.response.data["msg"] === 'Missing cookie "access_token_cookie"'
+      ) {
         return;
-      } else if (data["msg"] === "Token has expired") {
+      } else if (error.response.data["msg"] === "Token has expired") {
         refreshToken();
         return;
       }
-    } else {
-      setNickname(data.nickname);
-      setThumbnailSrc(data.thumbnail_image_url);
-      setIsLogged(true);
+      return;
     }
   };
 
   const refreshToken = async () => {
-    let data = await apiClient.post("/token/refresh");
+    try {
+      console.log("refresh!!");
+      let data = await apiClient.post("/token/refresh");
+      console.log(data);
 
-    if (data.result) {
-      autoLogin(); // 이 부분에서 autoLogin을 호출합니다.
-    } else {
-      if (data.msg === "Token has expired") {
+      if (data.result) {
+        autoLogin(); // 이 부분에서 autoLogin을 호출합니다.
+      } else {
+        if (data.msg === "Token has expired") {
+          setIsLogged(false);
+          setNickname("");
+          setThumbnailSrc("");
+          handleLogin();
+          return;
+        }
+        await apiClient.post("/token/remove");
+
+        alert("로그인을 다시 해주세요!");
         setIsLogged(false);
         setNickname("");
         setThumbnailSrc("");
-        handleLogin();
-        return;
       }
-      await apiClient.post("/token/remove");
-
-      alert("로그인을 다시 해주세요!");
-      setIsLogged(false);
-      setNickname("");
-      setThumbnailSrc("");
+    } catch (error) {
+      console.log(error);
     }
   };
 
