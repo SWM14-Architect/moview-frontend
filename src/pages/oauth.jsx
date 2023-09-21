@@ -10,6 +10,21 @@ const apiClient = axios.create({
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
 });
 
+// const getCookie = (cookieName) => {
+//   let cookieValue = null;
+
+//   if (document.cookie) {
+//     const array = document.cookie.split(escape(cookieName) + "=");
+
+//     if (array.length >= 2) {
+//       const arraySub = array[1].split(";");
+//       cookieValue = unescape(arraySub[0]);
+//     }
+//   }
+
+//   return cookieValue;
+// };
+
 const OAuth = () => {
   const navigate = useNavigate();
 
@@ -50,55 +65,39 @@ const OAuth = () => {
       ) {
         return;
       } else if (error.response.data["msg"] === "Token has expired") {
-        refreshToken();
+        //refreshToken();
         return;
       }
       return;
     }
   };
 
-  const refreshToken = async () => {
-    try {
-      console.log("refresh!!");
-      let data = await apiClient.post("/token/refresh");
-      console.log(data);
+  // const refreshToken = async () => {
+  //   try {
 
-      if (data.result) {
-        autoLogin(); // 이 부분에서 autoLogin을 호출합니다.
-      } else {
-        if (data.msg === "Token has expired") {
-          setIsLogged(false);
-          setNickname("");
-          setThumbnailSrc("");
-          handleLogin();
-          return;
-        }
-        await apiClient.post("/token/remove");
+  //     let data = await with_csrf.post("/token/refresh");
 
-        alert("로그인을 다시 해주세요!");
-        setIsLogged(false);
-        setNickname("");
-        setThumbnailSrc("");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     if (data.result) {
+  //       autoLogin(); // 이 부분에서 autoLogin을 호출합니다.
+  //     } else {
+  //       if (data.msg === "Token has expired") {
+  //         setIsLogged(false);
+  //         setNickname("");
+  //         setThumbnailSrc("");
+  //         handleLogin();
+  //         return;
+  //       }
+  //       await apiClient.post("/token/remove");
 
-  const getCookie = (cookieName) => {
-    let cookieValue = null;
-
-    if (document.cookie) {
-      const array = document.cookie.split(escape(cookieName) + "=");
-
-      if (array.length >= 2) {
-        const arraySub = array[1].split(";");
-        cookieValue = unescape(arraySub[0]);
-      }
-    }
-
-    return cookieValue;
-  };
+  //       alert("로그인을 다시 해주세요!");
+  //       setIsLogged(false);
+  //       setNickname("");
+  //       setThumbnailSrc("");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     // 자동 로그인 실행
