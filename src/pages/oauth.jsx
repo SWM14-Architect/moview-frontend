@@ -18,52 +18,40 @@ const OAuth = () => {
     try {
       const response = await apiClient.get("/oauth/url");
       const url = response.data["kakao_oauth_url"];
-      window.location.href=url;
-
+      window.location.href = url;
     } catch (error) {
       console.error("Error fetching OAuth URL:", error);
     }
   };
 
   const handleLogout = async () => {
-    try {
-      const response = await apiClient.post("/token/remove");
+    const response = await apiClient.post("/token/remove");
 
-      if (response) {
-        alert("정상적으로 로그아웃이 되었습니다.");
+    if (response) {
+      alert("정상적으로 로그아웃이 되었습니다.");
 
-        setIsLogged(false);
-        setNickname("");
-        setThumbnailSrc("");
-      }
-    } catch (error) {
-      console.log(`Error: ${error}`);
+      setIsLogged(false);
+      setNickname("");
+      setThumbnailSrc("");
     }
   };
 
   const autoLogin = async () => {
-
-    try {
       const res = await apiClient.get("/userinfo");
       const data = res.data;
       if (!!data["msg"]) {
         if (data["msg"] === 'Missing cookie "access_token_cookie"') {
-          console.log("자동로그인 실패");
           return;
         } else if (data["msg"] === "Token has expired") {
-          console.log("Access Token 만료");
           refreshToken();
           return;
         }
       } else {
-        console.log("자동로그인 성공");
         setNickname(data.nickname);
         setThumbnailSrc(data.thumbnail_image_url);
         setIsLogged(true);
       }
       // 이후 로직 (예: 상태 업데이트 또는 다른 함수 호출 등)
-    } catch (error) {
-      console.error("Error fetching user info:", error);
     }
   };
 
@@ -112,8 +100,6 @@ const OAuth = () => {
       setThumbnailSrc("");
     }
   };
-
-
 
   useEffect(() => {
     // 자동 로그인 실행
