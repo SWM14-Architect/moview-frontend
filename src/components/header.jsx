@@ -59,6 +59,10 @@ function Header() {
       setNickname(response.data.profile_nickname);
       setIsLogged(true);
     } catch (error) {
+      if(!error.response){
+        console.log('user not found');
+        return;
+      }
       if (
         error.response.data["msg"] === 'Missing cookie "access_token_cookie"'
       ) {
