@@ -1,23 +1,8 @@
 import React, { useState, useEffect } from "react";
 import style from "../styles/oauth.module.css";
 import KakaoButton from "../assets/kakaolink_btn_small.png";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { getCookie } from "../api/interview";
-
-// 기본 URL 설정
-const apiClient = axios.create({
-  baseURL: `${process.env.REACT_APP_API_ENDPOINT}/interview`,
-  withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
-});
-
-const apiClientForRefresh = axios.create({
-  baseURL: `${process.env.REACT_APP_API_ENDPOINT}/interview`,
-  withCredentials: true,
-  headers: {
-    "x-csrf-token": getCookie("csrf_refresh_token"), // 새로운 액세스 토큰 발급용
-  },
-});
+import { apiClientWithoutToken, apiClientForRefresh } from "../api/auto_login";
 
 const OAuth = () => {
   const navigate = useNavigate();
@@ -27,13 +12,13 @@ const OAuth = () => {
   const [thumbnailSrc, setThumbnailSrc] = useState("");
 
   const handleLogin = async () => {
-    const response = await apiClient.get("/oauth/url");
+    const response = await apiClientWithoutToken.get("/interview/oauth/url");
     const url = response.data["kakao_oauth_url"];
     window.location.href = url;
   };
 
   const handleLogout = async () => {
-    const response = await apiClient.post("/token/remove");
+    const response = await apiClientWithoutToken.post("/interview/token/remove");
 
     if (response) {
       alert("정상적으로 로그아웃이 되었습니다.");
@@ -48,8 +33,8 @@ const OAuth = () => {
   const autoLogin = async () => {
     let response;
     try {
-      response = await apiClient.get("/userinfo");
-      
+      response = await apiClientWithoutToken.get("/interview//userinfo");
+
       setNickname(response.data.nickname);
       setThumbnailSrc(response.data.thumbnail_image_url);
       setIsLogged(true);
@@ -68,13 +53,13 @@ const OAuth = () => {
 
   const refreshToken = async () => {
     try {
-      let response = await apiClientForRefresh.post("/token/refresh");
+      let response = await apiClientForRefresh.post("/interview/token/refresh");
 
       if (response.data.result) {
         autoLogin(); // 액세스 토큰이 갱신됬으므로 autoLogin을 호출합니다.
       } else {
         //리프레시 토큰 만료도 아니고 액세스 토큰도 갱신 안되면, 토큰 삭제.
-        await apiClient.post("/token/remove");
+        await apiClientWithoutToken.post("/interview/token/remove");
 
         alert("로그인을 다시 해주세요!");
         setIsLogged(false);

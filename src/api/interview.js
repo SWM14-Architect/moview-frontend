@@ -1,27 +1,10 @@
 import axios from 'axios';
 
-export const getCookie = (cookieName) => {
-  let cookieValue = null;
-
-  if (document.cookie) {
-    const array = document.cookie.split(escape(cookieName) + "=");
-
-    if (array.length >= 2) {
-      const arraySub = array[1].split(";");
-      cookieValue = unescape(arraySub[0]);
-    }
-  }
-
-  return cookieValue;
-};
 
 // 기본 URL 설정
 const apiClient = axios.create({
   baseURL: `${process.env.REACT_APP_API_ENDPOINT}`,
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
-  headers: {
-    'x-csrf-token': getCookie("csrf_access_token")
-  }
 });
 
 export const session_api = () => {
@@ -56,8 +39,6 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   return apiClient.post('/interview/input', requestBody)
   .then(response => response.data)
   .catch(error => {
-    console.log('input');
-    console.log(error);
     throw error;
   });
 };
