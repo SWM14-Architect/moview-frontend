@@ -10,7 +10,7 @@ import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
 import {INTERVIEW_STATE_DEFAULT_VALUE} from "../../constants/interviewRoomConst";
 import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
-import { apiClientWithoutToken } from "../../api/api_client_token";
+import { apiClientWithoutToken,apiClientForRefresh } from "../../api/api_client_token";
 import { useNavigate } from "react-router-dom";
 
 
@@ -276,8 +276,34 @@ function InterviewInput(){
     try {
       response = await apiClientWithoutToken.get("/interview/userinfo");
     } catch (error) {
-      alert('비정상적인 접근입니다!');
-      navigate("/");
+      if (
+        error.response.data["msg"] === 'Missing cookie "access_token_cookie"'
+      ) {
+        alert('비정상적인 접근입니다!');
+        navigate("/");
+        return;
+      } else if (error.response.data["msg"] === "Token has expired") {
+        refreshTokenInChecking();
+        return;
+      }
+      return;
+    }
+  };
+
+  const refreshTokenInChecking = async () => {
+    try {
+      let response = await apiClientForRefresh.post("/interview/token/refresh");
+      if (response.data.result) {
+        checkLogin(); // 액세스 토큰이 갱신됬으므로 autoLogin을 호출합니다.
+      } else {
+        //리프레시 토큰 만료도 아니고 액세스 토큰도 갱신 안되면, 토큰 삭제.
+        await apiClientWithoutToken.post("/interview/token/remove");
+
+        alert("로그인을 다시 해주세요!");
+        navigate("/");
+        return;
+      }
+    } catch (error) {
     }
   };
 
