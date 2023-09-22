@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getCookie = (cookieName) => {
+export const getCookie = (cookieName) => {
   let cookieValue = null;
 
   if (document.cookie) {

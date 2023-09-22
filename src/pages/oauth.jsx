@@ -3,11 +3,20 @@ import style from "../styles/oauth.module.css";
 import KakaoButton from "../assets/kakaolink_btn_small.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "../api/interview";
 
 // 기본 URL 설정
 const apiClient = axios.create({
   baseURL: `${process.env.REACT_APP_API_ENDPOINT}/interview`,
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
+});
+
+const apiClientForRefresh = axios.create({
+  baseURL: `${process.env.REACT_APP_API_ENDPOINT}/interview`,
+  withCredentials: true,
+  headers: {
+    "x-csrf-token": getCookie("csrf_refresh_token"), // 새로운 액세스 토큰 발급용
+  },
 });
 
 const OAuth = () => {
@@ -40,8 +49,7 @@ const OAuth = () => {
     let response;
     try {
       response = await apiClient.get("/userinfo");
-
-      console.log(response);
+      
       setNickname(response.data.nickname);
       setThumbnailSrc(response.data.thumbnail_image_url);
       setIsLogged(true);
@@ -51,39 +59,39 @@ const OAuth = () => {
       ) {
         return;
       } else if (error.response.data["msg"] === "Token has expired") {
-        //refreshToken();
+        refreshToken();
         return;
       }
       return;
     }
   };
 
-  // const refreshToken = async () => {
-  //   try {
+  const refreshToken = async () => {
+    try {
+      let response = await apiClientForRefresh.post("/token/refresh");
 
-  //     let data = await with_csrf.post("/token/refresh");
+      if (response.data.result) {
+        autoLogin(); // 액세스 토큰이 갱신됬으므로 autoLogin을 호출합니다.
+      } else {
+        //리프레시 토큰 만료도 아니고 액세스 토큰도 갱신 안되면, 토큰 삭제.
+        await apiClient.post("/token/remove");
 
-  //     if (data.result) {
-  //       autoLogin(); // 이 부분에서 autoLogin을 호출합니다.
-  //     } else {
-  //       if (data.msg === "Token has expired") {
-  //         setIsLogged(false);
-  //         setNickname("");
-  //         setThumbnailSrc("");
-  //         handleLogin();
-  //         return;
-  //       }
-  //       await apiClient.post("/token/remove");
-
-  //       alert("로그인을 다시 해주세요!");
-  //       setIsLogged(false);
-  //       setNickname("");
-  //       setThumbnailSrc("");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+        alert("로그인을 다시 해주세요!");
+        setIsLogged(false);
+        setNickname("");
+        setThumbnailSrc("");
+      }
+    } catch (error) {
+      if (error.response.data["msg"] === "Token has expired") {
+        //리프레시 토큰이 만료되었다면,
+        setIsLogged(false);
+        setNickname("");
+        setThumbnailSrc("");
+        handleLogin();
+        return;
+      }
+    }
+  };
 
   useEffect(() => {
     // 자동 로그인 실행
