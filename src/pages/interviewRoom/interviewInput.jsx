@@ -10,6 +10,9 @@ import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
 import {INTERVIEW_STATE_DEFAULT_VALUE} from "../../constants/interviewRoomConst";
 import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
+import { apiClientWithoutToken } from "../../api/api_client_token";
+import { useNavigate } from "react-router-dom";
+
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -161,6 +164,7 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
 }
 
 function InterviewInput(){
+  const navigate = useNavigate();
   ScrollToTop();
   const [, setIsLoading] = useRecoilState(loadingAtom);
   const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
@@ -174,6 +178,8 @@ function InterviewInput(){
   const [, setInterviewId] = useRecoilState(interviewIdAtom);
   // 클라이언트 상태 관리
   const [, setInterviewState] = useRecoilState(interviewStateAtom);
+
+
 
   // 사용자에게서 입력받는 데이터들
   const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
@@ -264,6 +270,20 @@ function InterviewInput(){
       toast.error(`오류가 발생했습니다!\n${err.message}`, {});
     });
   }
+
+  const checkLogin = async () => {
+    let response;
+    try {
+      response = await apiClientWithoutToken.get("/interview/userinfo");
+    } catch (error) {
+      alert('비정상적인 접근입니다!');
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    checkLogin();
+  });
 
   return (
     <section style={{backgroundColor:"#f4f7fb", flex:1}}>

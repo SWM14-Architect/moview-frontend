@@ -3,7 +3,7 @@ import style from "../styles/header.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { roomIdAtom } from "../store/interviewRoomAtom";
-import { apiClientWithoutToken, apiClientForRefresh } from "../api/auto_login";
+import { apiClientWithoutToken, apiClientForRefresh } from "../api/api_client_token";
 
 function HeaderMenu() {
   return (
@@ -31,15 +31,32 @@ function Header() {
 
   const [isLogged, setIsLogged] = useState(false);
   const [nickname, setNickname] = useState("");
-  const [thumbnailSrc, setThumbnailSrc] = useState("");
+
+  const handleLogin = async () => {
+    const response = await apiClientWithoutToken.get("/interview/oauth/url");
+    const url = response.data["kakao_oauth_url"];
+    window.location.href = url;
+  };
+
+  const handleLogout = async () => {
+    const response = await apiClientWithoutToken.post(
+      "/interview/token/remove"
+    );
+
+    if (response) {
+      alert("정상적으로 로그아웃이 되었습니다.");
+
+      setIsLogged(false);
+      setNickname("");
+    }
+    navigate("/");
+  };
 
   const autoLogin = async () => {
     let response;
     try {
       response = await apiClientWithoutToken.get("/interview/userinfo");
-      console.log(response);
       setNickname(response.data.profile_nickname);
-      setThumbnailSrc(response.data.thumbnail_image_url);
       setIsLogged(true);
     } catch (error) {
       if (
@@ -67,40 +84,18 @@ function Header() {
         alert("로그인을 다시 해주세요!");
         setIsLogged(false);
         setNickname("");
-        setThumbnailSrc("");
       }
     } catch (error) {
       if (error.response.data["msg"] === "Token has expired") {
         //리프레시 토큰이 만료되었다면,
         setIsLogged(false);
         setNickname("");
-        setThumbnailSrc("");
-        //handleLogin();
+        handleLogin();
         return;
       }
     }
   };
 
-  const handleLogin = async () => {
-    const response = await apiClientWithoutToken.get("/interview/oauth/url");
-    const url = response.data["kakao_oauth_url"];
-    window.location.href = url;
-  };
-
-  const handleLogout = async () => {
-    const response = await apiClientWithoutToken.post(
-      "/interview/token/remove"
-    );
-
-    if (response) {
-      alert("정상적으로 로그아웃이 되었습니다.");
-
-      setIsLogged(false);
-      setNickname("");
-      setThumbnailSrc("");
-    }
-    navigate("/");
-  };
 
   useEffect(() => {
     autoLogin();
@@ -140,12 +135,6 @@ function Header() {
             </button>
           ) : (
             <>
-              <img
-                id="thumbnail"
-                src={thumbnailSrc}
-                className={`${style.thumbnail}`}
-                alt="User Thumbnail"
-              />
               <div id="nickname" className={`${style.nickname}`}>
                 안녕하세요, {nickname} 님.
               </div>
