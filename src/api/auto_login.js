@@ -37,3 +37,4 @@ export const apiClientForRefresh = axios.create({
     "x-csrf-token": getCookie("csrf_refresh_token"), // 새로운 액세스 토큰 발급용
   },
 });
+

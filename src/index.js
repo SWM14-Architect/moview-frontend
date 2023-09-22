@@ -17,7 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "./styles/toast.css";
 import Main from "./pages/main";
 import InterviewRoom from "./pages/interviewRoom";
-import OAuth from "./pages/oauth";
 import ToastContainerComponent from "./utils/toastContainer";
 import KakaoCallback from "./pages/login_callback";
 import ReactGA from "react-ga4";
@@ -34,8 +33,6 @@ function Index(){
       children: [
         { path: "/", element: <Main /> },
         { path: "/room", element: <InterviewRoom /> },
-        { path: "/auth", element: <OAuth /> },
-
       ],
       errorElement: <ErrorPage />,
     },

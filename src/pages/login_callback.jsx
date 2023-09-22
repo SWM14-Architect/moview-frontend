@@ -23,7 +23,7 @@ const KakaoCallback = () => {
         },
       })
       .then((res) => {
-        navigate("/auth");
+        navigate("/");
       })
       .catch((error) => {
         console.error("cannot call oauth api", error);

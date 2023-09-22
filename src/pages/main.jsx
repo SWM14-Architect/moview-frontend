@@ -24,12 +24,10 @@ function firstSection({handleButtonClick}){
       </div>
       <div className={`line fadeInUpEffect animation-delay-3`} />
       <div className={`fadeInUpEffect animation-delay-3 ${style.title_content_start}`}>
-        <div>시작을 위해서는 계정이 필요합니다.</div>
-        <div>지금은 구현되어 있지 않습니다.</div>
       </div>
-      <div className={`fadeInUpEffect animation-delay-3`}>
+      {/* <div className={`fadeInUpEffect animation-delay-3`}>
         <button className={`blackButton`} style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}} onClick={(e) => handleButtonClick(e)}>{"면접시작 >"}</button>
-      </div>
+      </div> */}
     </div>
   );
 }

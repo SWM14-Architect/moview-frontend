@@ -39,6 +39,7 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   return apiClient.post('/interview/input', requestBody)
   .then(response => response.data)
   .catch(error => {
+
     throw error;
   });
 };
