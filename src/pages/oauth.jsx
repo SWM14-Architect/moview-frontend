@@ -10,21 +10,6 @@ const apiClient = axios.create({
   withCredentials: true, // 쿠키(세션 ID)를 전달하기 위한 CORS 설정
 });
 
-// const getCookie = (cookieName) => {
-//   let cookieValue = null;
-
-//   if (document.cookie) {
-//     const array = document.cookie.split(escape(cookieName) + "=");
-
-//     if (array.length >= 2) {
-//       const arraySub = array[1].split(";");
-//       cookieValue = unescape(arraySub[0]);
-//     }
-//   }
-
-//   return cookieValue;
-// };
-
 const OAuth = () => {
   const navigate = useNavigate();
 
@@ -55,6 +40,7 @@ const OAuth = () => {
     let response;
     try {
       response = await apiClient.get("/userinfo");
+
       console.log(response);
       setNickname(response.data.nickname);
       setThumbnailSrc(response.data.thumbnail_image_url);
