@@ -1,8 +1,7 @@
-import axios from 'axios';
-import {apiClientWithoutToken, apiClientForAccess } from "../api/api_client_token";
+import {apiInstanceForAccess, apiInstanceWithoutToken} from "./api_instance";
 
 export const session_api = () => {
-  return apiClientWithoutToken.post('/interview/session')
+  return apiInstanceWithoutToken().post('/interview/session')
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -30,7 +29,7 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   };
 
   // response {flag,content}
-  return apiClientForAccess.post('/interview/input', requestBody)
+  return apiInstanceForAccess().post('/interview/input', requestBody)
   .then(response => response.data)
   .catch(error => {
     console.log(error);
@@ -57,7 +56,7 @@ export const answer_api = ({interview_id, question_id, question_content, answer_
     "answer_content": answer_content,
   };
 
-  return apiClientForAccess.post('/interview/answer', requestBody)
+  return apiInstanceForAccess().post('/interview/answer', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -74,7 +73,7 @@ export const evaluation_api = ({interview_id}) => {
     "interview_id": interview_id,
   };
 
-  return apiClientForAccess.post('/interview/evaluation', requestBody)
+  return apiInstanceForAccess().post('/interview/evaluation', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -99,7 +98,7 @@ export const feedback_api = ( {interview_id, question_ids, feedback_scores} ) =>
     "feedback_scores": feedback_scores,
   };
 
-  return apiClientForAccess.post('/interview/feedback', requestBody)
+  return apiInstanceForAccess().post('/interview/feedback', requestBody)
   .catch(error => {
     throw error;
   });
