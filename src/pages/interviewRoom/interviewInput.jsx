@@ -4,7 +4,7 @@ import {MAXIMUM_COVERLETTER_NUMBER} from "../../constants/interviewInputConst";
 import {useRecoilState} from "recoil";
 import {interviewDataAtom, interviewIdAtom, interviewStateAtom, roomIdAtom} from "../../store/interviewRoomAtom";
 import {ScrollToTop} from "../../utils/scrollRestoration";
-import {input_api, session_api} from "../../api/interview";
+import {input_api} from "../../api/interview";
 import {toast} from "react-toastify";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";

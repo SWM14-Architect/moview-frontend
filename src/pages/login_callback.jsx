@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,6 @@ const KakaoCallback = () => {
   const navigate = useNavigate();
 
   const callOAuthAPI = async () => {
-    const href = window.location.href;
     let params = new URL(document.URL).searchParams;
     let code = params.get("code");
 
@@ -32,6 +31,7 @@ const KakaoCallback = () => {
 
   useEffect(() => {
     callOAuthAPI();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div></div>;

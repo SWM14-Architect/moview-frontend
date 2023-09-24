@@ -1,12 +1,4 @@
-import {apiInstanceForAccess, apiInstanceWithoutToken} from "./api_instance";
-
-export const session_api = () => {
-  return apiInstanceWithoutToken().post('/interview/session')
-  .then(response => response.data)
-  .catch(error => {
-    throw error;
-  });
-}
+import {apiInstanceForAccess} from "./api_instance";
 
 // 자소서 분석, 초기 질문리스트 생성
 export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnouncement, coverLetterQuestions, coverLetterAnswers}) => {
