@@ -8,8 +8,10 @@ import TypeIt from "typeit-react";
 import {useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {roomIdAtom} from "../store/interviewRoomAtom";
+import {userLoginAtom} from "../store/userAtom";
+import {oauth_url_api} from "../api/jwt";
 
-function firstSection({handleButtonClick}){
+function FirstSection(props){
   return (
     <div style={{width: "100%", textAlign:"center"}}>
       <TypeIt className={`${style.title_header}`} options={{speed: 30}}>
@@ -19,20 +21,48 @@ function firstSection({handleButtonClick}){
       </TypeIt>
       <img className={`fadeInUpEffect animation-delay-1`} src={MainImage} alt="main" style={{width:"100%", marginBottom:"2em"}} />
       <div className={`fadeInUpEffect animation-delay-2 ${style.title_content}`}>
-        <div>더 이상 면접 질문에 당황하지 마세요!</div>
-        <div>면접자의 자소서와 원하는 회사의 채용 공고를 분석하여, 어떠한 질문도 놀라지 않고 대응할 수 있는 개인화된 질문 리스트를 제공합니다. 현실감 넘치는 면접 시뮬레이션을 통해 진짜 면접에 대비하세요.</div>
+        더 이상 면접 질문에 당황하지 마세요!
+        <br/>
+        면접자의 자소서와 원하는 회사의 채용 공고를 분석하여 개인화된 질문 리스트를 제공합니다. 현실감 넘치는 면접 시뮬레이션을 통해 진짜 면접에 대비하세요.
       </div>
       <div className={`line fadeInUpEffect animation-delay-3`} />
       <div className={`fadeInUpEffect animation-delay-3 ${style.title_content_start}`}>
       </div>
-      {/* <div className={`fadeInUpEffect animation-delay-3`}>
-        <button className={`blackButton`} style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}} onClick={(e) => handleButtonClick(e)}>{"면접시작 >"}</button>
-      </div> */}
+      <div className={`fadeInUpEffect animation-delay-3`}>
+        {!props.userLogin ?
+          <div>
+            <div className={`${style.title_content_start}`}>
+              <div>시작을 위해서는 계정이 필요합니다.</div>
+              <div>카카오 계정으로 로그인하실 수 있습니다.</div>
+            </div>
+            <button
+              className={`blackButton`}
+              style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
+              onClick={(e) => props.handleLogin(e)}
+            >
+              카카오 로그인
+            </button>
+          </div> :
+          <div>
+            <div className={`${style.title_content_start}`}>
+              <div>정보를 입력하고 시작버튼을 누르시면,</div>
+              <div>AI가 내용을 분석하고 질문을 생성합니다.</div>
+            </div>
+            <button
+              className={`blackButton`}
+              style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
+              onClick={(e) => props.handleButtonClick(e)}
+            >
+              {"면접시작 >"}
+            </button>
+          </div>
+        }
+      </div>
     </div>
   );
 }
 
-function secondSection(){
+function SecondSection(){
 
   const featureComponent = (title, description) => {
     return (
@@ -61,6 +91,7 @@ function Main(){
   ScrollToTop();
   const navigate = useNavigate();
   const [, setRoomID] = useRecoilState(roomIdAtom);
+  const [userLogin, ] = useRecoilState(userLoginAtom);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
@@ -68,16 +99,25 @@ function Main(){
     navigate("/room");
   }
 
+  const handleLogin = async () => {
+    await oauth_url_api()
+    .then((res) => {
+      window.location.href = res.data["kakao_oauth_url"];
+    })
+    .catch((err) => {
+    });
+  };
+
   return (
     <section style={{flex: 1, paddingTop:"0px"}}>
       <section style={{backgroundColor:"#f4f7fb"}}>
         <div className={`container`} style={{flexDirection:"column"}}>
-          {firstSection({handleButtonClick: handleButtonClick})}
+          <FirstSection userLogin={userLogin} handleLogin={handleLogin} handleButtonClick={handleButtonClick} />
         </div>
       </section>
       <section style={{backgroundColor:"#ffffff"}}>
         <div className={`container fadeInUpEffect animation-delay-4`} style={{flexDirection:"column"}}>
-          {secondSection()}
+          <SecondSection />
         </div>
       </section>
     </section>
