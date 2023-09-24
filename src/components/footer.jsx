@@ -6,8 +6,13 @@ function Footer() {
     <footer style={{borderTop:"#e4ebf3 2px solid"}}>
       <div className={`container`}>
         <div style={{width:"100%"}}>
-          <div className={`layout-flex-grid-4 ${style.footer_box}`} style={{marginLeft:"auto"}}>
-            <div/>
+          <div className={`layout-flex-grid-4 ${style.footer_box}`}>
+            <div className={`${style.footer_list}`}>
+              <h5>모두의 인터뷰</h5>
+              <span>모뷰 | Team : Architect</span>
+              <span>서울특별시 강남구 테헤란로 311 아남타워 7층</span>
+              <span>everyinterview@gmail.com</span>
+            </div>
             <div/>
             <div className={`${style.footer_list}`}>
               <h5>PRODUCT</h5>
