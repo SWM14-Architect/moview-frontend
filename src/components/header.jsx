@@ -3,16 +3,14 @@ import style from "../styles/header.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { roomIdAtom } from "../store/interviewRoomAtom";
-import { apiClientWithoutToken, apiClientForRefresh } from "../api/api_instance";
 import {userLoginAtom, userNicknameAtom, userProfileAtom} from "../store/userAtom";
 import {jwt_token_remove_api, oauth_url_api} from "../api/jwt";
+import HamburgerButton from "./mobile-only/hamburgerButton";
 
 function HeaderMenu() {
   return (
     <>
       <ul>모두의인터뷰</ul>
-      <ul>Services</ul>
-      <ul>Pricing</ul>
     </>
   );
 }
@@ -34,6 +32,8 @@ function Header() {
   const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
   const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
 
+  const [isClickedHamburger, setIsClickedHamburger] = useState(false);
+
   const handleLogin = async () => {
     await oauth_url_api()
     .then((res) => {
@@ -47,6 +47,7 @@ function Header() {
     await jwt_token_remove_api()
     .then((res) => {
       alert("정상적으로 로그아웃이 되었습니다.");
+      setIsClickedHamburger(false);
       setUserLogin(false);
       setUserNickname("");
       setUserProfile("");
@@ -68,6 +69,7 @@ function Header() {
 
   const handleButtonClick = (e) => {
     e.preventDefault();
+    setIsClickedHamburger(false);
     if (!isRoom) {
       setRoomID("interviewInput");
       navigate("/room");
@@ -77,44 +79,68 @@ function Header() {
     }
   };
 
-  return (
-    <header>
-      <div className={`container`}>
-        <div className={`${style.navbar}`}>
-          <nav className={`${style.nav}`}>
-            {!isRoom ? <HeaderMenu /> : <InterviewMenu />}
-          </nav>
-          <div></div>
-          {!userLogin ? (
-            <button
-              className={`blackButton`}
-              style={{ marginRight: "15px" }}
-              onClick={(e) => handleLogin(e)}
-            >
-              {"카카오 로그인"}
-            </button>
-          ) : (
-            <>
-              <div id="nickname" className={`${style.nickname}`}>
-                안녕하세요, 님.
-              </div>
+  const handleHamburgerClick = (e) => {
+    e.preventDefault();
+    setIsClickedHamburger(!isClickedHamburger);
+  }
 
-              <button
-                className={`blackButton`}
-                style={{ marginRight: "15px" }}
-                onClick={(e) => handleButtonClick(e)}
-              >
-                {!isRoom ? "면접시작 >" : "면접종료 >"}
-              </button>
-              <button
-                className={`blackButton`}
-                style={{ marginRight: "15px" }}
-                onClick={(e) => handleLogout(e)}
-              >
-                {"카카오 로그아웃"}
-              </button>
-            </>
-          )}
+  return (
+    <header style={{height:"70px"}}>
+      <div style={{position:"fixed", zIndex:1, backgroundColor:"#fff", width:"100vw", height:"70px"}}>
+        <div className={`container`}>
+          <div className={`${style.navbar}`}>
+            <nav className={`${style.nav}`}>
+              {!isRoom ? <HeaderMenu /> : <InterviewMenu />}
+            </nav>
+            <div></div>
+            <div>
+              <div className={`mobile-only`}>
+                <HamburgerButton
+                  isClickedHamburger={isClickedHamburger}
+                  isRoom={isRoom}
+                  userLogin={userLogin}
+                  userNickname={userNickname}
+                  userProfile={userProfile}
+                  handleButtonClick={handleButtonClick}
+                  handleLogin={handleLogin}
+                  handleLogout={handleLogout}
+                  onClick={(e) => handleHamburgerClick(e)}
+                />
+              </div>
+              {!userLogin ? (
+                <div className={`pc-only ${style.nav}`}>
+                  <button
+                    className={`blackButton`}
+                    style={{ marginRight: "15px" }}
+                    onClick={(e) => handleLogin(e)}
+                  >
+                    {"카카오 로그인"}
+                  </button>
+                </div>
+              ) : (
+                <div className={`pc-only ${style.nav}`}>
+                  <div style={{lineHeight:"35px", marginRight: "15px"}}>
+                    {userNickname}님
+                  </div>
+                  <button
+                    className={`blackButton`}
+                    style={{ marginRight: "15px" }}
+                    onClick={(e) => handleButtonClick(e)}
+                  >
+                    {!isRoom ? "면접시작 >" : "면접종료 >"}
+                  </button>
+
+                  <button
+                    className={`blackButton`}
+                    style={{ marginRight: "15px" }}
+                    onClick={(e) => handleLogout(e)}
+                  >
+                    카카오 로그아웃
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </header>
