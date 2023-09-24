@@ -10,6 +10,7 @@ import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
 import {INTERVIEW_STATE_DEFAULT_VALUE} from "../../constants/interviewRoomConst";
 import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
+import {userNicknameAtom} from "../../store/userAtom";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -174,17 +175,15 @@ function InterviewInput(){
   const [, setInterviewId] = useRecoilState(interviewIdAtom);
   // 클라이언트 상태 관리
   const [, setInterviewState] = useRecoilState(interviewStateAtom);
+  // 사용자 닉네임
+  const [userNickname, ] = useRecoilState(userNicknameAtom);
 
   // 사용자에게서 입력받는 데이터들
-  const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
   const [interviewTargetCompany, setInterviewTargetCompany] = useState("");
   const [interviewTargetPosition, setInterviewTargetPosition] = useState("");
   const [interviewRecruitment, setInterviewRecruitment] = useState("");
   const [interviewCoverLetters, setInterviewCoverLetters] = useState([{"id":0, "question":"", "content":""}]);
 
-  function handleIntervieweeNameChange(e) {
-    setIntervieweeName(e.target.value);
-  }
 
   function handleInterviewCompanyChange(e) {
     setInterviewTargetCompany(e.target.value);
@@ -206,7 +205,6 @@ function InterviewInput(){
       toast.warn(text, {});
     }
 
-    if(intervieweeName === "") return toastWarning("이름을 입력해주세요.");
     if(interviewTargetCompany === "") return toastWarning("지원하고자 하는 회사를 입력해주세요.");
     if(interviewTargetPosition === "") return toastWarning("지원하고자 하는 직군을 입력해주세요.");
     if(interviewRecruitment === "") return toastWarning("모집공고를 입력해주세요.");
@@ -215,7 +213,7 @@ function InterviewInput(){
     }
 
     setInterivewData({
-      "intervieweeName": intervieweeName,
+      "intervieweeName": userNickname,
       "interviewTargetCompany": interviewTargetCompany,
       "interviewTargetPosition": interviewTargetPosition,
       "interviewRecruitment": interviewRecruitment,
@@ -226,7 +224,7 @@ function InterviewInput(){
     setIsLoading(true);
     setLoadingMessage("잠시후 면접이 시작됩니다");
     input_api({
-      intervieweeName: intervieweeName,
+      intervieweeName: userNickname,
       companyName: interviewTargetCompany,
       jobGroup: interviewTargetPosition,
       recruitAnnouncement: interviewRecruitment,
@@ -261,13 +259,7 @@ function InterviewInput(){
     <section style={{backgroundColor:"#f4f7fb", flex:1}}>
       <div className={`container`} style={{flexDirection:"column"}}>
         <div className={`${style.header}`}>면접 정보</div>
-        <div className={`layout-flex-grid-3 fadeInUpEffect`}>
-          <InputComponent
-            title={"이름"}
-            placeholder={"지원자의 이름을 입력해주세요."}
-            item={intervieweeName}
-            onChange={handleIntervieweeNameChange}
-          />
+        <div className={`layout-flex-grid-2 fadeInUpEffect`}>
           <InputComponent
             title={"회사"}
             placeholder={"지원하고자 하는 회사를 입력하세요."}
