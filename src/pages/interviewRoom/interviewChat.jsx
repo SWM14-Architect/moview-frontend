@@ -1,6 +1,10 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import TypeIt from "typeit-react";
+import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
+import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
+import { answer_api, evaluation_api, tts_api, stt_api } from "../../api/interview";
 import style from "../../styles/interviewChat.module.css";
-import {useRecoilState} from "recoil";
+import { useRecoilState } from "recoil";
 import {
   interviewDataAtom,
   interviewIdAtom,
@@ -8,15 +12,12 @@ import {
   interviewStateAtom,
   roomIdAtom
 } from "../../store/interviewRoomAtom";
-import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
-import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
-import TypeIt from "typeit-react";
-import {useInterval} from "../../utils/useInterval";
-import {ScrollToTop} from "../../utils/scrollRestoration";
-import {chatHistoryAtom} from "../../store/interviewChatAtom";
-import {answer_api, evaluation_api} from "../../api/interview";
+import { chatHistoryAtom } from "../../store/interviewChatAtom";
+import { loadingAtom, loadingMessageAtom } from "../../store/loadingAtom";
+import { useInterval } from "../../utils/useInterval";
+import { ScrollToTop } from "../../utils/scrollRestoration";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
-import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
+import PlayTTS from "../../utils/ttsPlayer";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -57,6 +58,22 @@ function InterviewChat(){
   const [interviewTurn, setInterviewTurn] = useState(false); // [false: AI 질문 중 true: Interviewee 답변 가능]
   const [interviewFlag, setInterviewFlag] = useState(false); // [false: 인터뷰 진행 중 true: 인터뷰 종료]
 
+  const [audioData, setAudioData] = useState(null); // TTS 결과
+
+  useEffect(() => {
+    // 첫 번째 면접 질문에 대한 TTS 실행 로직
+    const firstQuestion = interviewState.askedQuestions[0]?.content;
+    if (firstQuestion) {
+      tts_api({
+        text: firstQuestion
+      }).then((res) => {
+        setAudioData(res.message.audio_data);
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+  }, []);
+
   const canNotPlayerTalking = () => {
     if(intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null) return true;
     return false;
@@ -65,7 +82,6 @@ function InterviewChat(){
   const handleIntervieweeAnswerButton = (e, answerContent) => {
     e.preventDefault();
     if(canNotPlayerTalking()) return;
-
     setChatHistory([...chatHistory, {type:"Human", content: answerContent}]);
     setIntervieweeAnswer(answerContent);
     setIntervieweeAnswerFormText("");
@@ -173,6 +189,15 @@ function InterviewChat(){
           else{
             // NEXT_QUESTION, 다음 질문을 출력합니다.
             const nextQuestion = getNextQuestion(res.message);
+
+            tts_api({
+              text: nextQuestion.content
+            }).then((res) => {
+              setAudioData(res.message.audio_data);
+            }).catch((err) => {
+              console.log(err);
+            });
+
             handleInterviewerQuestion(null, nextQuestion.content);
           }
         })
@@ -249,6 +274,8 @@ function InterviewChat(){
             </button>
           </div>
         }
+        {/* TTS Player 컴포넌트 */}
+        {audioData && <PlayTTS contentTTS={audioData} />}
       </div>
     </section>
   );

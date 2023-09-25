@@ -1,15 +1,16 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { input_api, session_api, tts_api } from "../../api/interview";
+import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
+import { CHAT_HISTORY_DEFAULT_VALUE } from "../../constants/interviewChatConst";
+import { INTERVIEW_STATE_DEFAULT_VALUE } from "../../constants/interviewRoomConst";
 import style from "../../styles/interviewInput.module.css";
-import {MAXIMUM_COVERLETTER_NUMBER} from "../../constants/interviewInputConst";
-import {useRecoilState} from "recoil";
-import {interviewDataAtom, interviewIdAtom, interviewStateAtom, roomIdAtom} from "../../store/interviewRoomAtom";
-import {ScrollToTop} from "../../utils/scrollRestoration";
-import {input_api, session_api} from "../../api/interview";
-import {toast} from "react-toastify";
-import {chatHistoryAtom} from "../../store/interviewChatAtom";
-import {CHAT_HISTORY_DEFAULT_VALUE} from "../../constants/interviewChatConst";
-import {INTERVIEW_STATE_DEFAULT_VALUE} from "../../constants/interviewRoomConst";
-import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
+import { useRecoilState } from "recoil";
+import { interviewDataAtom, interviewIdAtom, interviewStateAtom, roomIdAtom } from "../../store/interviewRoomAtom";
+import { chatHistoryAtom } from "../../store/interviewChatAtom";
+import { loadingAtom, loadingMessageAtom } from "../../store/loadingAtom";
+import { ScrollToTop } from "../../utils/scrollRestoration";
+import PlayTTS from "../../utils/ttsPlayer";
 
 
 function InputForm({placeholder, item, index, onChange}){
@@ -242,7 +243,7 @@ function InterviewInput(){
         setRoomID("interviewChat");
         const interviewStateCopy = JSON.parse(JSON.stringify(INTERVIEW_STATE_DEFAULT_VALUE));
         interviewStateCopy.askedQuestions = [];
-        interviewStateCopy.initialQuestions = res.message.initial_questions.map(({content, question_id}) => ({
+        interviewStateCopy.initialQuestions = res.message.initial_questions.map(({question_id, content}) => ({
           _id: question_id,
           content: content,
           feedback: 0,

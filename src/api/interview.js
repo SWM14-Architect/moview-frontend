@@ -108,3 +108,19 @@ export const feedback_api = ( {interview_id, question_ids, feedback_scores} ) =>
     throw error;
   });
 };
+
+export const tts_api = ( {text} ) => {
+  // 입력 검증
+  if (typeof text !== 'string') throw new Error('Invalid input: Text');
+
+  // JSON 형식으로 requestBody 구성
+  const requestBody = {
+    "text": text,
+  };
+
+  return apiClient.post('/interview/tts', requestBody)
+  .then(response => response.data)
+  .catch(error => {
+    throw error;
+  });
+}
