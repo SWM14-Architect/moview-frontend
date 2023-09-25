@@ -1,4 +1,4 @@
-import {apiInstanceForAccess} from "./api_instance";
+import {API_INSTANCE_WITH_TOKEN} from "./api_instance";
 
 // 자소서 분석, 초기 질문리스트 생성
 export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnouncement, coverLetterQuestions, coverLetterAnswers}) => {
@@ -21,7 +21,7 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   };
 
   // response {flag,content}
-  return apiInstanceForAccess().post('/interview/input', requestBody)
+  return API_INSTANCE_WITH_TOKEN.post('/interview/input', requestBody)
   .then(response => response.data)
   .catch(error => {
     console.log(error);
@@ -48,7 +48,7 @@ export const answer_api = ({interview_id, question_id, question_content, answer_
     "answer_content": answer_content,
   };
 
-  return apiInstanceForAccess().post('/interview/answer', requestBody)
+  return API_INSTANCE_WITH_TOKEN.post('/interview/answer', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -65,7 +65,7 @@ export const evaluation_api = ({interview_id}) => {
     "interview_id": interview_id,
   };
 
-  return apiInstanceForAccess().post('/interview/evaluation', requestBody)
+  return API_INSTANCE_WITH_TOKEN.post('/interview/evaluation', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -90,7 +90,7 @@ export const feedback_api = ( {interview_id, question_ids, feedback_scores} ) =>
     "feedback_scores": feedback_scores,
   };
 
-  return apiInstanceForAccess().post('/interview/feedback', requestBody)
+  return API_INSTANCE_WITH_TOKEN.post('/interview/feedback', requestBody)
   .catch(error => {
     throw error;
   });
