@@ -4,6 +4,7 @@ import ReactGA from "react-ga4";
 import {useRecoilState} from "recoil";
 import {userLoginAtom} from "./store/userAtom";
 import {toast} from "react-toastify";
+import {roomIdAtom} from "./store/interviewRoomAtom";
 
 /**
  * uri 변경 추적 컴포넌트
@@ -14,6 +15,7 @@ const RouteChangeTracker = () => {
   const navigate = useNavigate();
   const [initialized, setInitialized] = useState(false);
   const [userLogin, ] = useRecoilState(userLoginAtom);
+  const [roomID, ] = useRecoilState(roomIdAtom);
 
   // 구글 애널리틱스 운영서버만 적용
   useEffect(() => {
@@ -35,9 +37,14 @@ const RouteChangeTracker = () => {
 
     // location 변경 감지시 pageview 이벤트 전송
     if (initialized) {
-      ReactGA.set({ page: location.pathname });
+      let pageview = location.pathname;
+      if(pageview === "/room"){
+        pageview = "/room/" + roomID;
+      }
+      ReactGA.set({ page: pageview });
       ReactGA.send("pageview");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, location]);
 };
 
