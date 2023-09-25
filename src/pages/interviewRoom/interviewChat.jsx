@@ -1,9 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import TypeIt from "typeit-react";
-import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
-import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
-import { answer_api, evaluation_api, tts_api, stt_api } from "../../api/interview";
-import style from "../../styles/interviewChat.module.css";
 import { useRecoilState } from "recoil";
 import {
   interviewDataAtom,
@@ -14,10 +10,14 @@ import {
 } from "../../store/interviewRoomAtom";
 import { chatHistoryAtom } from "../../store/interviewChatAtom";
 import { loadingAtom, loadingMessageAtom } from "../../store/loadingAtom";
+import { answer_api, evaluation_api } from "../../api/interview";
 import { useInterval } from "../../utils/useInterval";
 import { ScrollToTop } from "../../utils/scrollRestoration";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
-import PlayTTS from "../../utils/ttsPlayer";
+import { useTTSPlayer } from "../../utils/useTTSPlayer";
+import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
+import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
+import style from "../../styles/interviewChat.module.css";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -58,24 +58,21 @@ function InterviewChat(){
   const [interviewTurn, setInterviewTurn] = useState(false); // [false: AI 질문 중 true: Interviewee 답변 가능]
   const [interviewFlag, setInterviewFlag] = useState(false); // [false: 인터뷰 진행 중 true: 인터뷰 종료]
 
-  const [audioData, setAudioData] = useState(null); // TTS 결과
+  const [currentQuestionContent, setCurrentQuestionContent] = useState(null); // TTS를 실행할 질문 내용
+
+  useTTSPlayer(currentQuestionContent);
 
   useEffect(() => {
-    // 첫 번째 면접 질문에 대한 TTS 실행 로직
-    const firstQuestion = interviewState.askedQuestions[0]?.content;
+    // 첫 번째 면접 질문에 대한 TTS 실행
+    const interviewStateCopy = JSON.parse(JSON.stringify(interviewState));
+    const firstQuestion = interviewStateCopy.askedQuestions[0]?.content;
     if (firstQuestion) {
-      tts_api({
-        text: firstQuestion
-      }).then((res) => {
-        setAudioData(res.message.audio_data);
-      }).catch((err) => {
-        console.log(err);
-      });
+      setCurrentQuestionContent(firstQuestion);
     }
   }, []);
 
   const canNotPlayerTalking = () => {
-    if(intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null) return true;
+    if (intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null) return true;
     return false;
   }
 
@@ -190,13 +187,8 @@ function InterviewChat(){
             // NEXT_QUESTION, 다음 질문을 출력합니다.
             const nextQuestion = getNextQuestion(res.message);
 
-            tts_api({
-              text: nextQuestion.content
-            }).then((res) => {
-              setAudioData(res.message.audio_data);
-            }).catch((err) => {
-              console.log(err);
-            });
+            // 다음 질문에 대한 TTS를 실행합니다.
+            setCurrentQuestionContent(nextQuestion.content);
 
             handleInterviewerQuestion(null, nextQuestion.content);
           }
@@ -274,8 +266,6 @@ function InterviewChat(){
             </button>
           </div>
         }
-        {/* TTS Player 컴포넌트 */}
-        {audioData && <PlayTTS contentTTS={audioData} />}
       </div>
     </section>
   );
