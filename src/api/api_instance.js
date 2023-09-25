@@ -5,20 +5,7 @@ import {useEffect} from "react";
 import {useRecoilState} from "recoil";
 import {userLoginAtom, userNicknameAtom, userProfileAtom} from "../store/userAtom";
 import {useNavigate} from "react-router-dom";
-
-export const getCookie = (cookieName) => {
-  let cookieValue = null;
-
-  if (document.cookie) {
-    const array = document.cookie.split(escape(cookieName) + "=");
-
-    if (array.length >= 2) {
-      const arraySub = array[1].split(";");
-      cookieValue = unescape(arraySub[0]);
-    }
-  }
-  return cookieValue;
-};
+import {getCookie} from "../utils/useCookie";
 
 export const API_INSTANCE = axios.create({
   baseURL: `${process.env.REACT_APP_API_ENDPOINT}`,
