@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { input_api, session_api, tts_api } from "../../api/interview";
+import { input_api, session_api } from "../../api/interview";
 import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
 import { CHAT_HISTORY_DEFAULT_VALUE } from "../../constants/interviewChatConst";
 import { INTERVIEW_STATE_DEFAULT_VALUE } from "../../constants/interviewRoomConst";
@@ -10,8 +10,6 @@ import { interviewDataAtom, interviewIdAtom, interviewStateAtom, roomIdAtom } fr
 import { chatHistoryAtom } from "../../store/interviewChatAtom";
 import { loadingAtom, loadingMessageAtom } from "../../store/loadingAtom";
 import { ScrollToTop } from "../../utils/scrollRestoration";
-import PlayTTS from "../../utils/ttsPlayer";
-
 
 function InputForm({placeholder, item, index, onChange}){
   return (
