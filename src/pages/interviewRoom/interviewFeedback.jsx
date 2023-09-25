@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import style from "../../styles/interviewFeedback.module.css";
-import {useRecoilState} from "recoil";
-import {interviewDataAtom, interviewIdAtom, interviewResultAtom} from "../../store/interviewRoomAtom";
+import React, { useEffect, useState } from 'react';
 import "chart.js/auto";
 // import { Radar } from "react-chartjs-2";
-import {FEEDBACK_RANGE_DEFAULT_VALUE} from "../../constants/interviewFeedbackConst";
-import {useNavigate} from "react-router-dom";
-import {ScrollToTop} from "../../utils/scrollRestoration";
-import {feedback_api} from "../../api/interview";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { feedback_api } from "../../api/interview";
+import { useRecoilState } from "recoil";
+import { interviewDataAtom, interviewIdAtom, interviewResultAtom } from "../../store/interviewRoomAtom";
+import { ScrollToTop } from "../../utils/scrollRestoration";
+import { FEEDBACK_RANGE_DEFAULT_VALUE } from "../../constants/interviewFeedbackConst";
+import style from "../../styles/interviewFeedback.module.css";
 
 // function RadarChart({labels, datasets}) {
 //   const data = {

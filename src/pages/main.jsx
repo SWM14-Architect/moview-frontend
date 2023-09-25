@@ -1,13 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import TypeIt from "typeit-react";
+import { useRecoilState } from "recoil";
+import { roomIdAtom } from "../store/interviewRoomAtom";
+import { useTitle } from "../utils/useTitle";
+import { ScrollToTop } from "../utils/scrollRestoration";
+import { SERVICE_TITLE } from "../constants/serviceConst";
 import MainImage from "../assets/recruitment-6838250_1920.png";
 import style from "../styles/main.module.css";
-import {useTitle} from "../utils/useTitle";
-import {SERVICE_TITLE} from "../constants/serviceConst";
-import {ScrollToTop} from "../utils/scrollRestoration";
-import TypeIt from "typeit-react";
-import {useNavigate} from "react-router-dom";
-import {useRecoilState} from "recoil";
-import {roomIdAtom} from "../store/interviewRoomAtom";
 
 function firstSection({handleButtonClick}){
   return (

@@ -1,12 +1,12 @@
-import {useNavigate} from "react-router-dom";
-import {useEffect} from "react";
-import {useRecoilState} from "recoil";
-import {roomIdAtom} from "../store/interviewRoomAtom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { roomIdAtom } from "../store/interviewRoomAtom";
+import { useTitle } from "../utils/useTitle";
+import { SERVICE_TITLE } from "../constants/serviceConst";
 import InterviewInput from "./interviewRoom/interviewInput";
 import InterviewChat from "./interviewRoom/interviewChat";
 import InterviewFeedback from "./interviewRoom/interviewFeedback";
-import {useTitle} from "../utils/useTitle";
-import {SERVICE_TITLE} from "../constants/serviceConst";
 
 function InterviewRoom() {
   const [roomID, setRoomID] = useRecoilState(roomIdAtom);

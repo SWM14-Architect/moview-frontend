@@ -1,10 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ReactGA from "react-ga4";
+import "react-toastify/dist/ReactToastify.css";
+import { RecoilRoot } from "recoil";
 import App from "./App";
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ErrorPage from "./pages/error_page";
-import {RecoilRoot} from "recoil";
-
+import Main from "./pages/main";
+import InterviewRoom from "./pages/interviewRoom";
+import ToastContainerComponent from "./utils/toastContainer";
 import "./styles/font.css";
 import "./styles/animation.css";
 import "./styles/index.css";
@@ -13,12 +17,7 @@ import "./styles/button.hover.css";
 import "./styles/radio.input.css";
 import "./styles/range.input.css";
 import "./styles/loading.css";
-import "react-toastify/dist/ReactToastify.css";
 import "./styles/toast.css";
-import Main from "./pages/main";
-import InterviewRoom from "./pages/interviewRoom";
-import ToastContainerComponent from "./utils/toastContainer";
-import ReactGA from "react-ga4";
 
 
 // 구글 애널리틱스 운영서버만 적용
