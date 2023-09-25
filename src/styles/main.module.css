@@ -19,6 +19,11 @@
     margin-left: 4em;
     margin-right: 4em;
     text-align: left;
+
+    @media screen and (max-width: 768px) {
+        margin-left: 1em;
+        margin-right: 1em;
+    }
 }
 
 .title_content_start {

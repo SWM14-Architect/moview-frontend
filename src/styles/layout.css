@@ -35,3 +35,15 @@
         grid-template-columns: repeat(1, 1fr);
     }
 }
+
+.pc-only{
+    @media screen and (max-width: 768px) {
+        display:none;
+    }
+}
+
+.mobile-only {
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
+}

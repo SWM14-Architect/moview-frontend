@@ -5,12 +5,16 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    background-color: #fff;
     height: var(--navbar-height);
+    width: 100%;
+    max-width: 940px;
 }
 
 .nav {
     display: flex;
     flex-direction: row;
+
 }
 
 ul {
