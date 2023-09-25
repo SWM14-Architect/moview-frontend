@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {userLoginAtom, userNicknameAtom, userProfileAtom} from "../store/userAtom";
 
 // 기본 URL 설정
 const apiClient = axios.create({
@@ -11,17 +13,20 @@ const apiClient = axios.create({
 const KakaoCallback = () => {
   const navigate = useNavigate();
 
+  const [, setUserLogin] = useRecoilState(userLoginAtom);
+  const [, setUserNickname] = useRecoilState(userNicknameAtom);
+  const [, setUserProfile] = useRecoilState(userProfileAtom);
+
   const callOAuthAPI = async () => {
     let params = new URL(document.URL).searchParams;
     let code = params.get("code");
 
     await apiClient
-      .get("/oauth", {
-        params: {
-          code,
-        },
-      })
+      .get("/oauth", {params: {code}})
       .then((res) => {
+        setUserLogin(true);
+        setUserNickname(res.data["profile_nickname"]);
+        setUserProfile(res.data["profile_image_url"]);
         navigate("/");
       })
       .catch((error) => {
