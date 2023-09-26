@@ -15,6 +15,7 @@ import { useInterval } from "../../utils/useInterval";
 import { ScrollToTop } from "../../utils/scrollRestoration";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
 import { useTTSPlayer } from "../../utils/useTTSPlayer";
+import AudioRecorder from "../../utils/audioRecorder";
 import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
 import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
 import style from "../../styles/interviewChat.module.css";
@@ -64,6 +65,7 @@ function InterviewChat(){
 
   useEffect(() => {
     // 첫 번째 면접 질문에 대한 TTS 실행
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const interviewStateCopy = JSON.parse(JSON.stringify(interviewState));
     const firstQuestion = interviewStateCopy.askedQuestions[0]?.content;
     if (firstQuestion) {
@@ -73,6 +75,11 @@ function InterviewChat(){
 
   const canNotPlayerTalking = () => {
     if (intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null) return true;
+    return false;
+  }
+
+  const canNotPlayerSpeaking = () => {
+    if (interviewTurn === false || isTyping !== null) return true;
     return false;
   }
 
@@ -249,6 +256,10 @@ function InterviewChat(){
               placeholder={"질문에 대한 답변을 작성하세요."}
               item={intervieweeAnswerFormText}
               onChange={(e) => {setIntervieweeAnswerFormText(e.target.value)}}
+            />
+            <AudioRecorder
+                canNotPlayerTalking={canNotPlayerSpeaking()}
+                onSTTResult={(result) => setIntervieweeAnswerFormText(result)}
             />
             <button
               className={`${style.input_form_button} ${canNotPlayerTalking() ? style.input_form_disabled : null}`}

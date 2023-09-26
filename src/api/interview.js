@@ -124,3 +124,19 @@ export const tts_api = ( {text} ) => {
     throw error;
   });
 }
+
+export const stt_api = ( {audio_data} ) => {
+  // 입력 검증(base64로 인코딩 되어있는 오디오 데이터)
+  if (typeof audio_data !== 'string') throw new Error('Invalid input: Audio Data');
+
+  // JSON 형식으로 requestBody 구성
+  const requestBody = {
+    "audio_data": audio_data,
+  }
+
+  return apiClient.post('/interview/stt', requestBody)
+  .then(response => response.data)
+  .catch(error => {
+    throw error;
+  });
+}
