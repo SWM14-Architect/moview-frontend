@@ -7,7 +7,6 @@ import {ScrollToTop} from "../utils/scrollRestoration";
 import TypeIt from "typeit-react";
 import {useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
-import {roomIdAtom} from "../store/interviewRoomAtom";
 import {userLoginAtom} from "../store/userAtom";
 import {oauth_url_api} from "../api/jwt";
 
@@ -90,13 +89,11 @@ function Main(){
   useTitle(`${SERVICE_TITLE}`);
   ScrollToTop();
   const navigate = useNavigate();
-  const [, setRoomID] = useRecoilState(roomIdAtom);
   const [userLogin, ] = useRecoilState(userLoginAtom);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    setRoomID("interviewInput");
-    navigate("/room");
+    navigate("/mode");
   }
 
   const handleLogin = async () => {
