@@ -71,10 +71,10 @@ function Header() {
     e.preventDefault();
     setIsClickedHamburger(false);
     if (!isRoom) {
-      setRoomID("interviewInput");
+      setRoomID("modeSelect");
       navigate("/room");
     } else {
-      setRoomID("interviewInput");
+      setRoomID("modeSelect");
       navigate("/");
     }
   };

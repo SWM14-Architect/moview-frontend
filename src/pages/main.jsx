@@ -9,6 +9,7 @@ import {useNavigate} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userLoginAtom} from "../store/userAtom";
 import {oauth_url_api} from "../api/jwt";
+import {roomIdAtom} from "../store/interviewRoomAtom";
 
 function FirstSection(props){
   return (
@@ -89,11 +90,13 @@ function Main(){
   useTitle(`${SERVICE_TITLE}`);
   ScrollToTop();
   const navigate = useNavigate();
+  const [, setRoomID] = useRecoilState(roomIdAtom);
   const [userLogin, ] = useRecoilState(userLoginAtom);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    navigate("/mode");
+    setRoomID("modeSelect");
+    navigate("/room");
   }
 
   const handleLogin = async () => {
