@@ -83,7 +83,7 @@ function CoverLetterForm({refs, index, length, item, onQuestionChange, onContent
       }
       <div className={`${style.input_form_box}`}>
         <InputForm
-          placeholder={"자소서 문항을 입력하세요. (ex. 회사에 지원하게 된 계기는?)"}
+          placeholder={"자소서 문항을 입력하세요."}
           item={item.question}
           index={index}
           onChange={onQuestionChange}
