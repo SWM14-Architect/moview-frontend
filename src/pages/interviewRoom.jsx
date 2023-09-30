@@ -5,6 +5,7 @@ import {roomIdAtom} from "../store/interviewRoomAtom";
 import InterviewInput from "./interviewRoom/interviewInput";
 import InterviewChat from "./interviewRoom/interviewChat";
 import InterviewFeedback from "./interviewRoom/interviewFeedback";
+import InterviewLightInput from "./interviewRoom/interviewLightInput";
 import {useTitle} from "../utils/useTitle";
 import {SERVICE_TITLE} from "../constants/serviceConst";
 
@@ -16,6 +17,7 @@ function InterviewRoom() {
     "interviewInput": <InterviewInput />,
     "interviewChat": <InterviewChat />,
     "interviewFeedback": <InterviewFeedback />,
+    "interviewLight":<InterviewLightInput/>
   };
 
   useEffect(() => {

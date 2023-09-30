@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import { ScrollToTop } from "../utils/scrollRestoration";
 
 function InterviewLightInput(){
 
