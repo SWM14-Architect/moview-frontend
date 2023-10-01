@@ -111,7 +111,7 @@ function Header() {
                 <div className={`pc-only ${style.nav}`}>
                   <button
                     className={`blackButton`}
-                    style={{ marginRight: "15px" }}
+                    style={{ marginRight: "15px" ,borderRadius: "5px"}}
                     onClick={(e) => handleLogin(e)}
                   >
                     {"카카오 로그인"}
@@ -124,7 +124,7 @@ function Header() {
                   </div>
                   <button
                     className={`blackButton`}
-                    style={{ marginRight: "15px" }}
+                    style={{ marginRight: "15px" ,borderRadius: "5px"}}
                     onClick={(e) => handleButtonClick(e)}
                   >
                     {!isRoom ? "면접시작 >" : "면접종료 >"}
@@ -132,7 +132,7 @@ function Header() {
 
                   <button
                     className={`blackButton`}
-                    style={{ marginRight: "15px" }}
+                    style={{ marginRight: "15px" , borderRadius: "5px"}}
                     onClick={(e) => handleLogout(e)}
                   >
                     카카오 로그아웃

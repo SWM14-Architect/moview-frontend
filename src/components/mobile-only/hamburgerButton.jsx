@@ -18,7 +18,7 @@ function HamburgerButton(props){
           <div className={`${style.menu_nav}`}>
             <button
               className={`blackButton`}
-              style={{ marginRight: "15px" }}
+              style={{ marginRight: "15px" ,borderRadius: "5px" }}
               onClick={(e) => props.handleLogin(e)}
             >
               카카오 로그인
@@ -32,12 +32,14 @@ function HamburgerButton(props){
             </div>
             <button
               className={`blackButton`}
+              style={{borderRadius: "5px" }}
               onClick={(e) => props.handleButtonClick(e)}
             >
               {!props.isRoom ? "면접시작 >" : "면접종료 >"}
             </button>
             <button
               className={`blackButton`}
+              style={{borderRadius: "5px" }}
               onClick={(e) => props.handleLogout(e)}
             >
               카카오 로그아웃
