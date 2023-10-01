@@ -314,7 +314,7 @@ function InterviewInput() {
   return (
     <section style={{ backgroundColor: "#f4f7fb", flex: 1 }}>
       <div className={`container`} style={{ flexDirection: "column" }}>
-        <div className={`${style.header}`}>면접 정보</div>
+        <div className={`${style.header}`}>면접 정보 입력 (실전 모드)</div>
         <div className={`layout-flex-grid-2 fadeInUpEffect`}>
           <InputComponent
             title={"회사"}
@@ -352,7 +352,7 @@ function InterviewInput() {
           style={{ display: "flex", justifyContent: "center" }}
         >
           <button
-            className={`blueButton`}
+            className={`redButton`}
             style={{ borderRadius: "10px", width: "100px" }}
             onClick={(e) => handleNextButtonClick(e)}
           >
