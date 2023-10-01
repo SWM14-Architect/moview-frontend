@@ -1,6 +1,8 @@
 import React, { useCallback, useRef, useState } from "react";
 import style from "../../styles/interviewInput.module.css";
 import { useRecoilState } from "recoil";
+import { CHAT_HISTORY_DEFAULT_VALUE } from "../../constants/interviewChatConst";
+import { INTERVIEW_STATE_DEFAULT_VALUE } from "../../constants/interviewRoomConst";
 import { ScrollToTop } from "../../utils/scrollRestoration";
 import { toast } from "react-toastify";
 import { userNicknameAtom } from "../../store/userAtom";
@@ -12,6 +14,7 @@ import {
   interviewStateAtom,
   roomIdAtom,
 } from "../../store/interviewRoomAtom";
+import { light_api } from "../../api/interview";
 
 function InterviewLightInput() {
   ScrollToTop();
@@ -77,6 +80,52 @@ function InterviewLightInput() {
     setLoadingMessage(
       "잠시후 면접이 시작됩니다. 대기 시간은 약 3~6초 정도입니다!"
     );
+
+    //api call
+    light_api({
+        intervieweeName: userNickname,
+        companyName: interviewTargetCompany,
+        jobGroup: interviewTargetPosition,
+        keyword: interviewTargetKeyword,
+    })
+    .then((res) => {
+        console.log(res);
+
+        setIsLoading(false);
+        setRoomID("interviewChat");
+        const interviewStateCopy = JSON.parse(
+          JSON.stringify(INTERVIEW_STATE_DEFAULT_VALUE)
+        );
+        interviewStateCopy.askedQuestions = [];
+        interviewStateCopy.initialQuestions = res.message.light_questions.map(
+          ({ content, question_id }) => ({
+            _id: question_id,
+            content: content,
+            feedback: 0,
+            is_initial: true,
+            is_done: false,
+          })
+        );
+        const firstQuestion = interviewStateCopy.initialQuestions[0];
+        interviewStateCopy.askedQuestions.push({
+          _id: firstQuestion._id,
+          content: firstQuestion.content,
+        });
+        setInterviewState(interviewStateCopy);
+        setInterviewId(res.message.interview_id);
+        setChatHistory([
+          ...CHAT_HISTORY_DEFAULT_VALUE,
+          { type: "AI", content: firstQuestion.content },
+        ]);
+      })
+    .catch((err) => {
+    setIsLoading(false);
+    if (err.response.status === 401) {
+        toast.info("다시 로그인을 해주세요.");
+    } else {
+        toast.error(`오류가 발생했습니다!\n${err.message}`, {});
+    }
+    });
   }
 
   return (
@@ -92,7 +141,7 @@ function InterviewLightInput() {
           />
           <InputComponent
             title={"직군"}
-            placeholder={"지원하고자 하는 직군을 입력하세요."}
+            placeholder={"지원하고자 하는 직군을 입력하세요. (입력 예시) 웹 개발자"}
             item={interviewTargetPosition}
             onChange={handleInterviewPositionChange}
           />
@@ -101,7 +150,7 @@ function InterviewLightInput() {
           <TextareaComponent
             title={"면접 질문 키워드"}
             placeholder={
-              "연습하고 싶은 면접 질문 키워드를 입력하세요. (여러 개 가능. 권장은 2~3개입니다.)"
+              "연습하고 싶은 면접 질문 키워드를 입력하세요. 여러 개 입력 가능합니다. 권장은 2~3개입니다. (입력 예시) DB, 네트워크"
             }
             item={interviewTargetKeyword}
             onChange={handleInterviewKeyword}
