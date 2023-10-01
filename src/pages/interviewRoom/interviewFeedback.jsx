@@ -51,30 +51,30 @@ import {toast} from "react-toastify";
 //   );
 // }
 
-function SliderInput({name, index, onChange}){
-  return (
-    <form className={`${style.slider_form}`}>
-      <input
-        type="range"
-        name={name}
-        min={1}
-        max={5}
-        step={1}
-        list="markers"
-        defaultValue={FEEDBACK_RANGE_DEFAULT_VALUE}
-        onMouseUp={e=> onChange(index, parseInt(e.target.value))}
-        onTouchEnd={e=> onChange(index, parseInt(e.target.value))}
-      />
-      <datalist id="markers">
-        <option value="1" label="1점"></option>
-        <option value="2" label="2점"></option>
-        <option value="3" label="3점"></option>
-        <option value="4" label="4점"></option>
-        <option value="5" label="5점"></option>
-      </datalist>
-    </form>
-  );
-}
+// function SliderInput({name, index, onChange}){
+//   return (
+//     <form className={`${style.slider_form}`}>
+//       <input
+//         type="range"
+//         name={name}
+//         min={1}
+//         max={5}
+//         step={1}
+//         list="markers"
+//         defaultValue={FEEDBACK_RANGE_DEFAULT_VALUE}
+//         onMouseUp={e=> onChange(index, parseInt(e.target.value))}
+//         onTouchEnd={e=> onChange(index, parseInt(e.target.value))}
+//       />
+//       <datalist id="markers">
+//         <option value="1" label="1점"></option>
+//         <option value="2" label="2점"></option>
+//         <option value="3" label="3점"></option>
+//         <option value="4" label="4점"></option>
+//         <option value="5" label="5점"></option>
+//       </datalist>
+//     </form>
+//   );
+// }
 
 function InterviewFeedback(){
   ScrollToTop();
@@ -140,12 +140,6 @@ function InterviewFeedback(){
                 <div>
                   <span>평가</span>
                   <span>장점 분석<br/>{record.analysis[0]}<br/><br/>단점 분석<br/>{record.analysis[1]}</span>
-                </div>
-              </div>
-              <div className={`${style.feedback_box}`}>
-                <div>
-                  <span>적절한 면접 질문을 제공했나요?</span>
-                  <SliderInput name={`question_${index}`} index={index} onChange={handleFeedbackChange}/>
                 </div>
               </div>
             </div>

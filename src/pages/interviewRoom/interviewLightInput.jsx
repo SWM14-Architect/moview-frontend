@@ -89,8 +89,6 @@ function InterviewLightInput() {
         keyword: interviewTargetKeyword,
     })
     .then((res) => {
-        console.log(res);
-
         setIsLoading(false);
         setRoomID("interviewChat");
         const interviewStateCopy = JSON.parse(
