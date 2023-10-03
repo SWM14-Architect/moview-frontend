@@ -110,7 +110,7 @@ function SecondSection(){
           {features.map((feature) => (
             <div key={feature.name} className="relative pl-16">
               <dt className="text-base font-semibold leading-7 text-gray-900">
-                <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600">
+                <div className="absolute left-0 top-0 flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600">
                 </div>
                 {feature.name}
               </dt>
@@ -148,7 +148,7 @@ function Main(){
 
   return (
     <section style={{flex: 1, paddingTop:"0px"}}>
-      <section style={{backgroundColor:"#f4f7fb"}}>
+      <section style={{backgroundColor:"white"}}>
         <div className={`container`} style={{flexDirection:"column"}}>
           <FirstSection userLogin={userLogin} handleLogin={handleLogin} handleButtonClick={handleButtonClick} />
         </div>
