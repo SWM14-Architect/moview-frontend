@@ -11,6 +11,7 @@ import { jwt_token_remove_api, oauth_url_api } from "../api/jwt";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
 import logo from "../assets/logo192.png";
 
 function classNames(...classes) {
@@ -59,6 +60,11 @@ function Header() {
 
   const handleButtonClick = (e) => {
     e.preventDefault();
+
+    if(!userLogin){
+      toast.warn("로그인 먼저 해주세요!");
+      return;
+    }
 
     if (!isRoom) {
       setRoomID("modeSelect");
