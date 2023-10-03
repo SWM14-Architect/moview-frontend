@@ -28,7 +28,7 @@ function FirstSection(props){
       <div className={`line fadeInUpEffect animation-delay-3`} />
       <div className={`fadeInUpEffect animation-delay-3 ${style.title_content_start}`}>
       </div>
-      <div className={`fadeInUpEffect animation-delay-3`}>
+      {/* <div className={`fadeInUpEffect animation-delay-3`}>
         {!props.userLogin ?
           <div>
             <div className={`${style.title_content_start}`}>
@@ -44,10 +44,6 @@ function FirstSection(props){
             </button>
           </div> :
           <div>
-            <div className={`${style.title_content_start}`}>
-              <div>정보를 입력하고 시작버튼을 누르시면,</div>
-              <div>AI가 내용을 분석하고 질문을 생성합니다.</div>
-            </div>
             <button
               className={`blackButton`}
               style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
@@ -57,7 +53,7 @@ function FirstSection(props){
             </button>
           </div>
         }
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -81,7 +77,7 @@ const features = [
   {
     name: '면접 키워드 중심 면접 연습',
     description:
-      '직무 기술 면접에서 나올 수 있는 키워드를 반복 연습해서 합격률을 높이고, 면접관들을 놀라게 해봅시다!',
+      '직무 기술 면접에서 나올 수 있는 키워드를 반복 연습해서 합격률을 높이고, 면접관들을 깜짝 놀라게 해봅시다!',
   },
 ]
 
