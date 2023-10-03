@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import style from "../styles/header.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { roomIdAtom } from "../store/interviewRoomAtom";
@@ -14,8 +13,6 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import logo from "../assets/logo192.png";
 
-const navigation = [{ name: "면접 시작", href: "#" }];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -24,53 +21,53 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isRoom, setIsRoom] = useState(false);
-  // const [, setRoomID] = useRecoilState(roomIdAtom);
+  const [, setRoomID] = useRecoilState(roomIdAtom);
   const [userLogin, setUserLogin] = useRecoilState(userLoginAtom);
-  // const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
-  // const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
+  const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
+  const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
 
-  // const handleLogin = async () => {
-  //   await oauth_url_api()
-  //   .then((res) => {
-  //     window.location.href = res.data["kakao_oauth_url"];
-  //   })
-  //   .catch((err) => {
-  //   });
-  // };
+  const handleLogin = async () => {
+    await oauth_url_api()
+    .then((res) => {
+      window.location.href = res.data["kakao_oauth_url"];
+    })
+    .catch((err) => {
+    });
+  };
 
-  // const handleLogout = async () => {
-  //   await jwt_token_remove_api()
-  //   .then((res) => {
-  //     alert("정상적으로 로그아웃이 되었습니다.");
-  //     setUserLogin(false);
-  //     setUserNickname("");
-  //     setUserProfile("");
-  //     navigate("/");
-  //   })
-  //   .catch((err) => {
+  const handleLogout = async () => {
+    await jwt_token_remove_api()
+    .then((res) => {
+      alert("정상적으로 로그아웃이 되었습니다.");
+      setUserLogin(false);
+      setUserNickname("");
+      setUserProfile("");
+      navigate("/");
+    })
+    .catch((err) => {
 
-  //   });
-  // };
+    });
+  };
 
-  // useEffect(() => {
-  //   if (window.location.pathname === "/room") {
-  //     setIsRoom(true);
-  //   } else {
-  //     setIsRoom(false);
-  //   }
-  // }, [location]);
+  useEffect(() => {
+    if (window.location.pathname === "/room") {
+      setIsRoom(true);
+    } else {
+      setIsRoom(false);
+    }
+  }, [location]);
 
-  // const handleButtonClick = (e) => {
-  //   e.preventDefault();
+  const handleButtonClick = (e) => {
+    e.preventDefault();
 
-  //   if (!isRoom) {
-  //     setRoomID("modeSelect");
-  //     navigate("/room");
-  //   } else {
-  //     setRoomID("modeSelect");
-  //     navigate("/");
-  //   }
-  // };
+    if (!isRoom) {
+      setRoomID("modeSelect");
+      navigate("/room");
+    } else {
+      setRoomID("modeSelect");
+      navigate("/");
+    }
+  };
 
   return (
     <Disclosure
@@ -82,18 +79,19 @@ function Header() {
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                <MobileMenuButton open={open}/>
+                <MobileMenuButton open={open} />
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <CompanyLogo />
-                <MenuButton isRoom={isRoom} />
+                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} />
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <ProfileDropdown />
+
+                {!userLogin ? <LoginButton  handleLogin={handleLogin}/> : <ProfileDropdown handleLogout={handleLogout}/>}
               </div>
             </div>
           </div>
-          <MenuButtonResized isRoom={isRoom} />
+          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick}/>
         </>
       )}
     </Disclosure>
@@ -132,6 +130,7 @@ function MenuButton(props) {
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
             "rounded-md px-3 py-2 text-sm font-medium"
           )}
+          onClick={(e) => props.handleButtonClick(e)}
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </button>
@@ -140,8 +139,22 @@ function MenuButton(props) {
   );
 }
 
+function LoginButton(props) {
+  return (
+    <button
+    className={classNames(
+      "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
+      "rounded-md px-3 py-2 text-sm font-medium"
+    )}
+    onClick={(e) => props.handleLogin(e)}
+  >
+    로그인
+  </button>
+  );
+}
+
 //로그인 시 나오는 프로필
-function ProfileDropdown() {
+function ProfileDropdown(props) {
   return (
     <Menu as="div" className="relative ml-3">
       <div>
@@ -168,13 +181,13 @@ function ProfileDropdown() {
           <Menu.Item>
             {({ active }) => (
               <a
-                href="#"
                 className={classNames(
                   active ? "bg-gray-100" : "",
-                  "block px-4 py-2 text-sm text-gray-700"
+                  "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
                 )}
+                onClick={(e) => props.handleLogout(e)}
               >
-                Logout
+                로그아웃
               </a>
             )}
           </Menu.Item>
@@ -195,6 +208,7 @@ function MenuButtonResized(props) {
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
             "block rounded-md px-3 py-2 text-base font-medium"
           )}
+          onClick={(e) => props.handleButtonClick(e)}
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </Disclosure.Button>
