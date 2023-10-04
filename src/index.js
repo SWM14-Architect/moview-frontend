@@ -20,7 +20,6 @@ import InterviewRoom from "./pages/interviewRoom";
 import ToastContainerComponent from "./utils/toastContainer";
 import KakaoCallback from "./pages/login_callback";
 import {CookiesProvider} from "react-cookie";
-import Example from "./pages/example";
 
 function Index(){
   const router = createBrowserRouter([
@@ -30,7 +29,6 @@ function Index(){
       children: [
         { path: "/", element: <Main /> },
         { path: "/room", element: <InterviewRoom /> },
-        {path:"/ee",element:<Example/>}
       ],
       errorElement: <ErrorPage />,
     },

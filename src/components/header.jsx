@@ -4,13 +4,12 @@ import { useRecoilState } from "recoil";
 import { roomIdAtom } from "../store/interviewRoomAtom";
 import {
   userLoginAtom,
-  userNicknameAtom,
   userProfileAtom,
 } from "../store/userAtom";
 import { jwt_token_remove_api, oauth_url_api } from "../api/jwt";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import logo from "../assets/logo192.png";
 
@@ -24,7 +23,7 @@ function Header() {
   const [isRoom, setIsRoom] = useState(false);
   const [, setRoomID] = useRecoilState(roomIdAtom);
   const [userLogin, setUserLogin] = useRecoilState(userLoginAtom);
-  const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
+  // const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
   const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
 
   const handleLogin = async () => {
@@ -41,7 +40,7 @@ function Header() {
     .then((res) => {
       alert("정상적으로 로그아웃이 되었습니다.");
       setUserLogin(false);
-      setUserNickname("");
+      // setUserNickname("");
       setUserProfile("");
       navigate("/");
     })
@@ -183,6 +182,7 @@ function ProfileDropdown(props) {
           <Menu.Item>
             {({ active }) => (
               <a
+                href="/not-working-href"
                 className={classNames(
                   active ? "bg-gray-100" : "",
                   "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
