@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { tts_api } from '../api/interview';
 
-export const useTTSPlayer = (questionContent) => {
+export const useTTSPlayer = (questionContent, onTTSComplete) => {
   useEffect(() => {
     if (typeof questionContent !== 'string') return;
 
@@ -28,6 +28,7 @@ export const useTTSPlayer = (questionContent) => {
       // 오디오 재생이 끝났을 때 Object URL 해제 (메모리 누수 방지)
       audioElement.addEventListener('ended', () => {
         URL.revokeObjectURL(audioSrc);
+        onTTSComplete();  // TTS가 완료되면 호출
       });
 
       // 오디오 재생 중 오류가 발생했을 때 Object URL 해제 (메모리 누수 방지)
@@ -55,5 +56,6 @@ export const useTTSPlayer = (questionContent) => {
         }
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionContent]);
 }

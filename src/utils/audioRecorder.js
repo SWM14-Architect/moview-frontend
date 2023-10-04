@@ -1,11 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { stt_api } from '../api/interview';
+import style from "../styles/interviewChat.module.css";
 
 export default function AudioRecorder({ canNotPlayerSpeaking, onSTTResult }) {
   const [mediaRecorder, setMediaRecorder] = useState(null); // 녹음에 사용될 MediaRecorder 객체를 저장
   const [audioDuration, setAudioDuration] = useState(0); // 녹음이 시작된 시간을 저장
   const [micAccessDenied, setMicAccessDenied] = useState(false); // 마이크 접근 권한이 없는지 여부를 저장
+
+  useEffect(() => {
+    // 컴포넌트가 마운트 될 때 실행될 코드 (여기선 비워둠)
+
+    return () => {
+      // 컴포넌트가 언마운트 될 때 실행될 코드
+      if (mediaRecorder) {
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);  // 의존성 배열은 비워두어 컴포넌트 마운트/언마운트 시에만 실행되게 함
 
   const startRecording = async () => {
     try {
@@ -72,7 +85,7 @@ export default function AudioRecorder({ canNotPlayerSpeaking, onSTTResult }) {
         onSTTResult(res.message.text);
       }
     }).catch((err) => {
-      console.error(err);
+      toast.warn(`${err.response.data.message.error}`);
     });
   };
 
@@ -80,9 +93,10 @@ export default function AudioRecorder({ canNotPlayerSpeaking, onSTTResult }) {
       <div>
         <button
             onClick={mediaRecorder ? stopRecording : startRecording}
+            className={`${style.input_form_button} ${canNotPlayerSpeaking ? style.input_form_disabled : null}`}
             disabled={canNotPlayerSpeaking}
         >
-          {mediaRecorder ? "Stop Recording" : "Start Recording"}
+          {mediaRecorder ? "녹음 완료" : "녹음 시작"}
         </button>
         {micAccessDenied && (
             <div>

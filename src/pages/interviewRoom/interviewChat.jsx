@@ -60,26 +60,32 @@ function InterviewChat(){
   const [interviewFlag, setInterviewFlag] = useState(false); // [false: 인터뷰 진행 중 true: 인터뷰 종료]
 
   const [currentQuestionContent, setCurrentQuestionContent] = useState(null); // TTS를 실행할 질문 내용
+  const [ttsCompleted, setTTSCompleted] = useState(false); // TTS가 완료되었는지 확인하는 상태
 
-  useTTSPlayer(currentQuestionContent);
+  // TTS가 완료되면 호출되는 콜백 함수
+  const onTTSComplete = () => {
+    setTTSCompleted(true);
+  };
+
+  useTTSPlayer(currentQuestionContent, onTTSComplete);
 
   useEffect(() => {
     // 첫 번째 면접 질문에 대한 TTS 실행
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const interviewStateCopy = JSON.parse(JSON.stringify(interviewState));
     const firstQuestion = interviewStateCopy.askedQuestions[0]?.content;
     if (firstQuestion) {
       setCurrentQuestionContent(firstQuestion);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const canNotPlayerTalking = () => {
-    if (intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null) return true;
+    if (intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null || !ttsCompleted) return true;
     return false;
   }
 
   const canNotPlayerSpeaking = () => {
-    if (interviewTurn === false || isTyping !== null) return true;
+    if (interviewTurn === false || isTyping !== null || !ttsCompleted) return true;
     return false;
   }
 
@@ -89,6 +95,7 @@ function InterviewChat(){
     setChatHistory([...chatHistory, {type:"Human", content: answerContent}]);
     setIntervieweeAnswer(answerContent);
     setIntervieweeAnswerFormText("");
+    setTTSCompleted(false); // 답변이 완료되면 TTS 재생 상태를 초기화
     intervieweeAnswerRef.current.scrollIntoView({behavior: "smooth"});
   }
 
@@ -258,7 +265,7 @@ function InterviewChat(){
               onChange={(e) => {setIntervieweeAnswerFormText(e.target.value)}}
             />
             <AudioRecorder
-                canNotPlayerTalking={canNotPlayerSpeaking()}
+                canNotPlayerSpeaking={canNotPlayerSpeaking()}
                 onSTTResult={(result) => setIntervieweeAnswerFormText(result)}
             />
             <button
