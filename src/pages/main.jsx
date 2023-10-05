@@ -20,40 +20,9 @@ function FirstSection(props){
         <div>을 느끼고 계신가요?</div>
       </TypeIt>
       <img className={`fadeInUpEffect animation-delay-1`} src={MainImage} alt="main" style={{width:"100%", marginBottom:"2em"}} />
-      {/* <div className={`fadeInUpEffect animation-delay-2 ${style.title_content}`}>
-        더 이상 면접 질문에 당황하지 마세요!
-        <br/>
-        면접자의 자소서와 원하는 회사의 채용 공고를 분석하여 개인화된 질문 리스트를 제공합니다. 현실감 넘치는 면접 시뮬레이션을 통해 진짜 면접에 대비하세요.
-      </div> */}
       <div className={`line fadeInUpEffect animation-delay-3`} />
       <div className={`fadeInUpEffect animation-delay-3 ${style.title_content_start}`}>
       </div>
-      {/* <div className={`fadeInUpEffect animation-delay-3`}>
-        {!props.userLogin ?
-          <div>
-            <div className={`${style.title_content_start}`}>
-              <div>시작을 위해서는 계정이 필요합니다.</div>
-              <div>카카오 계정으로 로그인하실 수 있습니다.</div>
-            </div>
-            <button
-              className={`blackButton`}
-              style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
-              onClick={(e) => props.handleLogin(e)}
-            >
-              카카오 로그인
-            </button>
-          </div> :
-          <div>
-            <button
-              className={`blackButton`}
-              style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
-              onClick={(e) => props.handleButtonClick(e)}
-            >
-              {"면접시작 >"}
-            </button>
-          </div>
-        }
-      </div> */}
     </div>
   );
 }
@@ -82,15 +51,6 @@ const features = [
 ]
 
 function SecondSection(){
-
-  const featureComponent = (title, description) => {
-    return (
-      <div className={`${style.feature_box}`}>
-        <div className={`${style.feature_box_header}`}>{title}</div>
-        <div className={`${style.feature_box_content}`}>{description}</div>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-white py-24 sm:py-32">
