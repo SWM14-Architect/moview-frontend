@@ -49,13 +49,21 @@
 }
 
 .input_form {
-    margin: 10px;
+    position: relative;
+}
+
+.input_form_wrapper {
     display: flex;
-    flex-direction: column;
-    justify-items: center;
+    align-items: center;
+}
+
+.audio_recorder {
+    flex: 0 0 60px;
+    margin-right: 10px;
 }
 
 .input_form_textbox {
+    flex: 1 1 auto;
     outline: #fff 1px solid;
     box-sizing: border-box;
     width: 100%;
@@ -91,6 +99,24 @@
     background-color: grey !important;
     outline-color: grey !important;
     cursor: default;
+}
+
+.input_form_record_button {
+    filter: grayscale(0%);
+    background-image: url("../assets/record-stop.jpg");
+    width: 50px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.input_form_record_button.start {
+    background-image: url("../assets/record-start.jpg");
+}
+
+.input_form_record_disabled {
+    filter: grayscale(100%);
 }
 
 .result_form_button {
