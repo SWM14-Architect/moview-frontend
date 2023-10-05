@@ -30,7 +30,7 @@ function InterviewFeedback() {
       feedback_scores: interviewFeedbacks,
     })
       .then(() => {
-        alert(`면접이 종료되었습니다.`);
+        toast.info(`면접이 종료되었습니다.`);
         navigate("/");
       })
       .catch((err) => toast.error(`오류가 발생했습니다!\n${err.message}`, {}));

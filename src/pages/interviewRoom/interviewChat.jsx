@@ -131,7 +131,7 @@ function InterviewChat(){
 
   const handleInterviewEnd = () => {
     setIsLoading(true);
-    setLoadingMessage("면접 결과를 분석하고 있습니다");
+    setLoadingMessage("면접 결과를 분석하고 있습니다. 평균 소요 시간은 8 ~ 12초입니다.");
     evaluation_api({interview_id: interviewId}).then((res) => {
       console.log(res.message.evaluations);
 

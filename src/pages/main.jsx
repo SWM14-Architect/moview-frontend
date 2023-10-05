@@ -110,7 +110,7 @@ function Main(){
         </div>
       </section>
       <section style={{backgroundColor:"#ffffff"}}>
-        <div className={`container fadeInUpEffect animation-delay-4`} style={{flexDirection:"column"}}>
+        <div className={`container fadeInUpEffect animation-delay-2`} style={{flexDirection:"column"}}>
           <SecondSection />
         </div>
       </section>
