@@ -103,7 +103,6 @@ function InterviewChat(){
   const getNextQuestion = (followupQuestion) => {
     const interviewStateCopy = JSON.parse(JSON.stringify(interviewState));
     if(followupQuestion.question_id === null || interviewState.followupQuestionCount >= 3){
-      console.log("Next Initial Question");
       // 다음 초기질문을 가져옵니다.
       interviewStateCopy.initialQuestionIndex += 1;
       interviewStateCopy.followupQuestionCount = 0;
@@ -113,7 +112,6 @@ function InterviewChat(){
       return nextQuestion;
     }
     else{
-      console.log("Next Followup Question");
       // 생성된 꼬리질문을 가져옵니다.
       interviewStateCopy.followupQuestionCount += 1;
       const nextQuestion = {
@@ -133,7 +131,6 @@ function InterviewChat(){
     setIsLoading(true);
     setLoadingMessage("면접 결과를 분석하고 있습니다. 평균 소요 시간은 8 ~ 12초입니다.");
     evaluation_api({interview_id: interviewId}).then((res) => {
-      console.log(res.message.evaluations);
 
       setIsLoading(false);
       setInterviewResult(interviewSummaryGenerator(res.message.evaluations)); // 결과내용을 interviewResultAtom에 저장합니다.
@@ -161,7 +158,6 @@ function InterviewChat(){
           question_content: currentQuestion.content,
           answer_content: intervieweeAnswer
         }).then((res) => {
-          console.log("answer Api Success");
           // 질문에 대한 답변을 성공적으로 보냈기 때문에 질문 상태를 갱신합니다.
           setQuestionAsDone(currentIndex);
 
@@ -258,23 +254,23 @@ function InterviewChat(){
 function ThirdStep() {
   return (
     <div>
-      <ol class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base m-3">
-        <li class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-          <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-            <span class="mr-2">1</span>
-            Select <span class="hidden sm:inline-flex sm:ml-2">Mode</span>
+      <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base m-3">
+        <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <span className="mr-2">1</span>
+            Select <span className="hidden sm:inline-flex sm:ml-2">Mode</span>
           </span>
         </li>
-        <li class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-          <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-            <span class="mr-2">2</span>
-            <span class="hidden sm:inline-flex sm:ml-2">Input</span>
+        <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <span className="mr-2">2</span>
+            <span className="hidden sm:inline-flex sm:ml-2">Input</span>
           </span>
         </li>
-        <li class="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-          <span class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+        <li className="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
             <svg
-              class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2.5"
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2.5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -282,11 +278,11 @@ function ThirdStep() {
             >
               <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
             </svg>
-            <span class="hidden sm:inline-flex sm:ml-2">Interview</span>
+            <span className="hidden sm:inline-flex sm:ml-2">Interview</span>
           </span>
         </li>
-        <li class="flex items-center">
-          <span class="mr-2">4</span>
+        <li className="flex items-center">
+          <span className="mr-2">4</span>
           Result
         </li>
       </ol>
