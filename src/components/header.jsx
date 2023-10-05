@@ -38,7 +38,7 @@ function Header() {
   const handleLogout = async () => {
     await jwt_token_remove_api()
     .then((res) => {
-      alert("정상적으로 로그아웃이 되었습니다.");
+      toast.info("정상적으로 로그아웃이 되었습니다.");
       setUserLogin(false);
       // setUserNickname("");
       setUserProfile("");
@@ -181,16 +181,15 @@ function ProfileDropdown(props) {
         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <Menu.Item>
             {({ active }) => (
-              <a
-                href="/not-working-href"
+              <button
                 className={classNames(
                   active ? "bg-gray-100" : "",
-                  "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                  "block w-full py-2 text-sm text-gray-700 cursor-pointer"
                 )}
                 onClick={(e) => props.handleLogout(e)}
               >
                 로그아웃
-              </a>
+              </button>
             )}
           </Menu.Item>
         </Menu.Items>
