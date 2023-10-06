@@ -8,7 +8,7 @@ import {
   interviewStateAtom,
   roomIdAtom
 } from "../../store/interviewRoomAtom";
-import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
+import AIProfileImage from "../../assets/interviewer.png";
 import TypeIt from "typeit-react";
 import {useInterval} from "../../utils/useInterval";
 import {ScrollToTop} from "../../utils/scrollRestoration";
@@ -199,7 +199,7 @@ function InterviewChat(){
           <div key={index} className={`${style.chat_box} fadeInUpEffect`}>
             <div className={`${style.profile_box} ${item.type === "AI" ? null : style.profile_back}`}>
               <img src={item.type === "AI" ? AIProfileImage : userProfile} className="w-10 h-10 rounded-full" alt={"profile"}/>
-              <span>{item.type === "AI" ? "AI면접관" : userNickname}</span>
+              <span>{item.type === "AI" ? "면접관" : userNickname}</span>
             </div>
             {/* 마지막 대화 컴포넌트만 TypeIt으로 렌더링해서
                 새로고침했을 때 모든 대화에 TypeIt 효과가 적용되는 현상을 방지함. */}
