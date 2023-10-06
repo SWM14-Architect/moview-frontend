@@ -94,8 +94,8 @@ export default function AudioRecorder({ className, canNotPlayerSpeaking, onSTTRe
       <div className={className}>
         <button
             onClick={mediaRecorder ? stopRecording : startRecording}
-            className={`${mediaRecorder ? `${style.input_form_record_button} ${style.start}` : style.input_form_record_button} ${canNotPlayerSpeaking ? style.input_form_record_disabled : null}`}
-            disabled={canNotPlayerSpeaking}
+            className={`${mediaRecorder ? `${style.input_form_record_button} ${style.start}` : style.input_form_record_button} ${canNotPlayerSpeaking() ? style.input_form_record_disabled : null}`}
+            disabled={canNotPlayerSpeaking()}
             aria-label={mediaRecorder ? "녹음 완료" : "녹음 시작"}
         >
         </button>

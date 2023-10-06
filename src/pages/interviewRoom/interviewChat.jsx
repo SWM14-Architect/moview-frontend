@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewChat.module.css";
 import {useRecoilState} from "recoil";
 import {
@@ -258,14 +258,14 @@ function InterviewChat(){
         {/* 답변 작성 컴포넌트 */}
         {interviewFlag === false ?
           <div ref={intervieweeAnswerRef} className={`${style.input_form} fadeInUpEffect animation-delay-1`}>
-            <div className={style.input_form_wrapper}>
+            <div>
               <AudioRecorder
                   className={style.audio_recorder}
-                  canNotPlayerSpeaking={canNotPlayerSpeaking()}
+                  canNotPlayerSpeaking={canNotPlayerSpeaking}
                   onSTTResult={(result) => setIntervieweeAnswerFormText(result)}
               />
               <TextareaForm
-                  placeholder={"질문에 대한 답변을 직접 타이핑하거나, 음성 녹음(Beta)를 이용하여 작성하세요."}
+                  placeholder={"질문에 대한 답변을 직접 타이핑하거나, 왼쪽의 음성 녹음 버튼(Beta)을 이용하여 작성하세요."}
                   item={intervieweeAnswerFormText}
                   onChange={(e) => {setIntervieweeAnswerFormText(e.target.value)}}
               />

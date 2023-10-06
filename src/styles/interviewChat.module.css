@@ -49,25 +49,23 @@
 }
 
 .input_form {
-    position: relative;
-}
-
-.input_form_wrapper {
+    margin: 10px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-items: center;
 }
 
 .audio_recorder {
-    flex: 0 0 60px;
-    margin-right: 10px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
 .input_form_textbox {
-    flex: 1 1 auto;
     outline: #fff 1px solid;
     box-sizing: border-box;
     width: 100%;
-    padding: 10px;
+    padding: 10px 10px 10px 70px;
     margin : 0px;
     border: none;
     border-radius: 10px 10px 0px 0px;
@@ -104,8 +102,8 @@
 .input_form_record_button {
     filter: grayscale(0%);
     background-image: url("../assets/record-stop.jpg");
-    width: 50px;
-    height: 50px;
+    width: 3em;
+    height: 3em;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

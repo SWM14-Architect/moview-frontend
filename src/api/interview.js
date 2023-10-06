@@ -129,7 +129,7 @@ export const tts_api = ( {text} ) => {
     "text": text,
   };
 
-  return apiClient.post('/interview/tts', requestBody)
+  return API_INSTANCE_WITH_TOKEN.post('/interview/tts', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -145,7 +145,7 @@ export const stt_api = ( {audio_data} ) => {
     "audio_data": audio_data,
   }
 
-  return apiClient.post('/interview/stt', requestBody)
+  return API_INSTANCE_WITH_TOKEN.post('/interview/stt', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
