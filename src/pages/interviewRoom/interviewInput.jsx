@@ -1,38 +1,49 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
-import { input_api, session_api } from "../../api/interview";
+import style from "../../styles/interviewInput.module.css";
 import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
+import { useRecoilState } from "recoil";
+import {
+  interviewDataAtom,
+  interviewIdAtom,
+  interviewStateAtom,
+  roomIdAtom,
+} from "../../store/interviewRoomAtom";
+import { ScrollToTop } from "../../utils/scrollRestoration";
+import { input_api } from "../../api/interview";
+import { toast } from "react-toastify";
+import { chatHistoryAtom } from "../../store/interviewChatAtom";
 import { CHAT_HISTORY_DEFAULT_VALUE } from "../../constants/interviewChatConst";
 import { INTERVIEW_STATE_DEFAULT_VALUE } from "../../constants/interviewRoomConst";
-import style from "../../styles/interviewInput.module.css";
-import { useRecoilState } from "recoil";
-import { interviewDataAtom, interviewIdAtom, interviewStateAtom, roomIdAtom } from "../../store/interviewRoomAtom";
-import { chatHistoryAtom } from "../../store/interviewChatAtom";
 import { loadingAtom, loadingMessageAtom } from "../../store/loadingAtom";
-import { ScrollToTop } from "../../utils/scrollRestoration";
+import { userNicknameAtom } from "../../store/userAtom";
 
-function InputForm({placeholder, item, index, onChange}){
+function InputForm({ placeholder, item, index, onChange }) {
   return (
     <input
       className={`${style.input_form_textbox}`}
       type="text"
       placeholder={placeholder}
-      onChange={e => index !== null ? onChange(e, index) : onChange(e)}
+      onChange={(e) => (index !== null ? onChange(e, index) : onChange(e))}
       value={item}
     />
   );
 }
 
-function InputComponent({title, placeholder, item, onChange}){
+function InputComponent({ title, placeholder, item, onChange }) {
   return (
-   <div className={`${style.input_form_box}`}>
-    <div className={`${style.input_title}`}>{title}</div>
-     <InputForm placeholder={placeholder} item={item} index={null} onChange={onChange} />
-   </div>
-  )
+    <div className={`${style.input_form_box}`}>
+      <div className={`${style.input_title}`}>{title}</div>
+      <InputForm
+        placeholder={placeholder}
+        item={item}
+        index={null}
+        onChange={onChange}
+      />
+    </div>
+  );
 }
 
-function TextareaForm({placeholder, item, index, onChange, styles={}}){
+function TextareaForm({ placeholder, item, index, onChange, styles = {} }) {
   const textRef = useRef(null);
 
   // Textarea height auto resize
@@ -47,41 +58,60 @@ function TextareaForm({placeholder, item, index, onChange, styles={}}){
       className={`${style.input_form_textbox}`}
       placeholder={placeholder}
       onInput={handleResizeHeight}
-      onChange={e => index !== null ? onChange(e, index) : onChange(e)}
+      onChange={(e) => (index !== null ? onChange(e, index) : onChange(e))}
       style={styles}
       value={item}
     />
   );
 }
 
-function TextareaComponent({title, placeholder, item, onChange}){
+function TextareaComponent({ title, placeholder, item, onChange }) {
   return (
     <div className={`${style.input_form_box}`}>
       <div className={`${style.input_title}`}>{title}</div>
-      <TextareaForm placeholder={placeholder} item={item} index={null} onChange={onChange}/>
+      <TextareaForm
+        placeholder={placeholder}
+        item={item}
+        index={null}
+        onChange={onChange}
+      />
     </div>
   );
 }
 
-function CoverLetterForm({refs, index, length, item, onQuestionChange, onContentChange, addCoverletter, deleteCoverletter}){
+function CoverLetterForm({
+  refs,
+  index,
+  length,
+  item,
+  onQuestionChange,
+  onContentChange,
+  addCoverletter,
+  deleteCoverletter,
+}) {
   return (
     <div ref={refs} className={`${style.input_coverletter_box}`}>
-      {
-        length-1 === index && MAXIMUM_COVERLETTER_NUMBER > length ?
+      {length - 1 === index && MAXIMUM_COVERLETTER_NUMBER > length ? (
         <button
-          className={`${style.input_coverletter_button} ${style.coverletter_plus_button} ${length === 1 ? style.coverletter_plus_button_first : null}`}
+          className={`${style.input_coverletter_button} ${
+            style.coverletter_plus_button
+          } ${length === 1 ? style.coverletter_plus_button_first : null}`}
           onClick={() => addCoverletter()}
-        >+</button>:null
-      }
-      {length > 1 ?
+        >
+          +
+        </button>
+      ) : null}
+      {length > 1 ? (
         <button
           className={`${style.input_coverletter_button} ${style.coverletter_minus_button}`}
           onClick={() => deleteCoverletter(item.id)}
-        >-</button>:null
-      }
+        >
+          -
+        </button>
+      ) : null}
       <div className={`${style.input_form_box}`}>
         <InputForm
-          placeholder={"자소서 문항을 입력하세요. (ex. 회사에 지원하게 된 계기는?)"}
+          placeholder={"자소서 문항을 입력하세요."}
           item={item.question}
           index={index}
           onChange={onQuestionChange}
@@ -91,37 +121,37 @@ function CoverLetterForm({refs, index, length, item, onQuestionChange, onContent
           item={item.content}
           index={index}
           onChange={onContentChange}
-          styles={{marginTop:"20px", minHeight:"100px"}}
+          styles={{ marginTop: "20px", minHeight: "100px" }}
         />
       </div>
     </div>
   );
 }
 
-function CoverLetterComponent({coverLetters, setCoverLetters}){
+function CoverLetterComponent({ coverLetters, setCoverLetters }) {
   const lastCoverletterRef = useRef(null);
   const nextID = useRef(1);
 
   useEffect(() => {
-    if(lastCoverletterRef.current !== null) {
-      lastCoverletterRef.current.scrollIntoView({behavior: "smooth"});
+    if (lastCoverletterRef.current !== null) {
+      lastCoverletterRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [coverLetters]);
 
   function addCoverletter() {
-    if(coverLetters.length >= MAXIMUM_COVERLETTER_NUMBER) return;
+    if (coverLetters.length >= MAXIMUM_COVERLETTER_NUMBER) return;
 
     const input = {
       id: nextID.current,
-      question: '',
-      content: ''
+      question: "",
+      content: "",
     };
     setCoverLetters([...coverLetters, input]);
     nextID.current += 1;
   }
 
   function deleteCoverletter(index) {
-    setCoverLetters(coverLetters.filter(item => item.id !== index));
+    setCoverLetters(coverLetters.filter((item) => item.id !== index));
   }
 
   function handleQuestionChange(e, index) {
@@ -155,11 +185,11 @@ function CoverLetterComponent({coverLetters, setCoverLetters}){
           deleteCoverletter={deleteCoverletter}
         />
       ))}
-      </div>
+    </div>
   );
 }
 
-function InterviewInput(){
+function InterviewInput() {
   ScrollToTop();
   const [, setIsLoading] = useRecoilState(loadingAtom);
   const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
@@ -173,17 +203,16 @@ function InterviewInput(){
   const [, setInterviewId] = useRecoilState(interviewIdAtom);
   // 클라이언트 상태 관리
   const [, setInterviewState] = useRecoilState(interviewStateAtom);
+  // 사용자 닉네임
+  const [userNickname] = useRecoilState(userNicknameAtom);
 
   // 사용자에게서 입력받는 데이터들
-  const [intervieweeName, setIntervieweeName] = useState(""); // 지원자 이름
   const [interviewTargetCompany, setInterviewTargetCompany] = useState("");
   const [interviewTargetPosition, setInterviewTargetPosition] = useState("");
   const [interviewRecruitment, setInterviewRecruitment] = useState("");
-  const [interviewCoverLetters, setInterviewCoverLetters] = useState([{"id":0, "question":"", "content":""}]);
-
-  function handleIntervieweeNameChange(e) {
-    setIntervieweeName(e.target.value);
-  }
+  const [interviewCoverLetters, setInterviewCoverLetters] = useState([
+    { id: 0, question: "", content: "" },
+  ]);
 
   function handleInterviewCompanyChange(e) {
     setInterviewTargetCompany(e.target.value);
@@ -203,78 +232,91 @@ function InterviewInput(){
     const toastWarning = (text) => {
       // toast에 공통 옵션을 줄 수도 있어서 함수화했습니다.
       toast.warn(text, {});
-    }
+    };
 
-    if(intervieweeName === "") return toastWarning("이름을 입력해주세요.");
-    if(interviewTargetCompany === "") return toastWarning("지원하고자 하는 회사를 입력해주세요.");
-    if(interviewTargetPosition === "") return toastWarning("지원하고자 하는 직군을 입력해주세요.");
-    if(interviewRecruitment === "") return toastWarning("모집공고를 입력해주세요.");
-    if(interviewCoverLetters.map((item, index) => item.question === "" || item.content === "").includes(true)) {
+    if (interviewTargetCompany === "")
+      return toastWarning("지원하고자 하는 회사를 입력해주세요.");
+    if (interviewTargetPosition === "")
+      return toastWarning("지원하고자 하는 직군을 입력해주세요.");
+    if (interviewRecruitment === "")
+      return toastWarning("모집공고를 입력해주세요.");
+    if (
+      interviewCoverLetters
+        .map((item, index) => item.question === "" || item.content === "")
+        .includes(true)
+    ) {
       return toastWarning("자소서 항목을 모두 입력해주세요.");
     }
 
     setInterivewData({
-      "intervieweeName": intervieweeName,
-      "interviewTargetCompany": interviewTargetCompany,
-      "interviewTargetPosition": interviewTargetPosition,
-      "interviewRecruitment": interviewRecruitment,
-      "interviewCoverLetters": interviewCoverLetters
-    })
-    const coverLettersCopy = interviewCoverLetters.map(({ id, ...item }) => item);
+      intervieweeName: userNickname,
+      interviewTargetCompany: interviewTargetCompany,
+      interviewTargetPosition: interviewTargetPosition,
+      interviewRecruitment: interviewRecruitment,
+      interviewCoverLetters: interviewCoverLetters,
+    });
+    const coverLettersCopy = interviewCoverLetters.map(
+      ({ id, ...item }) => item
+    );
 
-    // REFACTORING: 원래 이렇게 지져분하게 안짜고 싶었는데, promise 방식을 쓰고 있어서인지
-    // try-catch문으로 error가 안잡혀서 아래와 같이 처리했습니다. 리팩토링 해야함...
-    session_api().then(() => {
-      // session을 성공적으로 생성했을 때, input API를 호출합니다.
-      setIsLoading(true);
-      setLoadingMessage("잠시후 면접이 시작됩니다");
-      input_api({
-        intervieweeName: intervieweeName,
-        companyName: interviewTargetCompany,
-        jobGroup: interviewTargetPosition,
-        recruitAnnouncement: interviewRecruitment,
-        coverLetterQuestions: coverLettersCopy.map(({question, content}) => question),
-        coverLetterAnswers: coverLettersCopy.map(({question, content}) => content)
-      })
+    setIsLoading(true);
+    setLoadingMessage("잠시후 면접이 시작됩니다. 대기 시간은 약 8~13초 정도입니다!");
+    input_api({
+      intervieweeName: userNickname,
+      companyName: interviewTargetCompany,
+      jobGroup: interviewTargetPosition,
+      recruitAnnouncement: interviewRecruitment,
+      coverLetterQuestions: coverLettersCopy.map(
+        ({ question, content }) => question
+      ),
+      coverLetterAnswers: coverLettersCopy.map(
+        ({ question, content }) => content
+      ),
+    })
       .then((res) => {
         setIsLoading(false);
         setRoomID("interviewChat");
-        const interviewStateCopy = JSON.parse(JSON.stringify(INTERVIEW_STATE_DEFAULT_VALUE));
+        const interviewStateCopy = JSON.parse(
+          JSON.stringify(INTERVIEW_STATE_DEFAULT_VALUE)
+        );
         interviewStateCopy.askedQuestions = [];
-        interviewStateCopy.initialQuestions = res.message.initial_questions.map(({question_id, content}) => ({
-          _id: question_id,
-          content: content,
-          feedback: 0,
-          is_initial: true,
-          is_done: false,
-        }));
+        interviewStateCopy.initialQuestions = res.message.initial_questions.map(
+          ({ content, question_id }) => ({
+            _id: question_id,
+            content: content,
+            feedback: 0,
+            is_initial: true,
+            is_done: false,
+          })
+        );
         const firstQuestion = interviewStateCopy.initialQuestions[0];
-        interviewStateCopy.askedQuestions.push({_id:firstQuestion._id, content:firstQuestion.content});
+        interviewStateCopy.askedQuestions.push({
+          _id: firstQuestion._id,
+          content: firstQuestion.content,
+        });
         setInterviewState(interviewStateCopy);
         setInterviewId(res.message.interview_id);
-        setChatHistory([...CHAT_HISTORY_DEFAULT_VALUE, {type:"AI", content:firstQuestion.content}]);
+        setChatHistory([
+          ...CHAT_HISTORY_DEFAULT_VALUE,
+          { type: "AI", content: firstQuestion.content },
+        ]);
       })
       .catch((err) => {
         setIsLoading(false);
-        toast.error(`오류가 발생했습니다!\n${err.message}`, {});
+        if (err.response.status === 401) {
+          toast.info("다시 로그인을 해주세요.");
+        } else {
+          toast.error(`오류가 발생했습니다!\n${err.message}`, {});
+        }
       });
-
-    }).catch((err) => {
-      toast.error(`오류가 발생했습니다!\n${err.message}`, {});
-    });
   }
 
   return (
-    <section style={{backgroundColor:"#f4f7fb", flex:1}}>
-      <div className={`container`} style={{flexDirection:"column"}}>
-        <div className={`${style.header}`}>면접 정보</div>
-        <div className={`layout-flex-grid-3 fadeInUpEffect`}>
-          <InputComponent
-            title={"이름"}
-            placeholder={"지원자의 이름을 입력해주세요."}
-            item={intervieweeName}
-            onChange={handleIntervieweeNameChange}
-          />
+    <section style={{ backgroundColor: "#f4f7fb", flex: 1 }}>
+      <div className={`container`} style={{ flexDirection: "column" }}>
+        <div className={`${style.header}`}>면접 정보 입력 (실전 모드)</div>
+        <SecondStep/>
+        <div className={`layout-flex-grid-2 fadeInUpEffect`}>
           <InputComponent
             title={"회사"}
             placeholder={"지원하고자 하는 회사를 입력하세요."}
@@ -296,15 +338,72 @@ function InterviewInput(){
             onChange={handleInterviewRecruitmentChange}
           />
         </div>
-        <div className={`fadeInUpEffect animation-delay-2`} style={{margin:"10px"}}>
-          <div className={`${style.input_title}`}>자소서 입력</div>
-          <CoverLetterComponent coverLetters={interviewCoverLetters} setCoverLetters={setInterviewCoverLetters}/>
+        <div
+          className={`fadeInUpEffect animation-delay-2`}
+          style={{ margin: "10px" }}
+        >
+          <div className={`${style.input_title}`}>자소서 입력 ( + 버튼을 이용해 자소서를 추가할 수 있어요!)</div>
+          <CoverLetterComponent
+            coverLetters={interviewCoverLetters}
+            setCoverLetters={setInterviewCoverLetters}
+          />
         </div>
-        <div className={`fadeInUpEffect animation-delay-2`} style={{display:"flex", justifyContent:"center"}}>
-          <button className={`blueButton`} style={{borderRadius:"10px", width:"100px"}} onClick={(e) => handleNextButtonClick(e)}>면접시작</button>
+        <div
+          className={`fadeInUpEffect animation-delay-2`}
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <button
+            className={`redButton`}
+            style={{ borderRadius: "10px", width: "100px" }}
+            onClick={(e) => handleNextButtonClick(e)}
+          >
+            면접시작
+          </button>
         </div>
       </div>
     </section>
+  );
+}
+
+function SecondStep() {
+  return (
+    <div>
+      <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base m-3">
+        <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <span className="mr-2">1</span>
+            Select <span className="hidden sm:inline-flex sm:ml-2">Mode</span>
+          </span>
+        </li>
+
+        <li className="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <svg
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2.5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+            </svg>
+            <span className="hidden sm:inline-flex sm:ml-2">Input</span>
+          </span>
+        </li>
+
+        <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <span className="mr-2">3</span>
+            <span className="hidden sm:inline-flex sm:ml-2">Interview</span>
+          </span>
+        </li>
+
+        <li className="flex items-center">
+          <span className="mr-2">4</span>
+          Result
+        </li>
+      </ol>
+    </div>
   );
 }
 

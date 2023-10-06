@@ -1,15 +1,17 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import TypeIt from "typeit-react";
-import { useRecoilState } from "recoil";
-import { roomIdAtom } from "../store/interviewRoomAtom";
-import { useTitle } from "../utils/useTitle";
-import { ScrollToTop } from "../utils/scrollRestoration";
-import { SERVICE_TITLE } from "../constants/serviceConst";
-import MainImage from "../assets/recruitment-6838250_1920.png";
+import MainImage from "../assets/pexels-tima-miroshnichenko.jpg";
 import style from "../styles/main.module.css";
+import {useTitle} from "../utils/useTitle";
+import {SERVICE_TITLE} from "../constants/serviceConst";
+import {ScrollToTop} from "../utils/scrollRestoration";
+import TypeIt from "typeit-react";
+import {useNavigate} from "react-router-dom";
+import {useRecoilState} from "recoil";
+import {userLoginAtom} from "../store/userAtom";
+import {oauth_url_api} from "../api/jwt";
+import {roomIdAtom} from "../store/interviewRoomAtom";
 
-function firstSection({handleButtonClick}){
+function FirstSection(props){
   return (
     <div style={{width: "100%", textAlign:"center"}}>
       <TypeIt className={`${style.title_header}`} options={{speed: 30}}>
@@ -18,43 +20,63 @@ function firstSection({handleButtonClick}){
         <div>을 느끼고 계신가요?</div>
       </TypeIt>
       <img className={`fadeInUpEffect animation-delay-1`} src={MainImage} alt="main" style={{width:"100%", marginBottom:"2em"}} />
-      <div className={`fadeInUpEffect animation-delay-2 ${style.title_content}`}>
-        <div>더 이상 면접 질문에 당황하지 마세요!</div>
-        <div>면접자의 자소서와 원하는 회사의 채용 공고를 분석하여, 어떠한 질문도 놀라지 않고 대응할 수 있는 개인화된 질문 리스트를 제공합니다. 현실감 넘치는 면접 시뮬레이션을 통해 진짜 면접에 대비하세요.</div>
-      </div>
       <div className={`line fadeInUpEffect animation-delay-3`} />
       <div className={`fadeInUpEffect animation-delay-3 ${style.title_content_start}`}>
-        <div>시작을 위해서는 계정이 필요합니다.</div>
-        <div>지금은 구현되어 있지 않습니다.</div>
-      </div>
-      <div className={`fadeInUpEffect animation-delay-3`}>
-        <button className={`blackButton`} style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}} onClick={(e) => handleButtonClick(e)}>{"면접시작 >"}</button>
       </div>
     </div>
   );
 }
 
-function secondSection(){
+const features = [
+  {
+    name: '자소서 및 채용 공고 분석',
+    description:
+      '면접자의 자소서와 원하는 회사의 채용 공고를 꼼꼼하게 분석합니다. 이 분석을 통해, 어떠한 질문도 예상하고 준비할 수 있게 도와줍니다.',
+  },
+  {
+    name: '개인화된 질문 리스트 생성',
+    description:
+      '분석된 결과를 토대로, 개인화된 질문 리스트를 제공합니다. 이를 통해 면접에서 당황하지 않고, 실제 면접에서 자주 묻는 질문에 대해 미리 준비할 수 있게 합니다.',
+  },
+  {
+    name: '현실감 있는 면접 시뮬레이션',
+    description:
+      '실제 면접을 대비하기 위한 현실감 넘치는 면접 시뮬레이션을 제공합니다. 이 시뮬레이션은 사용자가 실제 면접 상황을 체험하고, 면접 과정에서 발생할 수 있는 다양한 변수들에 대비할 수 있게 해줍니다.',
+  },
+  {
+    name: '면접 키워드 중심 면접 연습',
+    description:
+      '직무 기술 면접에서 나올 수 있는 키워드를 반복 연습해서 합격률을 높이고, 면접관들을 깜짝 놀라게 해봅시다!',
+  },
+]
 
-  const featureComponent = (title, description) => {
-    return (
-      <div className={`${style.feature_box}`}>
-        <div className={`${style.feature_box_header}`}>{title}</div>
-        <div className={`${style.feature_box_content}`}>{description}</div>
-      </div>
-    );
-  }
+function SecondSection(){
 
   return (
-    <div style={{width:"100%"}}>
-      <h1 className={`${style.feature_header}`}>핵심기능 소개</h1>
-      <div className={`layout-flex-grid-2`}>
-        {featureComponent("자소서 및 채용 공고 분석", "면접자의 자소서와 원하는 회사의 채용 공고를 꼼꼼하게 분석합니다. 이 분석을 통해, 어떠한 질문도 예상하고 준비할 수 있게 도와줍니다.")}
-        {featureComponent("개인화된 질문 리스트 생성", "분석된 결과를 토대로, 개인화된 질문 리스트를 제공합니다. 이를 통해 면접에서 당황하지 않고, 실제 면접에서 자주 묻는 질문에 대해 미리 준비할 수 있게 합니다.")}
-        {featureComponent("개인화된 역량 매칭", "나의 경험과 역량이 회사의 요구사항과 어떻게 연결될 수 있는지를 명확하게 이해하도록 도와줍니다. 이를 통해 더 효과적으로 자신의 역량을 강조하고, 회사가 원하는 인재상에 부합하는지 확인할 수 있습니다.")}
-        {featureComponent("현실감 있는 면접 시뮬레이션", "실제 면접을 대비하기 위한 현실감 넘치는 면접 시뮬레이션을 제공합니다. 이 시뮬레이션은 사용자가 실제 면접 상황을 체험하고, 면접 과정에서 발생할 수 있는 다양한 변수들에 대비할 수 있게 해줍니다.")}
+    <div className="bg-white py-24 sm:py-32">
+    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-2xl lg:text-center">
+        <h2 className="text-base font-semibold leading-7 text-indigo-600">취업의 최종 관문, 면접.</h2>
+        <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          다가오는 면접 날짜에 더 이상 두려워하지 마세요.
+        </p>
+      </div>
+      <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+        <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+          {features.map((feature) => (
+            <div key={feature.name} className="relative pl-16">
+              <dt className="text-base font-semibold leading-7 text-gray-900">
+                <div className="absolute left-0 top-0 flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600">
+                </div>
+                {feature.name}
+              </dt>
+              <dd className="mt-2 text-base leading-7 text-gray-600">{feature.description}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </div>
+  </div>
   );
 }
 
@@ -63,23 +85,33 @@ function Main(){
   ScrollToTop();
   const navigate = useNavigate();
   const [, setRoomID] = useRecoilState(roomIdAtom);
+  const [userLogin, ] = useRecoilState(userLoginAtom);
 
   const handleButtonClick = (e) => {
     e.preventDefault();
-    setRoomID("interviewInput");
+    setRoomID("modeSelect");
     navigate("/room");
   }
 
+  const handleLogin = async () => {
+    await oauth_url_api()
+    .then((res) => {
+      window.location.href = res.data["kakao_oauth_url"];
+    })
+    .catch((err) => {
+    });
+  };
+
   return (
     <section style={{flex: 1, paddingTop:"0px"}}>
-      <section style={{backgroundColor:"#f4f7fb"}}>
+      <section style={{backgroundColor:"white"}}>
         <div className={`container`} style={{flexDirection:"column"}}>
-          {firstSection({handleButtonClick: handleButtonClick})}
+          <FirstSection userLogin={userLogin} handleLogin={handleLogin} handleButtonClick={handleButtonClick} />
         </div>
       </section>
       <section style={{backgroundColor:"#ffffff"}}>
-        <div className={`container fadeInUpEffect animation-delay-4`} style={{flexDirection:"column"}}>
-          {secondSection()}
+        <div className={`container fadeInUpEffect animation-delay-2`} style={{flexDirection:"column"}}>
+          <SecondSection />
         </div>
       </section>
     </section>

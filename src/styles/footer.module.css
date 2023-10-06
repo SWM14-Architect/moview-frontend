@@ -1,5 +1,10 @@
 .footer_box {
     margin-bottom: 1em;
+    margin-left: auto;
+
+    @media screen and (max-width: 768px) {
+        margin-left: 3em;
+    }
 }
 
 .footer_list {

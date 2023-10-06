@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
-import TypeIt from "typeit-react";
-import { useRecoilState } from "recoil";
+import React, {useCallback, useRef, useState} from "react";
+import style from "../../styles/interviewChat.module.css";
+import {useRecoilState} from "recoil";
 import {
   interviewDataAtom,
   interviewIdAtom,
@@ -8,17 +8,17 @@ import {
   interviewStateAtom,
   roomIdAtom
 } from "../../store/interviewRoomAtom";
-import { chatHistoryAtom } from "../../store/interviewChatAtom";
-import { loadingAtom, loadingMessageAtom } from "../../store/loadingAtom";
-import { answer_api, evaluation_api } from "../../api/interview";
-import { useInterval } from "../../utils/useInterval";
-import { ScrollToTop } from "../../utils/scrollRestoration";
-import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
+import AIProfileImage from "../../assets/interviewer.png";
+import TypeIt from "typeit-react";
+import {useInterval} from "../../utils/useInterval";
+import {ScrollToTop} from "../../utils/scrollRestoration";
 import { useTTSPlayer } from "../../utils/useTTSPlayer";
 import AudioRecorder from "../../utils/audioRecorder";
-import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
-import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
-import style from "../../styles/interviewChat.module.css";
+import {chatHistoryAtom} from "../../store/interviewChatAtom";
+import {answer_api, evaluation_api} from "../../api/interview";
+import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
+import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
+import { userNicknameAtom,userProfileAtom } from "../../store/userAtom";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -52,6 +52,8 @@ function InterviewChat(){
   const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
   const [interviewId, ] = useRecoilState(interviewIdAtom);
   const [interviewState, setInterviewState] = useRecoilState(interviewStateAtom);
+  const [userNickname,]=useRecoilState(userNicknameAtom);
+  const [userProfile,]=useRecoilState(userProfileAtom);
 
   const [isTyping, setIsTyping] = useState(null); // isTyping: Optional[{index: index, type:item.type(AI or Human), instance:TypeIt instance}]
   const [intervieweeAnswerFormText, setIntervieweeAnswerFormText] = useState(""); // Form Value
@@ -130,7 +132,6 @@ function InterviewChat(){
   const getNextQuestion = (followupQuestion) => {
     const interviewStateCopy = JSON.parse(JSON.stringify(interviewState));
     if(followupQuestion.question_id === null || interviewState.followupQuestionCount >= 3){
-      console.log("Next Initial Question");
       // 다음 초기질문을 가져옵니다.
       interviewStateCopy.initialQuestionIndex += 1;
       interviewStateCopy.followupQuestionCount = 0;
@@ -140,7 +141,6 @@ function InterviewChat(){
       return nextQuestion;
     }
     else{
-      console.log("Next Followup Question");
       // 생성된 꼬리질문을 가져옵니다.
       interviewStateCopy.followupQuestionCount += 1;
       const nextQuestion = {
@@ -158,9 +158,8 @@ function InterviewChat(){
 
   const handleInterviewEnd = () => {
     setIsLoading(true);
-    setLoadingMessage("면접 결과를 분석하고 있습니다");
+    setLoadingMessage("면접 결과를 분석하고 있습니다. 평균 소요 시간은 8 ~ 12초입니다.");
     evaluation_api({interview_id: interviewId}).then((res) => {
-      console.log(res.message.evaluations);
 
       setIsLoading(false);
       setInterviewResult(interviewSummaryGenerator(res.message.evaluations)); // 결과내용을 interviewResultAtom에 저장합니다.
@@ -188,7 +187,6 @@ function InterviewChat(){
           question_content: currentQuestion.content,
           answer_content: intervieweeAnswer
         }).then((res) => {
-          console.log("answer Api Success");
           // 질문에 대한 답변을 성공적으로 보냈기 때문에 질문 상태를 갱신합니다.
           setQuestionAsDone(currentIndex);
 
@@ -225,13 +223,14 @@ function InterviewChat(){
         <div className={`fadeInUpEffect`}>
           <div className={`${style.header}`}>{interviewData.interviewTargetCompany} 가상면접</div>
           <div className={`${style.sub_header}`}>{interviewData.interviewTargetPosition}</div>
+          <ThirdStep/>
         </div>
         {/* 인터뷰 채팅 히스토리 컴포넌트 */}
         {chatHistory.map((item, index) => (
           <div key={index} className={`${style.chat_box} fadeInUpEffect`}>
             <div className={`${style.profile_box} ${item.type === "AI" ? null : style.profile_back}`}>
-              <img src={item.type === "AI" ? AIProfileImage : HumanProfileImage} className={`${style.profile_image}`} alt={"profile"}/>
-              <span>{item.type === "AI" ? "AI면접관" : "나"}</span>
+              <img src={item.type === "AI" ? AIProfileImage : userProfile} className="w-10 h-10 rounded-full" alt={"profile"}/>
+              <span>{item.type === "AI" ? "면접관" : userNickname}</span>
             </div>
             {/* 마지막 대화 컴포넌트만 TypeIt으로 렌더링해서
                 새로고침했을 때 모든 대화에 TypeIt 효과가 적용되는 현상을 방지함. */}
@@ -289,6 +288,45 @@ function InterviewChat(){
         }
       </div>
     </section>
+  );
+}
+
+function ThirdStep() {
+  return (
+    <div>
+      <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base m-3">
+        <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <span className="mr-2">1</span>
+            Select <span className="hidden sm:inline-flex sm:ml-2">Mode</span>
+          </span>
+        </li>
+        <li className="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <span className="mr-2">2</span>
+            <span className="hidden sm:inline-flex sm:ml-2">Input</span>
+          </span>
+        </li>
+        <li className="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+          <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+            <svg
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2.5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+            </svg>
+            <span className="hidden sm:inline-flex sm:ml-2">Interview</span>
+          </span>
+        </li>
+        <li className="flex items-center">
+          <span className="mr-2">4</span>
+          Result
+        </li>
+      </ol>
+    </div>
   );
 }
 

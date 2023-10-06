@@ -12,6 +12,19 @@
     background-color: #363636;
 }
 
+.redButton{
+    font-family: "NanumGothic";
+    width: 100px;
+    height: 40px;
+    background-color: red;
+    color: #fff;
+    transition: all 0.4s;
+}
+
+.redButton:hover{
+background-color: #000;
+}
+
 .blueButton {
     font-family: "NanumGothic";
     width: 100px;
