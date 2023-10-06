@@ -9,7 +9,6 @@ import {
   roomIdAtom
 } from "../../store/interviewRoomAtom";
 import AIProfileImage from "../../assets/free-icon-man-4086624-p-500.png";
-import HumanProfileImage from "../../assets/free-icon-man-3884851-p-500.png";
 import TypeIt from "typeit-react";
 import {useInterval} from "../../utils/useInterval";
 import {ScrollToTop} from "../../utils/scrollRestoration";
@@ -17,6 +16,7 @@ import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {answer_api, evaluation_api} from "../../api/interview";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
 import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
+import { userNicknameAtom,userProfileAtom } from "../../store/userAtom";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -50,6 +50,8 @@ function InterviewChat(){
   const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
   const [interviewId, ] = useRecoilState(interviewIdAtom);
   const [interviewState, setInterviewState] = useRecoilState(interviewStateAtom);
+  const [userNickname,]=useRecoilState(userNicknameAtom);
+  const [userProfile,]=useRecoilState(userProfileAtom);
 
   const [isTyping, setIsTyping] = useState(null); // isTyping: Optional[{index: index, type:item.type(AI or Human), instance:TypeIt instance}]
   const [intervieweeAnswerFormText, setIntervieweeAnswerFormText] = useState(""); // Form Value
@@ -196,8 +198,8 @@ function InterviewChat(){
         {chatHistory.map((item, index) => (
           <div key={index} className={`${style.chat_box} fadeInUpEffect`}>
             <div className={`${style.profile_box} ${item.type === "AI" ? null : style.profile_back}`}>
-              <img src={item.type === "AI" ? AIProfileImage : HumanProfileImage} className={`${style.profile_image}`} alt={"profile"}/>
-              <span>{item.type === "AI" ? "AI면접관" : "나"}</span>
+              <img src={item.type === "AI" ? AIProfileImage : userProfile} className="w-10 h-10 rounded-full" alt={"profile"}/>
+              <span>{item.type === "AI" ? "AI면접관" : userNickname}</span>
             </div>
             {/* 마지막 대화 컴포넌트만 TypeIt으로 렌더링해서
                 새로고침했을 때 모든 대화에 TypeIt 효과가 적용되는 현상을 방지함. */}
