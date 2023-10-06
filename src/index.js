@@ -21,7 +21,6 @@ import ToastContainerComponent from "./utils/toastContainer";
 import KakaoCallback from "./pages/login_callback";
 import {CookiesProvider} from "react-cookie";
 
-
 function Index(){
   const router = createBrowserRouter([
     {

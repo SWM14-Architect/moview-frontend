@@ -1,0 +1,28 @@
+.header {
+    text-align: center;
+    font-family: "GmarketSansBold";
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.input_form_box {
+    margin: 10px;
+}
+
+.input_title {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    font-family: "GMarketSansBold";
+    font-size: 1.2em;
+}
+
+.input_form_textbox {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-family: "NamunGothic";
+    font-size: 0.9em;
+}
