@@ -1,4 +1,4 @@
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 
 // Custom Hook for documentTitle
 export function useTitle (title) {
@@ -11,4 +11,4 @@ export function useTitle (title) {
       htmlTitle.innerText = title;
     }
   });
-};
+}

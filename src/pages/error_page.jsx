@@ -1,7 +1,7 @@
-import {useNavigate, useRouteError} from "react-router-dom";
+import { useNavigate, useRouteError } from "react-router-dom";
+import { useTitle } from "../utils/useTitle";
+import { SERVICE_TITLE } from "../constants/serviceConst";
 import style from "../styles/error.module.css";
-import {useTitle} from "../utils/useTitle";
-import {SERVICE_TITLE} from "../constants/serviceConst";
 
 export default function ErrorPage() {
   useTitle(`${SERVICE_TITLE} - ERROR`);

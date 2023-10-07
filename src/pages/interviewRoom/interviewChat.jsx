@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewChat.module.css";
 import {useRecoilState} from "recoil";
 import {
@@ -12,6 +12,8 @@ import AIProfileImage from "../../assets/interviewer.png";
 import TypeIt from "typeit-react";
 import {useInterval} from "../../utils/useInterval";
 import {ScrollToTop} from "../../utils/scrollRestoration";
+import { useTTSPlayer } from "../../utils/useTTSPlayer";
+import AudioRecorder from "../../utils/audioRecorder";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
 import {answer_api, evaluation_api} from "../../api/interview";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
@@ -59,18 +61,43 @@ function InterviewChat(){
   const [interviewTurn, setInterviewTurn] = useState(false); // [false: AI 질문 중 true: Interviewee 답변 가능]
   const [interviewFlag, setInterviewFlag] = useState(false); // [false: 인터뷰 진행 중 true: 인터뷰 종료]
 
+  const [currentQuestionContent, setCurrentQuestionContent] = useState(null); // TTS를 실행할 질문 내용
+  const [ttsCompleted, setTTSCompleted] = useState(false); // TTS가 완료되었는지 확인하는 상태
+
+  // TTS가 완료되면 호출되는 콜백 함수
+  const onTTSComplete = () => {
+    setTTSCompleted(true);
+  };
+
+  useTTSPlayer(currentQuestionContent, onTTSComplete);
+
+  useEffect(() => {
+    // 첫 번째 면접 질문에 대한 TTS 실행
+    const interviewStateCopy = JSON.parse(JSON.stringify(interviewState));
+    const firstQuestion = interviewStateCopy.askedQuestions[0]?.content;
+    if (firstQuestion) {
+      setCurrentQuestionContent(firstQuestion);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const canNotPlayerTalking = () => {
-    if(intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null) return true;
+    if (intervieweeAnswerFormText === "" || interviewTurn === false || isTyping !== null || !ttsCompleted) return true;
+    return false;
+  }
+
+  const canNotPlayerSpeaking = () => {
+    if (interviewTurn === false || isTyping !== null || !ttsCompleted) return true;
     return false;
   }
 
   const handleIntervieweeAnswerButton = (e, answerContent) => {
     e.preventDefault();
     if(canNotPlayerTalking()) return;
-
     setChatHistory([...chatHistory, {type:"Human", content: answerContent}]);
     setIntervieweeAnswer(answerContent);
     setIntervieweeAnswerFormText("");
+    setTTSCompleted(false); // 답변이 완료되면 TTS 재생 상태를 초기화
     intervieweeAnswerRef.current.scrollIntoView({behavior: "smooth"});
   }
 
@@ -171,6 +198,10 @@ function InterviewChat(){
           else{
             // NEXT_QUESTION, 다음 질문을 출력합니다.
             const nextQuestion = getNextQuestion(res.message);
+
+            // 다음 질문에 대한 TTS를 실행합니다.
+            setCurrentQuestionContent(nextQuestion.content);
+
             handleInterviewerQuestion(null, nextQuestion.content);
           }
         })
@@ -227,11 +258,18 @@ function InterviewChat(){
         {/* 답변 작성 컴포넌트 */}
         {interviewFlag === false ?
           <div ref={intervieweeAnswerRef} className={`${style.input_form} fadeInUpEffect animation-delay-1`}>
-            <TextareaForm
-              placeholder={"질문에 대한 답변을 작성하세요."}
-              item={intervieweeAnswerFormText}
-              onChange={(e) => {setIntervieweeAnswerFormText(e.target.value)}}
-            />
+            <div>
+              <AudioRecorder
+                  className={style.audio_recorder}
+                  canNotPlayerSpeaking={canNotPlayerSpeaking}
+                  onSTTResult={(result) => setIntervieweeAnswerFormText(result)}
+              />
+              <TextareaForm
+                  placeholder={"질문에 대한 답변을 직접 타이핑하거나, 왼쪽의 음성 녹음 버튼(Beta)을 이용하여 작성하세요."}
+                  item={intervieweeAnswerFormText}
+                  onChange={(e) => {setIntervieweeAnswerFormText(e.target.value)}}
+              />
+            </div>
             <button
               className={`${style.input_form_button} ${canNotPlayerTalking() ? style.input_form_disabled : null}`}
               onClick={(e) => handleIntervieweeAnswerButton(e, intervieweeAnswerFormText)}

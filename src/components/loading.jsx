@@ -1,5 +1,5 @@
 import React from 'react';
-import {SyncLoader} from "react-spinners";
+import { SyncLoader } from "react-spinners";
 
 function Loading({ message, isLoading }) {
   return (

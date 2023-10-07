@@ -1,5 +1,5 @@
-import {atom} from "recoil";
-import {recoilPersist} from "recoil-persist";
+import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 import {
   INTERVIEW_INPUT_FORM_DEFAULT_VALUE,
   INTERVIEW_RESULT_DEFAULT_VALUE,
@@ -12,7 +12,7 @@ default: 해당 전역변수의 Default값, 초기값입니다.
 effects_UNSTABLE: [persistAtom], Optional한 부분입니다. 해당 코드가 있으면 브라우저의 로컬스토리지에 값이 저장됩니다. (새로고침에도 값이 유지됩니다.)
 */
 
-const {persistAtom} = recoilPersist();
+const { persistAtom } = recoilPersist();
 
 export const roomIdAtom = atom({
   key: "roomIDState",

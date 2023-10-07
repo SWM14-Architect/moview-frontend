@@ -1,4 +1,4 @@
-import {INTERVIEW_RESULT_DEFAULT_VALUE} from "../constants/interviewRoomConst";
+import { INTERVIEW_RESULT_DEFAULT_VALUE } from "../constants/interviewRoomConst";
 
 
 function interviewSummaryGenerator(interviewResults){

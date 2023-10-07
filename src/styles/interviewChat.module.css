@@ -55,11 +55,17 @@
     justify-items: center;
 }
 
+.audio_recorder {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
 .input_form_textbox {
     outline: #fff 1px solid;
     box-sizing: border-box;
     width: 100%;
-    padding: 10px;
+    padding: 10px 10px 10px 70px;
     margin : 0px;
     border: none;
     border-radius: 10px 10px 0px 0px;
@@ -91,6 +97,24 @@
     background-color: grey !important;
     outline-color: grey !important;
     cursor: default;
+}
+
+.input_form_record_button {
+    filter: grayscale(0%);
+    background-image: url("../assets/record-stop.jpg");
+    width: 3em;
+    height: 3em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.input_form_record_button.start {
+    background-image: url("../assets/record-start.jpg");
+}
+
+.input_form_record_disabled {
+    filter: grayscale(100%);
 }
 
 .result_form_button {
