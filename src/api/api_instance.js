@@ -46,10 +46,12 @@ export const Interceptor = ({children}) => {
         const {config, response: {status}} = err;
 
         if (config.url === REFRESH_URL || status !== 401 || config.sent) {
-          setUserLogin(false);
-          setUserNickname("");
-          setUserProfile("");
-          navigate("/");
+          if (status === 401) {
+            setUserLogin(false);
+            setUserNickname("");
+            setUserProfile("");
+            navigate("/");
+          }
           return Promise.reject(err);
         }
 
