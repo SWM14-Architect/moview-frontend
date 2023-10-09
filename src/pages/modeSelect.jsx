@@ -3,7 +3,7 @@ import { ScrollToTop } from "../utils/scrollRestoration";
 import style from "../styles/modelSelect.module.css";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { roomIdAtom } from "../store/interviewRoomAtom";
+import {roomIdAtom} from "../store/interviewRoomAtom";
 
 function ModeSelect() {
   ScrollToTop();
@@ -43,7 +43,7 @@ function ModeSelect() {
 
         {/*실전 모드 설명 컴포넌트*/}
         <ModeExplanation
-           sLight={false}
+          isLight={false}
           item={
             "면접이 얼마 안 남았다면, 실전 모드를 선택해서 실제 면접에 나올 수 있는 질문들을 대비하세요! (단, 자소서 입력이 필요합니다.)"
           }
@@ -135,19 +135,19 @@ function ModeExplanation({isLight}) {
     <div className={`${style.input_form}`}>
       <div className={`${style.chat_box} fadeInUpEffect`}>
         <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{isLight? "연습 모드" : "실전 모드"}</h2>
-      <ol className="max-w-md space-y-1 text-gray-500 list-decimal list-inside dark:text-gray-400">
+      <ol className="max-w space-y-1 text-gray-500 list-decimal list-inside dark:text-gray-400">
         <li>
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="text-gray-900 dark:text-white">
             {isLight? "모집 공고, 자소서 없이 가볍게 연습할 수 있는 모드 ": "모집 공고, 자소서를 분석해서 개인 맞춤형 질문을 연습할 수 있는 모드"}
           </span>
         </li>
         <li>
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="text-gray-900 dark:text-white">
             {isLight? "면접 키워드 중심으로 연습":"면접 일정이 얼마 안 남았을 때 유용"}
           </span>
         </li>
         <li>
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="text-gray-900 dark:text-white">
             꼬리질문 및 답변 평가 기능 제공
           </span>
         </li>

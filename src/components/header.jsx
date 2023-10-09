@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { roomIdAtom } from "../store/interviewRoomAtom";
 import {
-  userLoginAtom,
+  userLoginAtom, userNicknameAtom,
   userProfileAtom,
 } from "../store/userAtom";
 import { jwt_token_remove_api, oauth_url_api } from "../api/jwt";
@@ -23,7 +23,7 @@ function Header() {
   const [isRoom, setIsRoom] = useState(false);
   const [, setRoomID] = useRecoilState(roomIdAtom);
   const [userLogin, setUserLogin] = useRecoilState(userLoginAtom);
-  // const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
+  const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
   const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
 
   const handleLogin = async () => {
@@ -32,6 +32,7 @@ function Header() {
       window.location.href = res.data["kakao_oauth_url"];
     })
     .catch((err) => {
+      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
     });
   };
 
@@ -40,12 +41,12 @@ function Header() {
     .then((res) => {
       toast.info("정상적으로 로그아웃이 되었습니다.");
       setUserLogin(false);
-      // setUserNickname("");
+      setUserNickname("");
       setUserProfile("");
       navigate("/");
     })
     .catch((err) => {
-
+      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
     });
   };
 
@@ -91,8 +92,8 @@ function Header() {
                 <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} />
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-
-                {!userLogin ? <LoginButton  handleLogin={handleLogin}/> : <ProfileDropdown userProfile={userProfile} handleLogout={handleLogout}/>}
+                <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{!userLogin ? null : `${userNickname}님`}</div>
+                {!userLogin ? <LoginButton handleLogin={handleLogin}/> : <ProfileDropdown userProfile={userProfile} handleLogout={handleLogout}/>}
               </div>
             </div>
           </div>
