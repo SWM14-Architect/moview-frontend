@@ -19,6 +19,7 @@ import {answer_api, evaluation_api} from "../../api/interview";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
 import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
 import { userNicknameAtom,userProfileAtom } from "../../store/userAtom";
+import {toast} from "react-toastify";
 
 function TextareaForm({placeholder, item, onChange}){
   const textRef = useRef(null);
@@ -166,6 +167,7 @@ function InterviewChat(){
       setRoomID("interviewFeedback");
     }).catch((err) => {
       setIsLoading(false);
+      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
       console.log(err);
     });
   }
@@ -195,14 +197,19 @@ function InterviewChat(){
             setInterviewFlag(true);
             handleInterviewerQuestion(null, "수고하셨습니다!");
           }
-          else{
+          else {
             // NEXT_QUESTION, 다음 질문을 출력합니다.
             const nextQuestion = getNextQuestion(res.message);
+            if (nextQuestion === null || nextQuestion === undefined) {
+              // 다음 질문이 없을 경우, 인터뷰를 종료합니다.
+              setInterviewFlag(true);
+              handleInterviewerQuestion(null, "수고하셨습니다!");
+            } else {
+              // 다음 질문에 대한 TTS를 실행합니다.
+              setCurrentQuestionContent(nextQuestion.content);
 
-            // 다음 질문에 대한 TTS를 실행합니다.
-            setCurrentQuestionContent(nextQuestion.content);
-
-            handleInterviewerQuestion(null, nextQuestion.content);
+              handleInterviewerQuestion(null, nextQuestion.content);
+            }
           }
         })
         .catch((err) => {
