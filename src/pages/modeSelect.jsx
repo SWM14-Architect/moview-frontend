@@ -3,7 +3,7 @@ import { ScrollToTop } from "../utils/scrollRestoration";
 import style from "../styles/modelSelect.module.css";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { roomIdAtom } from "../store/interviewRoomAtom";
+import {roomIdAtom} from "../store/interviewRoomAtom";
 
 function ModeSelect() {
   ScrollToTop();
@@ -43,7 +43,7 @@ function ModeSelect() {
 
         {/*실전 모드 설명 컴포넌트*/}
         <ModeExplanation
-           sLight={false}
+          isLight={false}
           item={
             "면접이 얼마 안 남았다면, 실전 모드를 선택해서 실제 면접에 나올 수 있는 질문들을 대비하세요! (단, 자소서 입력이 필요합니다.)"
           }
