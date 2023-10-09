@@ -43,6 +43,7 @@ export const Interceptor = ({children}) => {
     API_INSTANCE_WITH_TOKEN.interceptors.response.use(
       (res) => res,
       async(err) => {
+        if(!err.response?.status) return Promise.reject(err);
         const {config, response: {status}} = err;
 
         if (config.url === REFRESH_URL || status !== 401 || config.sent) {
