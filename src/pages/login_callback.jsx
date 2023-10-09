@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userLoginAtom, userNicknameAtom, userProfileAtom} from "../store/userAtom";
+import {toast} from "react-toastify";
 
 // 기본 URL 설정
 const apiClient = axios.create({
@@ -30,6 +31,7 @@ const KakaoCallback = () => {
         navigate("/");
       })
       .catch((error) => {
+        toast.error(`${error.response?.data.message ? error.response.data.message.error : "오류가 발생했습니다!\n" + error.message}`, {});
         console.error("cannot call oauth api", error);
       });
   };
