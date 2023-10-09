@@ -1,6 +1,11 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewInput.module.css";
 import { useRecoilState } from "recoil";
+import {
+  MAX_COMPANY_NAME_LENGTH,
+  MAX_POSITION_NAME_LENGTH,
+  MAX_KEYWORD_LENGTH,
+} from "../../constants/interviewInputConst";
 import { CHAT_HISTORY_DEFAULT_VALUE } from "../../constants/interviewChatConst";
 import { INTERVIEW_STATE_DEFAULT_VALUE } from "../../constants/interviewRoomConst";
 import { ScrollToTop } from "../../utils/scrollRestoration";
@@ -40,15 +45,30 @@ function InterviewLightInput() {
   const [interviewTargetKeyword, setInterviewKeyword] = useState("");
 
   function handleInterviewCompanyChange(e) {
-    setInterviewTargetCompany(e.target.value);
+    if (e.target.value.length > MAX_COMPANY_NAME_LENGTH) {
+      toast.warn(`회사 이름은 ${MAX_COMPANY_NAME_LENGTH}자를 초과할 수 없습니다.`);
+      setInterviewTargetCompany(e.target.value.substring(0, MAX_COMPANY_NAME_LENGTH));
+    } else {
+      setInterviewTargetCompany(e.target.value);
+    }
   }
 
   function handleInterviewPositionChange(e) {
-    setInterviewTargetPosition(e.target.value);
+    if (e.target.value.length > MAX_POSITION_NAME_LENGTH) {
+      toast.warn(`직군명은 ${MAX_POSITION_NAME_LENGTH}자를 초과할 수 없습니다.`);
+      setInterviewTargetPosition(e.target.value.substring(0, MAX_POSITION_NAME_LENGTH));
+    } else {
+      setInterviewTargetPosition(e.target.value);
+    }
   }
 
   function handleInterviewKeyword(e) {
-    setInterviewKeyword(e.target.value);
+    if (e.target.value.length > MAX_KEYWORD_LENGTH) {
+      toast.warn(`키워드는 ${MAX_KEYWORD_LENGTH}자를 초과할 수 없습니다.`);
+      setInterviewKeyword(e.target.value.substring(0, MAX_KEYWORD_LENGTH));
+    } else {
+      setInterviewKeyword(e.target.value);
+    }
   }
 
   function handleNextButtonClick(e) {
@@ -78,7 +98,7 @@ function InterviewLightInput() {
     // 로딩 렌더링
     setIsLoading(true);
     setLoadingMessage(
-      "잠시후 면접이 시작됩니다. 대기 시간은 약 3~6초 정도입니다!"
+      "잠시 후 면접이 시작됩니다. 대기 시간은 약 3 ~ 6초 정도입니다!"
     );
 
     //api call
@@ -134,14 +154,14 @@ function InterviewLightInput() {
         <div className={`layout-flex-grid-2 fadeInUpEffect`}>
           <InputComponent
             title={"회사"}
-            placeholder={"지원하고자 하는 회사를 입력하세요."}
+            placeholder={`지원하고자 하는 회사를 입력하세요. (최대 ${MAX_COMPANY_NAME_LENGTH}자)`}
             item={interviewTargetCompany}
             onChange={handleInterviewCompanyChange}
           />
           <InputComponent
             title={"직군"}
             placeholder={
-              "지원하고자 하는 직군을 입력하세요. (입력 예시) 웹 개발자"
+              `지원하고자 하는 직군을 입력하세요. (최대 ${MAX_POSITION_NAME_LENGTH}자)`
             }
             item={interviewTargetPosition}
             onChange={handleInterviewPositionChange}
@@ -151,7 +171,8 @@ function InterviewLightInput() {
           <TextareaComponent
             title={"면접 질문 키워드"}
             placeholder={
-              "연습하고 싶은 면접 질문 키워드를 입력하세요. 여러 개 입력 가능합니다. 권장은 2~3개입니다. (입력 예시) DB, 네트워크"
+              `연습하고 싶은 면접 질문 키워드를 입력하세요. 여러 개 입력 가능합니다. 권장 키워드 개수는 2~3개입니다. (입력 예시: DB, 네트워크)
+(최대 ${MAX_KEYWORD_LENGTH}자)`
             }
             item={interviewTargetKeyword}
             onChange={handleInterviewKeyword}

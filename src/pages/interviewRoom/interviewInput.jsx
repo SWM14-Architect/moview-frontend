@@ -1,6 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import style from "../../styles/interviewInput.module.css";
-import { MAXIMUM_COVERLETTER_NUMBER } from "../../constants/interviewInputConst";
+import {
+  MAXIMUM_COVERLETTER_NUMBER,
+  MAX_COMPANY_NAME_LENGTH,
+  MAX_POSITION_NAME_LENGTH,
+  MAX_RECRUITMENT_LENGTH,
+  MAX_COVERLETTER_QUESTION_LENGTH,
+  MAX_COVERLETTER_ANSWER_LENGTH,
+} from "../../constants/interviewInputConst";
 import { useRecoilState } from "recoil";
 import {
   interviewDataAtom,
@@ -65,7 +72,7 @@ function TextareaForm({ placeholder, item, index, onChange, styles = {} }) {
   );
 }
 
-function TextareaComponent({ title, placeholder, item, onChange }) {
+function TextareaComponent({ title, placeholder, item, onChange, charCount }) {
   return (
     <div className={`${style.input_form_box}`}>
       <div className={`${style.input_title}`}>{title}</div>
@@ -75,6 +82,7 @@ function TextareaComponent({ title, placeholder, item, onChange }) {
         index={null}
         onChange={onChange}
       />
+      <div className={style.char_count}>{`${charCount} / ${MAX_RECRUITMENT_LENGTH}자`}</div>
     </div>
   );
 }
@@ -84,6 +92,7 @@ function CoverLetterForm({
   index,
   length,
   item,
+  charCount,
   onQuestionChange,
   onContentChange,
   addCoverletter,
@@ -111,24 +120,28 @@ function CoverLetterForm({
       ) : null}
       <div className={`${style.input_form_box}`}>
         <InputForm
-          placeholder={"자소서 문항을 입력하세요."}
+          placeholder={`자소서 문항을 입력하세요. (최대 ${MAX_COVERLETTER_QUESTION_LENGTH}자)`}
           item={item.question}
           index={index}
           onChange={onQuestionChange}
         />
-        <TextareaForm
-          placeholder={"자소서 문항에 대한 답변을 작성하세요."}
-          item={item.content}
-          index={index}
-          onChange={onContentChange}
-          styles={{ marginTop: "20px", minHeight: "100px" }}
-        />
+        <div>
+          <TextareaForm
+              placeholder={"자소서 문항에 대한 답변을 작성하세요."}
+              item={item.content}
+              index={index}
+              onChange={(e) => onContentChange(e, index)}
+              styles={{ marginTop: "20px", paddingBottom: "20px", minHeight: "100px" }}
+          />
+          <div className={style.char_count}>{`${charCount} / ${MAX_COVERLETTER_ANSWER_LENGTH}자`}</div>
+        </div>
       </div>
     </div>
   );
 }
 
 function CoverLetterComponent({ coverLetters, setCoverLetters }) {
+  const [coverLetterContentCharCounts, setCoverLetterContentCharCounts] = useState([]);  // 글자수를 저장할 상태
   const lastCoverletterRef = useRef(null);
   const nextID = useRef(1);
 
@@ -157,17 +170,48 @@ function CoverLetterComponent({ coverLetters, setCoverLetters }) {
   function handleQuestionChange(e, index) {
     if (index > coverLetters.length) return;
 
-    const coverLettersCopy = JSON.parse(JSON.stringify(coverLetters));
-    coverLettersCopy[index].question = e.target.value;
-    setCoverLetters(coverLettersCopy);
+    const inputValue = e.target.value;
+    if (inputValue.length > MAX_COVERLETTER_QUESTION_LENGTH) {
+      toast.warn(`자소서 문항은 ${MAX_COVERLETTER_QUESTION_LENGTH}자를 초과할 수 없습니다.`);
+      setCoverLetters(prevState => {
+        const newState = JSON.parse(JSON.stringify(prevState));
+        newState[index].question = inputValue.substring(0, MAX_COVERLETTER_QUESTION_LENGTH);
+        return newState;
+      });
+    } else {
+      const coverLettersCopy = JSON.parse(JSON.stringify(coverLetters));
+      coverLettersCopy[index].question = inputValue;
+      setCoverLetters(coverLettersCopy);
+    }
   }
 
   function handleContentChange(e, index) {
     if (index > coverLetters.length) return;
 
-    const coverLettersCopy = JSON.parse(JSON.stringify(coverLetters));
-    coverLettersCopy[index].content = e.target.value;
-    setCoverLetters(coverLettersCopy);
+    const inputValue = e.target.value;
+    const newCharCount = inputValue.length;
+    if (newCharCount > MAX_COVERLETTER_ANSWER_LENGTH) {
+      toast.warn(`자소서 답변은 ${MAX_COVERLETTER_ANSWER_LENGTH}자를 초과할 수 없습니다.`);
+      setCoverLetters(prevState => {
+        const newState = JSON.parse(JSON.stringify(prevState));
+        newState[index].content = inputValue.substring(0, MAX_COVERLETTER_ANSWER_LENGTH);
+        return newState;
+      });
+      setCoverLetterContentCharCounts(prevCounts => {
+        const newCounts = [...prevCounts];
+        newCounts[index] = MAX_COVERLETTER_ANSWER_LENGTH;
+        return newCounts;
+      });
+    } else {
+      const coverLettersCopy = JSON.parse(JSON.stringify(coverLetters));
+      coverLettersCopy[index].content = inputValue;
+      setCoverLetters(coverLettersCopy);
+      setCoverLetterContentCharCounts(prevCounts => {
+        const newCounts = [...prevCounts];
+        newCounts[index] = newCharCount;
+        return newCounts;
+      });
+    }
   }
 
   return (
@@ -179,8 +223,9 @@ function CoverLetterComponent({ coverLetters, setCoverLetters }) {
           length={coverLetters.length}
           index={index}
           item={item}
+          charCount={coverLetterContentCharCounts[index] || 0}
           onQuestionChange={handleQuestionChange}
-          onContentChange={handleContentChange}
+          onContentChange={(e) => handleContentChange(e, index)}
           addCoverletter={addCoverletter}
           deleteCoverletter={deleteCoverletter}
         />
@@ -213,17 +258,38 @@ function InterviewInput() {
   const [interviewCoverLetters, setInterviewCoverLetters] = useState([
     { id: 0, question: "", content: "" },
   ]);
+  const [interviewRecruitmentCharCount, setInterviewRecruitmentCharCount] = useState(0);  // 모집 공고 글자수를 저장할 상태
 
   function handleInterviewCompanyChange(e) {
-    setInterviewTargetCompany(e.target.value);
+    if (e.target.value.length > MAX_COMPANY_NAME_LENGTH) {
+      toast.warn(`회사 이름은 ${MAX_COMPANY_NAME_LENGTH}자를 초과할 수 없습니다.`);
+      setInterviewTargetCompany(e.target.value.substring(0, MAX_COMPANY_NAME_LENGTH));
+    } else {
+      setInterviewTargetCompany(e.target.value);
+    }
   }
 
   function handleInterviewPositionChange(e) {
-    setInterviewTargetPosition(e.target.value);
+    if (e.target.value.length > MAX_POSITION_NAME_LENGTH) {
+      toast.warn(`직군명은 ${MAX_POSITION_NAME_LENGTH}자를 초과할 수 없습니다.`);
+      setInterviewTargetPosition(e.target.value.substring(0, MAX_POSITION_NAME_LENGTH));
+    } else {
+      setInterviewTargetPosition(e.target.value);
+    }
   }
 
   function handleInterviewRecruitmentChange(e) {
-    setInterviewRecruitment(e.target.value);
+    const inputValue = e.target.value;
+    const newCharCount = inputValue.length;
+
+    if (newCharCount > MAX_RECRUITMENT_LENGTH) {
+      toast.warn(`모집 공고는 ${MAX_RECRUITMENT_LENGTH}자를 초과할 수 없습니다.`);
+      setInterviewRecruitment(e.target.value.substring(0, MAX_RECRUITMENT_LENGTH));
+      setInterviewRecruitmentCharCount(MAX_RECRUITMENT_LENGTH);
+    } else {
+      setInterviewRecruitment(inputValue);
+      setInterviewRecruitmentCharCount(newCharCount);
+    }
   }
 
   function handleNextButtonClick(e) {
@@ -260,7 +326,7 @@ function InterviewInput() {
     );
 
     setIsLoading(true);
-    setLoadingMessage("잠시후 면접이 시작됩니다. 대기 시간은 약 8~13초 정도입니다!");
+    setLoadingMessage("잠시 후 면접이 시작됩니다. 대기 시간은 약 8 ~ 13초 정도입니다!");
     input_api({
       intervieweeName: userNickname,
       companyName: interviewTargetCompany,
@@ -319,13 +385,13 @@ function InterviewInput() {
         <div className={`layout-flex-grid-2 fadeInUpEffect`}>
           <InputComponent
             title={"회사"}
-            placeholder={"지원하고자 하는 회사를 입력하세요."}
+            placeholder={`지원하고자 하는 회사를 입력하세요. (최대 ${MAX_COMPANY_NAME_LENGTH}자)`}
             item={interviewTargetCompany}
             onChange={handleInterviewCompanyChange}
           />
           <InputComponent
             title={"직군"}
-            placeholder={"지원하고자 하는 직군을 입력하세요."}
+            placeholder={`지원하고자 하는 직군을 입력하세요. (최대 ${MAX_POSITION_NAME_LENGTH}자)`}
             item={interviewTargetPosition}
             onChange={handleInterviewPositionChange}
           />
@@ -336,6 +402,7 @@ function InterviewInput() {
             placeholder={"회사의 모집공고를 작성하세요."}
             item={interviewRecruitment}
             onChange={handleInterviewRecruitmentChange}
+            charCount={interviewRecruitmentCharCount}
           />
         </div>
         <div

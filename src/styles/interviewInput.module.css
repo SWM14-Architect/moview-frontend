@@ -65,3 +65,13 @@
 .coverletter_minus_button:hover {
     background-color: crimson;
 }
+
+.char_count {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    text-align: right;
+    font-family: "NamunGothic";
+    font-size: 0.9em;
+    color: #a9a9a9;
+}

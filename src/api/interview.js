@@ -1,4 +1,15 @@
 import {API_INSTANCE_WITH_TOKEN} from "./api_instance";
+import {
+  MAX_COMPANY_NAME_LENGTH,
+  MAX_POSITION_NAME_LENGTH,
+  MAX_RECRUITMENT_LENGTH,
+  MAX_COVERLETTER_QUESTION_LENGTH,
+  MAX_COVERLETTER_ANSWER_LENGTH,
+  MAX_KEYWORD_LENGTH,
+} from "../constants/interviewInputConst";
+import {
+  MAX_INTERVIEW_ANSWER_LENGTH,
+} from "../constants/interviewChatConst";
 
 // 자소서 분석, 초기 질문리스트 생성
 export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnouncement, coverLetterQuestions, coverLetterAnswers}) => {
@@ -9,6 +20,19 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   if (typeof recruitAnnouncement !== 'string') throw new Error('Invalid input: Recruitment Announcement');
   if (!Array.isArray(coverLetterQuestions)) throw new Error('Invalid input: Cover Letter Questions');
   if (!Array.isArray(coverLetterAnswers)) throw new Error('Invalid input: Cover Letter Answers');
+
+  // 길이 검증
+  if (companyName.length > MAX_COMPANY_NAME_LENGTH) throw new Error(`Company name should not exceed ${MAX_COMPANY_NAME_LENGTH} characters.`);
+  if (jobGroup.length > MAX_POSITION_NAME_LENGTH) throw new Error(`Job group should not exceed ${MAX_POSITION_NAME_LENGTH} characters.`);
+  if (recruitAnnouncement.length > MAX_RECRUITMENT_LENGTH) throw new Error(`Recruitment announcement should not exceed ${MAX_RECRUITMENT_LENGTH} characters.`);
+
+  coverLetterQuestions.forEach((question, index) => {
+    if (question.length > MAX_COVERLETTER_QUESTION_LENGTH) throw new Error(`Question at index ${index} should not exceed ${MAX_COVERLETTER_QUESTION_LENGTH} characters.`);
+  });
+
+  coverLetterAnswers.forEach((answer, index) => {
+    if (answer.length > MAX_COVERLETTER_ANSWER_LENGTH) throw new Error(`Answer at index ${index} should not exceed ${MAX_COVERLETTER_ANSWER_LENGTH} characters.`);
+  });
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
@@ -37,6 +61,11 @@ export const light_api=({intervieweeName, companyName, jobGroup, keyword})=>{
   if (typeof jobGroup !== 'string') throw new Error('Invalid input: Job Group');
   if (typeof keyword !== 'string') throw new Error('Invalid input: Keyword');
 
+  // 길이 검증
+  if (companyName.length > MAX_COMPANY_NAME_LENGTH) throw new Error(`Company name should not exceed ${MAX_COMPANY_NAME_LENGTH} characters.`);
+  if (jobGroup.length > MAX_POSITION_NAME_LENGTH) throw new Error(`Job group should not exceed ${MAX_POSITION_NAME_LENGTH} characters.`);
+  if (keyword.length > MAX_KEYWORD_LENGTH) throw new Error(`Keyword should not exceed ${MAX_KEYWORD_LENGTH} characters.`);
+
   // JSON 형식으로 requestBody 구성
   const requestBody = {
     "interviewee_name":intervieweeName,
@@ -63,6 +92,9 @@ export const answer_api = ({interview_id, question_id, question_content, answer_
     throw new Error('Invalid input: Interviewer Question');
   if (typeof answer_content !== 'string')
     throw new Error('Invalid input: Interviewee Answer');
+
+  // 길이 검증
+  if (answer_content.length > MAX_INTERVIEW_ANSWER_LENGTH) throw new Error(`Answer should not exceed ${MAX_INTERVIEW_ANSWER_LENGTH} characters.`);
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
@@ -123,6 +155,9 @@ export const feedback_api = ( {interview_id, question_ids, feedback_scores} ) =>
 export const tts_api = ( {text} ) => {
   // 입력 검증
   if (typeof text !== 'string') throw new Error('Invalid input: Text');
+
+  // 길이 검증
+  if (text.length > MAX_INTERVIEW_ANSWER_LENGTH) throw new Error(`Text should not exceed ${MAX_INTERVIEW_ANSWER_LENGTH} characters.`);
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
