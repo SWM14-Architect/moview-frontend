@@ -92,7 +92,7 @@ function Header() {
                 <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} />
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{userNickname} 면접자님</div>
+                <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{!userLogin ? null : `${userNickname}님`}</div>
                 {!userLogin ? <LoginButton handleLogin={handleLogin}/> : <ProfileDropdown userProfile={userProfile} handleLogout={handleLogout}/>}
               </div>
             </div>
