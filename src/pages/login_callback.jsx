@@ -32,7 +32,6 @@ const KakaoCallback = () => {
       })
       .catch((error) => {
         toast.error(`${error.response?.data.message ? error.response.data.message.error : "오류가 발생했습니다!\n" + error.message}`, {});
-        console.error("cannot call oauth api", error);
       });
   };
 

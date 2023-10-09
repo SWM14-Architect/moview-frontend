@@ -34,14 +34,12 @@ export const useTTSPlayer = (questionContent, onTTSComplete) => {
 
       // 오디오 재생 중 오류가 발생했을 때 Object URL 해제 (메모리 누수 방지)
       audioElement.onerror = function () {
-        console.error("Audio error: ", audioElement.error);
         URL.revokeObjectURL(audioSrc);
       };
 
       audioElement.play();
     }).catch((err) => {
       toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
-      console.error(err);
     });
 
     return () => {

@@ -68,7 +68,6 @@ export default function AudioRecorder({ className, canNotPlayerSpeaking, onSTTRe
       setMediaRecorder(newMediaRecorder);
       setMicAccessDenied(false);  // 마이크 접근이 성공하면 상태를 false로 설정
     } catch (err) {
-      console.error("마이크 접근이 거부되었습니다.", err);
       toast.error(`마이크 접근이 거부되었습니다. 마이크 권한을 허용해주세요.`, {});
       setMicAccessDenied(true);  // 마이크 접근이 거부되면 상태를 true로 설정
     }
