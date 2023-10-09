@@ -6,7 +6,7 @@ import style from "../styles/interviewChat.module.css";
 export default function AudioRecorder({ className, canNotPlayerSpeaking, onSTTResult }) {
   const [mediaRecorder, setMediaRecorder] = useState(null); // 녹음에 사용될 MediaRecorder 객체를 저장
   const [audioDuration, setAudioDuration] = useState(0); // 녹음이 시작된 시간을 저장
-  const [micAccessDenied, setMicAccessDenied] = useState(false); // 마이크 접근 권한이 없는지 여부를 저장
+  const [, setMicAccessDenied] = useState(false); // 마이크 접근 권한이 없는지 여부를 저장
 
   useEffect(() => {
     // 컴포넌트가 마운트 될 때 실행될 코드 (여기선 비워둠)
@@ -69,6 +69,7 @@ export default function AudioRecorder({ className, canNotPlayerSpeaking, onSTTRe
       setMicAccessDenied(false);  // 마이크 접근이 성공하면 상태를 false로 설정
     } catch (err) {
       console.error("마이크 접근이 거부되었습니다.", err);
+      toast.error(`마이크 접근이 거부되었습니다. 마이크 권한을 허용해주세요.`, {});
       setMicAccessDenied(true);  // 마이크 접근이 거부되면 상태를 true로 설정
     }
   };
@@ -86,7 +87,7 @@ export default function AudioRecorder({ className, canNotPlayerSpeaking, onSTTRe
         onSTTResult(res.message.text);
       }
     }).catch((err) => {
-      toast.warn(`${err.response.data.message.error}`);
+      toast.error(`${err.response.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
     });
   };
 
@@ -99,12 +100,6 @@ export default function AudioRecorder({ className, canNotPlayerSpeaking, onSTTRe
             aria-label={mediaRecorder ? "녹음 완료" : "녹음 시작"}
         >
         </button>
-        {micAccessDenied && (
-            <div>
-              <p>마이크 접근이 거부되었습니다. 설정을 변경하려면 아래 버튼을 클릭하세요.</p>
-              <button onClick={startRecording}>다시 시도</button>
-            </div>
-        )}
       </div>
   );
 }
