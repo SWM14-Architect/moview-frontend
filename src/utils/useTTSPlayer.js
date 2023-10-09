@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { tts_api } from '../api/interview';
+import {toast} from "react-toastify";
 
 export const useTTSPlayer = (questionContent, onTTSComplete) => {
   useEffect(() => {
@@ -39,6 +40,7 @@ export const useTTSPlayer = (questionContent, onTTSComplete) => {
 
       audioElement.play();
     }).catch((err) => {
+      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
       console.error(err);
     });
 
