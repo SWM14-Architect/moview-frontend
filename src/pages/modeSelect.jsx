@@ -135,19 +135,19 @@ function ModeExplanation({isLight}) {
     <div className={`${style.input_form}`}>
       <div className={`${style.chat_box} fadeInUpEffect`}>
         <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{isLight? "연습 모드" : "실전 모드"}</h2>
-      <ol className="max-w-md space-y-1 text-gray-500 list-decimal list-inside dark:text-gray-400">
+      <ol className="max-w space-y-1 text-gray-500 list-decimal list-inside dark:text-gray-400">
         <li>
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="text-gray-900 dark:text-white">
             {isLight? "모집 공고, 자소서 없이 가볍게 연습할 수 있는 모드 ": "모집 공고, 자소서를 분석해서 개인 맞춤형 질문을 연습할 수 있는 모드"}
           </span>
         </li>
         <li>
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="text-gray-900 dark:text-white">
             {isLight? "면접 키워드 중심으로 연습":"면접 일정이 얼마 안 남았을 때 유용"}
           </span>
         </li>
         <li>
-          <span className="font-semibold text-gray-900 dark:text-white">
+          <span className="text-gray-900 dark:text-white">
             꼬리질문 및 답변 평가 기능 제공
           </span>
         </li>
