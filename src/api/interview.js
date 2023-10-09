@@ -24,7 +24,6 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   return API_INSTANCE_WITH_TOKEN.post('/interview/input', requestBody)
   .then(response => response.data)
   .catch(error => {
-    console.log(error);
     throw error;
   });
 };
@@ -48,7 +47,6 @@ export const light_api=({intervieweeName, companyName, jobGroup, keyword})=>{
   return API_INSTANCE_WITH_TOKEN.post('/interview/light', requestBody)
   .then(response => response.data)
   .catch(error => {
-    console.log(error);
     throw error;
   });
 }

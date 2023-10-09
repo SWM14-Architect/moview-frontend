@@ -168,7 +168,6 @@ function InterviewChat(){
     }).catch((err) => {
       setIsLoading(false);
       toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
-      console.log(err);
     });
   }
 
@@ -215,7 +214,6 @@ function InterviewChat(){
         .catch((err) => {
           handleInterviewerQuestion(null, "다시 한번 더 말씀해주실 수 있나요?");
           setIntervieweeAnswerFormText(intervieweeAnswer);
-          console.log(err);
         });
       }
       setIsTyping(null);
