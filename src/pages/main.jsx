@@ -10,6 +10,7 @@ import {useRecoilState} from "recoil";
 import {userLoginAtom} from "../store/userAtom";
 import {oauth_url_api} from "../api/jwt";
 import {roomIdAtom} from "../store/interviewRoomAtom";
+import {toast} from "react-toastify";
 
 function FirstSection(props){
   return (
@@ -127,6 +128,7 @@ function Main(){
       window.location.href = res.data["kakao_oauth_url"];
     })
     .catch((err) => {
+      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
     });
   };
 
