@@ -91,6 +91,11 @@ function Header() {
     }
   };
 
+  const handleButtonHowTo=(e)=>{
+    e.preventDefault();
+    navigate("/how-to");
+  };
+
   return (
     <Disclosure
       as="nav"
@@ -105,7 +110,7 @@ function Header() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <CompanyLogo />
-                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} />
+                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo}/>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{!userLogin ? null : `${userNickname}님`}</div>
@@ -113,7 +118,7 @@ function Header() {
               </div>
             </div>
           </div>
-          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick}/>
+          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo}/>
         </>
       )}
     </Disclosure>
@@ -155,6 +160,15 @@ function MenuButton(props) {
           onClick={(e) => props.handleButtonClick(e)}
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
+        </button>
+        <button
+          className={classNames(
+            "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
+            "rounded-md px-5 py-2 text-sm font-medium"
+          )}
+          onClick={(e) => props.handleButtonHowTo(e)}
+        >
+          {"사용 방법"}
         </button>
       </div>
     </div>
@@ -230,6 +244,17 @@ function MenuButtonResized(props) {
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </Disclosure.Button>
+        <Disclosure.Button
+          as="a"
+          className={classNames(
+            "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
+            "block rounded-md px-3 py-2 text-base font-medium"
+          )}
+        >
+        onClick={(e) => props.handleButtonHowTo(e)}
+          {"사용 방법"}
+        </Disclosure.Button>
+        
       </div>
     </Disclosure.Panel>
   );
