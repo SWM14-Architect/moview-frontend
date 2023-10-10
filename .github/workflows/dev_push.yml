@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - dev
-      - *
   workflow_dispatch: # Run workflow(수동 실행) 기능 활성화
     branches:
-      - dev
+      - *
 
 jobs:
   test_and_deploy:
