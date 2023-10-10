@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewChat.module.css";
 import {useRecoilState} from "recoil";
+import { toast } from "react-toastify";
 import {
   interviewDataAtom,
   interviewIdAtom,
@@ -19,9 +20,9 @@ import {answer_api, evaluation_api} from "../../api/interview";
 import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
 import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
 import { userNicknameAtom,userProfileAtom } from "../../store/userAtom";
-import {toast} from "react-toastify";
+import { MAX_INTERVIEW_ANSWER_LENGTH } from "../../constants/interviewChatConst";
 
-function TextareaForm({placeholder, item, onChange}){
+function TextareaForm({ placeholder, item, onChange }){
   const textRef = useRef(null);
 
   // Textarea height auto resize
@@ -91,6 +92,15 @@ function InterviewChat(){
     if (interviewTurn === false || isTyping !== null || !ttsCompleted) return true;
     return false;
   }
+
+  const handleTextareaChange = (e) => {
+    if (e.target.value.length > MAX_INTERVIEW_ANSWER_LENGTH) {
+      toast.warn(`답변은 ${MAX_INTERVIEW_ANSWER_LENGTH}자를 초과할 수 없습니다.`);
+      setIntervieweeAnswerFormText(e.target.value.substring(0, MAX_INTERVIEW_ANSWER_LENGTH));
+    } else {
+      setIntervieweeAnswerFormText(e.target.value);
+    }
+  };
 
   const handleIntervieweeAnswerButton = (e, answerContent) => {
     e.preventDefault();
@@ -272,7 +282,7 @@ function InterviewChat(){
               <TextareaForm
                   placeholder={"질문에 대한 답변을 직접 타이핑하거나, 왼쪽의 음성 녹음 버튼(Beta)을 이용하여 작성하세요."}
                   item={intervieweeAnswerFormText}
-                  onChange={(e) => {setIntervieweeAnswerFormText(e.target.value)}}
+                  onChange={handleTextareaChange}
               />
             </div>
             <button
