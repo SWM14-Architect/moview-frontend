@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { roomIdAtom } from "../store/interviewRoomAtom";
 import {
   userLoginAtom, userNicknameAtom,
   userProfileAtom,
@@ -12,6 +11,14 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import logo from "../assets/logo192.png";
+import SaveProgess from "./SaveProgess";
+import {
+  interviewIdAtom,
+  interviewResultAtom,
+  roomIdAtom
+} from "../store/interviewRoomAtom";
+import {loadingAtom, loadingMessageAtom} from "../store/loadingAtom";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -21,10 +28,14 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isRoom, setIsRoom] = useState(false);
-  const [, setRoomID] = useRecoilState(roomIdAtom);
+  const [roomId, setRoomID] = useRecoilState(roomIdAtom);
   const [userLogin, setUserLogin] = useRecoilState(userLoginAtom);
   const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
   const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
+  const [, setIsLoading] = useRecoilState(loadingAtom);
+  const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
+  const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
+  const [interviewId, ] = useRecoilState(interviewIdAtom);
 
   const handleLogin = async () => {
     await oauth_url_api()
@@ -69,7 +80,12 @@ function Header() {
     if (!isRoom) {
       setRoomID("modeSelect");
       navigate("/room");
-    } else {
+    } else if (roomId==="interviewChat"){
+
+      SaveProgess({setIsLoading:setIsLoading,setLoadingMessage:setLoadingMessage,setInterviewResult:setInterviewResult,interviewId:interviewId,setRoomID:setRoomID});
+      
+    }
+    else {
       setRoomID("modeSelect");
       navigate("/");
     }
