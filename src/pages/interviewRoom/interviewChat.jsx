@@ -177,7 +177,7 @@ function InterviewChat(){
       setRoomID("interviewFeedback");
     }).catch((err) => {
       setIsLoading(false);
-      console.log(err);
+      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
     });
   }
 
@@ -206,20 +206,24 @@ function InterviewChat(){
             setInterviewFlag(true);
             handleInterviewerQuestion(null, "수고하셨습니다!");
           }
-          else{
+          else {
             // NEXT_QUESTION, 다음 질문을 출력합니다.
             const nextQuestion = getNextQuestion(res.message);
+            if (nextQuestion === null || nextQuestion === undefined) {
+              // 다음 질문이 없을 경우, 인터뷰를 종료합니다.
+              setInterviewFlag(true);
+              handleInterviewerQuestion(null, "수고하셨습니다!");
+            } else {
+              // 다음 질문에 대한 TTS를 실행합니다.
+              setCurrentQuestionContent(nextQuestion.content);
 
-            // 다음 질문에 대한 TTS를 실행합니다.
-            setCurrentQuestionContent(nextQuestion.content);
-
-            handleInterviewerQuestion(null, nextQuestion.content);
+              handleInterviewerQuestion(null, nextQuestion.content);
+            }
           }
         })
         .catch((err) => {
           handleInterviewerQuestion(null, "다시 한번 더 말씀해주실 수 있나요?");
           setIntervieweeAnswerFormText(intervieweeAnswer);
-          console.log(err);
         });
       }
       setIsTyping(null);

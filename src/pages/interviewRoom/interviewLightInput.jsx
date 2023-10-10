@@ -125,10 +125,7 @@ function InterviewLightInput() {
           })
         );
         const firstQuestion = interviewStateCopy.initialQuestions[0];
-        interviewStateCopy.askedQuestions.push({
-          _id: firstQuestion._id,
-          content: firstQuestion.content,
-        });
+        interviewStateCopy.askedQuestions.push(firstQuestion);
         setInterviewState(interviewStateCopy);
         setInterviewId(res.message.interview_id);
         setChatHistory([
@@ -138,10 +135,10 @@ function InterviewLightInput() {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err.response.status === 401) {
+        if (err.response?.status === 401) {
           toast.info("다시 로그인을 해주세요.");
         } else {
-          toast.error(`오류가 발생했습니다!\n${err.message}`, {});
+          toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
         }
       });
   }

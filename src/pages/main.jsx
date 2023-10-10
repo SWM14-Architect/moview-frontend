@@ -10,6 +10,7 @@ import {useRecoilState} from "recoil";
 import {userLoginAtom} from "../store/userAtom";
 import {oauth_url_api} from "../api/jwt";
 import {roomIdAtom} from "../store/interviewRoomAtom";
+import {toast} from "react-toastify";
 
 function FirstSection(props){
   return (
@@ -20,9 +21,37 @@ function FirstSection(props){
         <div>을 느끼고 계신가요?</div>
       </TypeIt>
       <img className={`fadeInUpEffect animation-delay-1`} src={MainImage} alt="main" style={{width:"100%", marginBottom:"2em"}} />
-      <div className={`line fadeInUpEffect animation-delay-3`} />
-      <div className={`fadeInUpEffect animation-delay-3 ${style.title_content_start}`}>
+      <div className={`fadeInUpEffect animation-delay-3`}>
+        {!props.userLogin ?
+          <div>
+            <div className={`${style.title_content_start}`}>
+              <div>시작을 위해서는 계정이 필요합니다.</div>
+              <div>카카오 계정으로 로그인하실 수 있습니다.</div>
+            </div>
+            <button
+              className={`blackButton`}
+              style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
+              onClick={(e) => props.handleLogin(e)}
+            >
+              카카오 로그인
+            </button>
+          </div> :
+          <div>
+            <div className={`${style.title_content_start}`}>
+              <div>정보를 입력하고 시작버튼을 누르시면,</div>
+              <div>AI가 내용을 분석하고 질문을 생성합니다.</div>
+            </div>
+            <button
+              className={`blackButton`}
+              style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
+              onClick={(e) => props.handleButtonClick(e)}
+            >
+              {"면접시작 >"}
+            </button>
+          </div>
+        }
       </div>
+      <div className={`line fadeInUpEffect animation-delay-3`} />
     </div>
   );
 }
@@ -99,6 +128,7 @@ function Main(){
       window.location.href = res.data["kakao_oauth_url"];
     })
     .catch((err) => {
+      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
     });
   };
 

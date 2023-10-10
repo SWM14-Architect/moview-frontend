@@ -5,6 +5,7 @@ import {useRecoilState} from "recoil";
 import {userLoginAtom} from "./store/userAtom";
 import {toast} from "react-toastify";
 import {roomIdAtom} from "./store/interviewRoomAtom";
+import {loadingAtom} from "./store/loadingAtom";
 
 /**
  * uri 변경 추적 컴포넌트
@@ -16,6 +17,7 @@ const RouteChangeTracker = () => {
   const [initialized, setInitialized] = useState(false);
   const [userLogin, ] = useRecoilState(userLoginAtom);
   const [roomID, ] = useRecoilState(roomIdAtom);
+  const [isLoading, setIsLoading] = useRecoilState(loadingAtom);
 
   // 구글 애널리틱스 운영서버만 적용
   useEffect(() => {
@@ -33,6 +35,11 @@ const RouteChangeTracker = () => {
         toast.warn("비정상적인 접근입니다!", {});
         navigate("/");
       }
+    }
+
+    // 로딩 중에 페이지가 변경되면 로딩 중지
+    if(isLoading){
+      setIsLoading(false);
     }
 
     // location 변경 감지시 pageview 이벤트 전송

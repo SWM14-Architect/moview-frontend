@@ -33,7 +33,9 @@ function InterviewFeedback() {
         toast.info(`면접이 종료되었습니다.`);
         navigate("/");
       })
-      .catch((err) => toast.error(`오류가 발생했습니다!\n${err.message}`, {}));
+      .catch((err) => {
+        toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
+      });
   }
 
   useEffect(() => {
