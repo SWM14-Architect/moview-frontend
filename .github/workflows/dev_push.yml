@@ -6,7 +6,7 @@ on:
       - dev
   workflow_dispatch: # Run workflow(수동 실행) 기능 활성화
     branches:
-      - *
+      - '*'
 
 jobs:
   test_and_deploy:
