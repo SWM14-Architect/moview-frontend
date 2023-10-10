@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import style from "../../styles/interviewInput.module.css";
 import { useRecoilState } from "recoil";
 import {
