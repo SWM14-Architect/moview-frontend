@@ -2,11 +2,11 @@ name: Dev branch Push Workflow
 
 on:
   push:
-    branches:
-      - dev
+    branches-ignore:
+      - main
   workflow_dispatch: # Run workflow(수동 실행) 기능 활성화
-    branches:
-      - '*'
+    branches-ignore:
+      - main
 
 jobs:
   test_and_deploy:
