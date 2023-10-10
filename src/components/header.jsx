@@ -36,6 +36,7 @@ function Header() {
   const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
   const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
   const [interviewId, ] = useRecoilState(interviewIdAtom);
+  const [isHowTo,setHowTo]=useState(false);
 
   const handleLogin = async () => {
     await oauth_url_api()
@@ -62,6 +63,13 @@ function Header() {
   };
 
   useEffect(() => {
+    if (window.location.pathname==="/"){
+      setHowTo(true);
+    }else{
+      setHowTo(false);
+    }
+
+
     if (window.location.pathname === "/room") {
       setIsRoom(true);
     } else {
@@ -110,7 +118,7 @@ function Header() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <CompanyLogo />
-                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo}/>
+                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo}/>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{!userLogin ? null : `${userNickname}님`}</div>
@@ -118,7 +126,7 @@ function Header() {
               </div>
             </div>
           </div>
-          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo}/>
+          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo}/>
         </>
       )}
     </Disclosure>
@@ -161,7 +169,7 @@ function MenuButton(props) {
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </button>
-        <button
+        {props.isHowTo?        <button
           className={classNames(
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
             "rounded-md px-5 py-2 text-sm font-medium"
@@ -169,7 +177,7 @@ function MenuButton(props) {
           onClick={(e) => props.handleButtonHowTo(e)}
         >
           {"사용 방법"}
-        </button>
+        </button>:""}
       </div>
     </div>
   );
@@ -244,7 +252,7 @@ function MenuButtonResized(props) {
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </Disclosure.Button>
-        <Disclosure.Button
+        {props.isHowTo?        <Disclosure.Button
           as="a"
           className={classNames(
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
@@ -253,8 +261,7 @@ function MenuButtonResized(props) {
         >
         onClick={(e) => props.handleButtonHowTo(e)}
           {"사용 방법"}
-        </Disclosure.Button>
-        
+        </Disclosure.Button>:""}
       </div>
     </Disclosure.Panel>
   );
