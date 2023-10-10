@@ -7,6 +7,7 @@ import Footer from "./components/footer";
 import Loading from "./components/loading";
 import RouteChangeTracker from "./RouteChangeTracker";
 import {Interceptor} from "./api/api_instance";
+import FeedbackModal from "./components/feedbackModal";
 
 function App() {
   // 모든 화면에 공통된 부분을 처리하는 컴포넌트
@@ -23,6 +24,7 @@ function App() {
         </div>
         <Footer/>
         {isLoading ? <Loading message={loadingMessage} isLoading={isLoading} /> : null}
+        <FeedbackModal />
       </div>
     </Interceptor>
   )
