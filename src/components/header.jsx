@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { roomIdAtom } from "../store/interviewRoomAtom";
 import {
   userLoginAtom, userNicknameAtom,
   userProfileAtom,
@@ -12,6 +11,14 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import logo from "../assets/logo192.png";
+import SaveProgess from "./SaveProgess";
+import {
+  interviewIdAtom,
+  interviewResultAtom,
+  roomIdAtom
+} from "../store/interviewRoomAtom";
+import {loadingAtom, loadingMessageAtom} from "../store/loadingAtom";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -21,10 +28,15 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isRoom, setIsRoom] = useState(false);
-  const [, setRoomID] = useRecoilState(roomIdAtom);
+  const [roomId, setRoomID] = useRecoilState(roomIdAtom);
   const [userLogin, setUserLogin] = useRecoilState(userLoginAtom);
   const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
   const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
+  const [, setIsLoading] = useRecoilState(loadingAtom);
+  const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
+  const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
+  const [interviewId, ] = useRecoilState(interviewIdAtom);
+  const [isHowTo,setHowTo]=useState(false);
 
   const handleLogin = async () => {
     await oauth_url_api()
@@ -51,6 +63,13 @@ function Header() {
   };
 
   useEffect(() => {
+    if (window.location.pathname==="/"){
+      setHowTo(true);
+    }else{
+      setHowTo(false);
+    }
+
+
     if (window.location.pathname === "/room") {
       setIsRoom(true);
     } else {
@@ -69,10 +88,20 @@ function Header() {
     if (!isRoom) {
       setRoomID("modeSelect");
       navigate("/room");
-    } else {
+    } else if (roomId==="interviewChat"){
+
+      SaveProgess({setIsLoading:setIsLoading,setLoadingMessage:setLoadingMessage,setInterviewResult:setInterviewResult,interviewId:interviewId,setRoomID:setRoomID});
+      
+    }
+    else {
       setRoomID("modeSelect");
       navigate("/");
     }
+  };
+
+  const handleButtonHowTo=(e)=>{
+    e.preventDefault();
+    navigate("/how-to");
   };
 
   return (
@@ -89,7 +118,7 @@ function Header() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <CompanyLogo />
-                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} />
+                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo}/>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{!userLogin ? null : `${userNickname}님`}</div>
@@ -97,7 +126,7 @@ function Header() {
               </div>
             </div>
           </div>
-          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick}/>
+          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo}/>
         </>
       )}
     </Disclosure>
@@ -140,6 +169,15 @@ function MenuButton(props) {
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </button>
+        {props.isHowTo?        <button
+          className={classNames(
+            "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
+            "rounded-md px-5 py-2 text-sm font-medium"
+          )}
+          onClick={(e) => props.handleButtonHowTo(e)}
+        >
+          {"사용 방법"}
+        </button>:""}
       </div>
     </div>
   );
@@ -214,6 +252,16 @@ function MenuButtonResized(props) {
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </Disclosure.Button>
+        {props.isHowTo?        <Disclosure.Button
+          as="a"
+          className={classNames(
+            "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
+            "block rounded-md px-3 py-2 text-base font-medium"
+          )}
+        >
+        onClick={(e) => props.handleButtonHowTo(e)}
+          {"사용 방법"}
+        </Disclosure.Button>:""}
       </div>
     </Disclosure.Panel>
   );
