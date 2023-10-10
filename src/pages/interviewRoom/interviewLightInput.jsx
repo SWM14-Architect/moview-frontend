@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewInput.module.css";
 import { useRecoilState } from "recoil";
 import {
@@ -268,17 +268,16 @@ function TextareaForm({ placeholder, item, index, onChange, styles = {} }) {
   const textRef = useRef(null);
 
   // Textarea height auto resize
-  const handleResizeHeight = useCallback(() => {
+  useEffect(() => {
     textRef.current.style.height = "auto";
     textRef.current.style.height = textRef.current.scrollHeight + "px";
-  }, []);
+  }, [item]);
 
   return (
     <textarea
       ref={textRef}
       className={`${style.input_form_textbox}`}
       placeholder={placeholder}
-      onInput={handleResizeHeight}
       onChange={(e) => (index !== null ? onChange(e, index) : onChange(e))}
       style={styles}
       value={item}

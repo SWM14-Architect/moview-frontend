@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "../../styles/interviewInput.module.css";
 import {
   MAXIMUM_COVERLETTER_NUMBER,
@@ -54,17 +54,16 @@ function TextareaForm({ placeholder, item, index, onChange, styles = {} }) {
   const textRef = useRef(null);
 
   // Textarea height auto resize
-  const handleResizeHeight = useCallback(() => {
+  useEffect(() => {
     textRef.current.style.height = "auto";
     textRef.current.style.height = textRef.current.scrollHeight + "px";
-  }, []);
+  }, [item]);
 
   return (
     <textarea
       ref={textRef}
       className={`${style.input_form_textbox}`}
       placeholder={placeholder}
-      onInput={handleResizeHeight}
       onChange={(e) => (index !== null ? onChange(e, index) : onChange(e))}
       style={styles}
       value={item}
@@ -366,7 +365,7 @@ function InterviewInput() {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err?.response.status === 401) {
+        if (err.response?.status === 401) {
           toast.info("다시 로그인을 해주세요.");
         } else {
           toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});

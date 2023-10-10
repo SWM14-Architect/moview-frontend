@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewChat.module.css";
 import {useRecoilState} from "recoil";
 import { toast } from "react-toastify";
@@ -26,17 +26,16 @@ function TextareaForm({ placeholder, item, onChange }){
   const textRef = useRef(null);
 
   // Textarea height auto resize
-  const handleResizeHeight = useCallback(() => {
+  useEffect(() => {
     textRef.current.style.height = "auto";
     textRef.current.style.height = textRef.current.scrollHeight + "px";
-  }, []);
+  }, [item]);
 
   return (
     <textarea
       ref={textRef}
       className={`${style.input_form_textbox}`}
       placeholder={placeholder}
-      onInput={handleResizeHeight}
       onChange={e => onChange(e)}
       value={item}
     />
