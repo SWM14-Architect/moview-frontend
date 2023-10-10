@@ -44,6 +44,9 @@ jobs:
       #        env:
       #          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up environment variables for dev branches
+        run: cp .env.production-dev .env.production
+
       - name: Build React
         run: npm run build
 
