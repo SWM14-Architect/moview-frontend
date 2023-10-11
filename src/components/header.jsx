@@ -276,8 +276,8 @@ function MenuButtonResized(props) {
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
             "block rounded-md px-3 py-2 text-base font-medium"
           )}
+          onClick={(e) => props.handleButtonHowTo(e)}
         >
-        onClick={(e) => props.handleButtonHowTo(e)}
           {"사용 방법"}
         </Disclosure.Button>:""}
       </div>
