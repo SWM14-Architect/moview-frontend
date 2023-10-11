@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { stt_api } from '../api/interview';
 import style from "../styles/interviewChat.module.css";
+import {useRecoilState} from "recoil";
+import {interviewIdAtom} from "../store/interviewRoomAtom";
 
 export default function AudioRecorder({ className, canNotPlayerSpeaking, onSTTResult }) {
   const [mediaRecorder, setMediaRecorder] = useState(null); // 녹음에 사용될 MediaRecorder 객체를 저장
+  const [interviewId, ] = useRecoilState(interviewIdAtom);
 
   useEffect(() => {
     // 컴포넌트가 마운트 될 때 실행될 코드 (여기선 비워둠)
@@ -76,6 +79,7 @@ export default function AudioRecorder({ className, canNotPlayerSpeaking, onSTTRe
 
   const sendDataToServer = (base64Data) => {
     stt_api({
+      interview_id: interviewId,
       audio_data: base64Data,
     }).then((res) => {
       if (onSTTResult) {
