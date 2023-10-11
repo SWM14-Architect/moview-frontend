@@ -16,13 +16,13 @@
     font-family: "NanumGothic";
     width: 100px;
     height: 40px;
-    background-color: red;
+    background-color: #fc7979;
     color: #fff;
     transition: all 0.4s;
 }
 
 .redButton:hover{
-background-color: #000;
+    background-color: #965252;
 }
 
 .blueButton {
@@ -36,4 +36,17 @@ background-color: #000;
 
 .blueButton:hover {
     background-color: #36406b;
+}
+
+.grayButton{
+    font-family: "NanumGothic";
+    width: 100px;
+    height: 40px;
+    background-color: #7a7a7a;
+    color: #fff;
+    transition: all 0.4s;
+}
+
+.grayButton:hover{
+    background-color: #484848;
 }

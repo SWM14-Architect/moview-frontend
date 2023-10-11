@@ -22,6 +22,11 @@ function ModeSelect() {
     navigate("/room");
   };
 
+  const handleButtonBack = (e) => {
+    e.preventDefault();
+    navigate("/");
+  }
+
   return (
     <section style={{ backgroundColor: "#f4f7fb", flex: 1 }}>
       <div className={`container`} style={{ flexDirection: "column" }}>
@@ -60,29 +65,39 @@ function ModeSelect() {
           <button
             className={`blueButton`}
             style={{
-              marginTop: "60px",
-              marginBottom: "15px",
-              marginRight: "20px",
-              width: "150px",
+              margin: "60px 10px 15px",
+              width: "100px",
               borderRadius: "10px",
             }}
             onClick={(e) => handleButtonClickOfLight(e)}
           >
-            연습
+            연습모드
           </button>
 
           {/*실전 모드 버튼*/}
           <button
             className={`redButton`}
             style={{
-              marginTop: "60px",
-              marginBottom: "15px",
-              width: "150px",
+              margin: "60px 10px 15px",
+              width: "100px",
               borderRadius: "10px",
             }}
             onClick={(e) => handleButtonClick(e)}
           >
-            실전
+            실전모드
+          </button>
+          
+          {/*뒤로가기 버튼*/}
+          <button
+            className={`grayButton`}
+            style={{
+              margin: "60px 10px 15px",
+              width: "100px",
+              borderRadius: "10px",
+            }}
+            onClick={(e) => handleButtonBack(e)}
+          >
+            뒤로가기
           </button>
         </div>
       </div>
