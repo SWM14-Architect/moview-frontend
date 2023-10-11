@@ -20,7 +20,9 @@ function FirstSection(props){
         <div style={{marginLeft:"5px", color:"#9a3838"}}>두려움</div>
         <div>을 느끼고 계신가요?</div>
       </TypeIt>
-      <img className={`fadeInUpEffect animation-delay-1`} src={MainImage} alt="main" style={{width:"100%", marginBottom:"2em"}} />
+      <div className={`fadeInUpEffect animation-delay-1`} style={{marginBottom:"2em", height:"480px", overflow:"hidden"}}>
+        <img src={MainImage} alt="main" style={{width:"100%"}} />
+      </div>
       <div className={`fadeInUpEffect animation-delay-3`}>
         {!props.userLogin ?
           <div>
