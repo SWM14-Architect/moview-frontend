@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import ReactGA from "react-ga4";
+import {useRecoilState} from "recoil";
+import {userLoginAtom} from "./store/userAtom";
+import {toast} from "react-toastify";
+import {roomIdAtom} from "./store/interviewRoomAtom";
+import {loadingAtom} from "./store/loadingAtom";
 
 /**
  * uri 변경 추적 컴포넌트
@@ -8,7 +13,11 @@ import ReactGA from "react-ga4";
  */
 const RouteChangeTracker = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [initialized, setInitialized] = useState(false);
+  const [userLogin, ] = useRecoilState(userLoginAtom);
+  const [roomID, ] = useRecoilState(roomIdAtom);
+  const [isLoading, setIsLoading] = useRecoilState(loadingAtom);
 
   // 구글 애널리틱스 운영서버만 적용
   useEffect(() => {
@@ -18,12 +27,31 @@ const RouteChangeTracker = () => {
     }
   }, []);
 
-  // location 변경 감지시 pageview 이벤트 전송
+
   useEffect(() => {
+    // 로그인하지 않은 상태일 때 특정 path 접근 제한
+    if(!userLogin) {
+      if (location.pathname === "/room") {
+        toast.warn("비정상적인 접근입니다!", {});
+        navigate("/");
+      }
+    }
+
+    // 로딩 중에 페이지가 변경되면 로딩 중지
+    if(isLoading){
+      setIsLoading(false);
+    }
+
+    // location 변경 감지시 pageview 이벤트 전송
     if (initialized) {
-      ReactGA.set({ page: location.pathname });
+      let pageview = location.pathname;
+      if(pageview === "/room"){
+        pageview = "/room/" + roomID;
+      }
+      ReactGA.set({ page: pageview });
       ReactGA.send("pageview");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, location]);
 };
 

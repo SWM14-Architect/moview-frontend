@@ -1,4 +1,4 @@
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 
 // Custom Hook for setInterval
 export const useInterval = (callback, interval, memo) => {
