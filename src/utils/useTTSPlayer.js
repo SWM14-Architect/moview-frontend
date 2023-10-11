@@ -1,14 +1,19 @@
 import { useEffect } from 'react';
 import { tts_api } from '../api/interview';
 import {toast} from "react-toastify";
+import {useRecoilState} from "recoil";
+import {interviewIdAtom} from "../store/interviewRoomAtom";
 
 export const useTTSPlayer = (questionContent, onTTSComplete) => {
+  const [interviewId, ] = useRecoilState(interviewIdAtom);
+
   useEffect(() => {
     if (typeof questionContent !== 'string') return;
 
     let audioElement;
     let audioSrc;
     tts_api({
+      interview_id: interviewId,
       text: questionContent,
     }).then((res) => {
       // Base64로 인코딩된 문자열을 Blob 객체로 변환

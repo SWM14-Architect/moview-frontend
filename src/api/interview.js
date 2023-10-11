@@ -150,7 +150,7 @@ export const feedback_api = ( {interview_id, question_ids, feedback_scores} ) =>
   });
 };
 
-export const tts_api = ( {text} ) => {
+export const tts_api = ( {interview_id, text} ) => {
   // 입력 검증
   if (typeof text !== 'string') throw new Error('Invalid input: Text');
 
@@ -159,6 +159,7 @@ export const tts_api = ( {text} ) => {
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
+    "interview_id": interview_id,
     "text": text,
   };
 
@@ -169,12 +170,13 @@ export const tts_api = ( {text} ) => {
   });
 }
 
-export const stt_api = ( {audio_data} ) => {
+export const stt_api = ( {interview_id, audio_data} ) => {
   // 입력 검증(base64로 인코딩 되어있는 오디오 데이터)
   if (typeof audio_data !== 'string') throw new Error('Invalid input: Audio Data');
 
   // JSON 형식으로 requestBody 구성
   const requestBody = {
+    "interview_id": interview_id,
     "audio_data": audio_data,
   }
 
