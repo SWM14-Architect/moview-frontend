@@ -5,6 +5,10 @@ import {useRecoilState} from "recoil";
 import {openModalAtom} from "../store/modalAtom";
 import style from "../styles/feedbackModal.module.css";
 import {MAX_FEEDBACK_CONTENT_LENGTH} from "../constants/interviewFeedbackConst";
+import {slack_feedback_api} from "../api/slack";
+import {toast} from "react-toastify";
+import {roomIdAtom} from "../store/interviewRoomAtom";
+import {useNavigate} from "react-router-dom";
 
 function TextareaForm({ placeholder, item, onChange, charCount, styles = {} }) {
   const textRef = useRef(null);
@@ -31,9 +35,16 @@ function TextareaForm({ placeholder, item, onChange, charCount, styles = {} }) {
 }
 
 function FeedbackModal(){
+  const navigate = useNavigate();
+  const [roomId, ] = useRecoilState(roomIdAtom);
   const [openModal, setOpenModal] = useRecoilState(openModalAtom);
   const [content, setContent] = useState("");
   const [charCount, setCharCount] = useState(0);
+
+  useEffect(() => {
+    setContent("");
+    setCharCount(0);
+  }, [openModal]);
 
   function handleOnChange(e) {
     if(e.target.value.length > MAX_FEEDBACK_CONTENT_LENGTH){
@@ -43,8 +54,30 @@ function FeedbackModal(){
       setCharCount(e.target.value.length);
     }
   }
+
+  function handleOnSubmit() {
+    slack_feedback_api({"user_message": content})
+      .then((res) => {
+        toast.info("소중한 피드백 감사합니다!");
+        setOpenModal(null);
+        if(roomId === "interviewFeedback"){
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
+      });
+  }
+
+  function handleOnClose() {
+    setOpenModal(null);
+    if(roomId === "interviewFeedback"){
+      navigate("/");
+    }
+  }
+
   return (
-    <Modal show={openModal === 'feedback'} onClose={() => setOpenModal(null)}>
+    <Modal show={openModal === 'feedback'} onClose={() => handleOnClose()}>
       <Modal.Header>Feedback</Modal.Header>
       <Modal.Body>
         <div className="space-y-6">
@@ -55,8 +88,8 @@ function FeedbackModal(){
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => setOpenModal(null)}>보내기</Button>
-        <Button color="gray" onClick={() => setOpenModal(null)}>
+        <Button onClick={() => handleOnSubmit()}>보내기</Button>
+        <Button color="gray" onClick={() => handleOnClose()}>
           나가기
         </Button>
       </Modal.Footer>

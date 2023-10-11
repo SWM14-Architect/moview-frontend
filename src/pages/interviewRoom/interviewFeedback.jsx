@@ -3,48 +3,26 @@ import style from "../../styles/interviewFeedback.module.css";
 import { useRecoilState } from "recoil";
 import {
   interviewDataAtom,
-  interviewIdAtom,
   interviewResultAtom,
 } from "../../store/interviewRoomAtom";
 import "chart.js/auto";
-import { FEEDBACK_RANGE_DEFAULT_VALUE } from "../../constants/interviewFeedbackConst";
-import { useNavigate } from "react-router-dom";
 import { ScrollToTop } from "../../utils/scrollRestoration";
-import { feedback_api } from "../../api/interview";
-import { toast } from "react-toastify";
+import {openModalAtom} from "../../store/modalAtom";
 
 function InterviewFeedback() {
   ScrollToTop();
-  const navigate = useNavigate();
   const [interviewData] = useRecoilState(interviewDataAtom);
   const [interviewResults] = useRecoilState(interviewResultAtom);
-  const [interviewId] = useRecoilState(interviewIdAtom);
   const [interviewRecords, setInterviewRecords] = useState([]);
-  const [interviewFeedbacks, setInterviewFeedbacks] = useState([]);
+  const [, setOpenModal] = useRecoilState(openModalAtom);
 
   function handleEndButtonClick(e) {
     e.preventDefault();
-    feedback_api({
-      interview_id: interviewId,
-      question_ids: interviewRecords.map((record) => record.question_id),
-      feedback_scores: interviewFeedbacks,
-    })
-      .then(() => {
-        toast.info(`면접이 종료되었습니다.`);
-        navigate("/");
-      })
-      .catch((err) => {
-        toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
-      });
+    setOpenModal("feedback");
   }
 
   useEffect(() => {
     setInterviewRecords(interviewResults.interviewResults);
-    setInterviewFeedbacks(
-      new Array(interviewResults.interviewResults.length).fill(
-        FEEDBACK_RANGE_DEFAULT_VALUE
-      )
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
