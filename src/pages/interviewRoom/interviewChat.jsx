@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import style from "../../styles/interviewChat.module.css";
 import {useRecoilState} from "recoil";
 import { toast } from "react-toastify";
@@ -16,27 +16,26 @@ import {ScrollToTop} from "../../utils/scrollRestoration";
 import { useTTSPlayer } from "../../utils/useTTSPlayer";
 import AudioRecorder from "../../utils/audioRecorder";
 import {chatHistoryAtom} from "../../store/interviewChatAtom";
-import {answer_api, evaluation_api} from "../../api/interview";
-import interviewSummaryGenerator from "../../utils/interviewSummaryGenerator";
+import {answer_api} from "../../api/interview";
 import {loadingAtom, loadingMessageAtom} from "../../store/loadingAtom";
 import { userNicknameAtom,userProfileAtom } from "../../store/userAtom";
 import { MAX_INTERVIEW_ANSWER_LENGTH } from "../../constants/interviewChatConst";
+import SaveProgess from "../../components/SaveProgess";
 
 function TextareaForm({ placeholder, item, onChange }){
   const textRef = useRef(null);
 
   // Textarea height auto resize
-  const handleResizeHeight = useCallback(() => {
+  useEffect(() => {
     textRef.current.style.height = "auto";
     textRef.current.style.height = textRef.current.scrollHeight + "px";
-  }, []);
+  }, [item]);
 
   return (
     <textarea
       ref={textRef}
       className={`${style.input_form_textbox}`}
       placeholder={placeholder}
-      onInput={handleResizeHeight}
       onChange={e => onChange(e)}
       value={item}
     />
@@ -168,17 +167,7 @@ function InterviewChat(){
   }
 
   const handleInterviewEnd = () => {
-    setIsLoading(true);
-    setLoadingMessage("면접 결과를 분석하고 있습니다. 평균 소요 시간은 8 ~ 12초입니다.");
-    evaluation_api({interview_id: interviewId}).then((res) => {
-
-      setIsLoading(false);
-      setInterviewResult(interviewSummaryGenerator(res.message.evaluations)); // 결과내용을 interviewResultAtom에 저장합니다.
-      setRoomID("interviewFeedback");
-    }).catch((err) => {
-      setIsLoading(false);
-      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
-    });
+    SaveProgess({setIsLoading:setIsLoading,setLoadingMessage:setLoadingMessage,setInterviewResult:setInterviewResult,interviewId:interviewId,setRoomID:setRoomID});
   }
 
   // 1초마다 입력이 완료되었는지 체크합니다.

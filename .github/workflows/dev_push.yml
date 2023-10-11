@@ -1,0 +1,59 @@
+name: Dev branch Push Workflow
+
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch: # Run workflow(수동 실행) 기능 활성화
+    branches-ignore:
+      - main
+
+jobs:
+  test_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 환경 설정
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      #      # 2. 테스트 진행
+      #      - name: Run tests with coverage
+      #        run: npm test -- --coverage
+      #
+      #      - name: Post Test Coverage Report as PR Comment
+      #        run: |
+      #          COVERAGE_INFO=$(cat coverage/lcov.info)
+      #          COMMENT="#### Test Coverage Report\n\`\`\`\n${COVERAGE_INFO}\n\`\`\`"
+      #          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+      #          echo $COMMENT | gh pr comment ${PR_NUMBER} -F-
+      #        env:
+      #          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up environment variables for dev branches
+        run: cp .env.production-dev .env.production
+
+      - name: Build React
+        run: npm run build
+
+      - name: Deploy to S3
+        run: aws s3 sync --region ${{ secrets.AWS_REGION }} build/ s3://${{ secrets.DEV_S3_BUCKET_NAME }} --delete
+
+      # 배포시 기존의 CloudFront 캐시 무효화
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DEV_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
