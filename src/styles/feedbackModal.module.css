@@ -1,0 +1,21 @@
+
+.input_form_textbox {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    outline: #212121 1px solid;
+    border-radius: 10px;
+    font-family: "NamunGothic";
+    font-size: 0.9em;
+}
+
+.char_count {
+    position: absolute;
+    bottom: 35px;
+    right: 20px;
+    text-align: right;
+    font-family: "NamunGothic";
+    font-size: 0.9em;
+    color: #a9a9a9;
+}

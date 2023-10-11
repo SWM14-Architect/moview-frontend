@@ -11,6 +11,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import logo from "../assets/logo192.png";
+import {openModalAtom} from "../store/modalAtom";
 import SaveProgess from "./SaveProgess";
 import {
   interviewIdAtom,
@@ -18,7 +19,6 @@ import {
   roomIdAtom
 } from "../store/interviewRoomAtom";
 import {loadingAtom, loadingMessageAtom} from "../store/loadingAtom";
-
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -32,6 +32,7 @@ function Header() {
   const [userLogin, setUserLogin] = useRecoilState(userLoginAtom);
   const [userNickname, setUserNickname] = useRecoilState(userNicknameAtom);
   const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
+  const [, setOpenModal] = useRecoilState(openModalAtom);
   const [, setIsLoading] = useRecoilState(loadingAtom);
   const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
   const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
@@ -61,6 +62,10 @@ function Header() {
       toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
     });
   };
+
+  const handleFeedback = () => {
+    setOpenModal("feedback");
+  }
 
   useEffect(() => {
     if (window.location.pathname==="/"){
@@ -122,7 +127,7 @@ function Header() {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{!userLogin ? null : `${userNickname}님`}</div>
-                {!userLogin ? <LoginButton handleLogin={handleLogin}/> : <ProfileDropdown userProfile={userProfile} handleLogout={handleLogout}/>}
+                {!userLogin ? <LoginButton handleLogin={handleLogin}/> : <ProfileDropdown userProfile={userProfile} handleLogout={handleLogout} handleFeedback={handleFeedback}/>}
               </div>
             </div>
           </div>
@@ -218,6 +223,19 @@ function ProfileDropdown(props) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                className={classNames(
+                  active ? "bg-gray-100" : "",
+                  "block w-full py-2 text-sm text-gray-700 cursor-pointer"
+                )}
+                onClick={(e) => props.handleFeedback(e)}
+              >
+                피드백 남기기
+              </button>
+            )}
+          </Menu.Item>
           <Menu.Item>
             {({ active }) => (
               <button

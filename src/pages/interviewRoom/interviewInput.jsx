@@ -291,6 +291,11 @@ function InterviewInput() {
     }
   }
 
+  const handleButtonBack = (e) => {
+    e.preventDefault();
+    setRoomID("modeSelect");
+  }
+
   function handleNextButtonClick(e) {
     e.preventDefault();
 
@@ -417,10 +422,18 @@ function InterviewInput() {
         >
           <button
             className={`redButton`}
-            style={{ borderRadius: "10px", width: "100px" }}
+            style={{ margin: "60px 10px 15px", borderRadius: "10px", width: "100px" }}
             onClick={(e) => handleNextButtonClick(e)}
           >
             면접시작
+          </button>
+          {/*뒤로가기 버튼*/}
+          <button
+            className={`grayButton`}
+            style={{ margin: "60px 10px 15px", width: "100px", borderRadius: "10px" }}
+            onClick={(e) => handleButtonBack(e)}
+          >
+            뒤로가기
           </button>
         </div>
       </div>
