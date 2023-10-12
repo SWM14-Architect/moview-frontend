@@ -65,7 +65,9 @@ function FeedbackModal(){
         }
       })
       .catch((err) => {
-        toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
+        if (err.response?.status !== 401) {
+          toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
+        }
       });
   }
 

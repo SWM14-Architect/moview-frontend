@@ -140,9 +140,7 @@ function InterviewLightInput() {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err.response?.status === 401) {
-          toast.info("다시 로그인을 해주세요.");
-        } else {
+        if (err.response?.status !== 401) {
           toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
         }
       });
