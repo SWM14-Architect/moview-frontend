@@ -42,9 +42,17 @@ export const useTTSPlayer = (questionContent, onTTSComplete) => {
         URL.revokeObjectURL(audioSrc);
       };
 
-      audioElement.play();
+      audioElement.play()
+      .then()
+      .catch(() => {
+        // useTTSPlayer.js:49 DOMException: play() failed because the user didn't interact with the document first.
+        URL.revokeObjectURL(audioSrc);
+        onTTSComplete();
+      });
     }).catch((err) => {
-      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
+      if (err.response?.status !== 401) {
+        toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
+      }
     });
 
     return () => {
