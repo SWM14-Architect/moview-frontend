@@ -6,6 +6,7 @@ import {useRecoilState} from "recoil";
 import {userLoginAtom, userNicknameAtom, userProfileAtom} from "../store/userAtom";
 import {useNavigate} from "react-router-dom";
 import {getCookie} from "../utils/useCookie";
+import {toast} from "react-toastify";
 
 export const API_INSTANCE = axios.create({
   baseURL: `${process.env.REACT_APP_API_ENDPOINT}`,
@@ -48,6 +49,8 @@ export const Interceptor = ({children}) => {
 
         if (config.url === REFRESH_URL || status !== 401 || config.sent) {
           if (status === 401) {
+            toast.info("다시 로그인을 해주세요.");
+            console.error(err);
             setUserLogin(false);
             setUserNickname("");
             setUserProfile("");

@@ -37,7 +37,24 @@ function Header() {
   const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
   const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
   const [interviewId, ] = useRecoilState(interviewIdAtom);
-  const [isHowTo,setHowTo]=useState(false);
+  const [isHowTo, setHowTo]=useState(false);
+  const [exitHowTo, setExitHowTo] = useState(false);
+
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    if (isRoom && roomId==="interviewChat"){
+      SaveProgess({
+        setIsLoading:setIsLoading,
+        setLoadingMessage:setLoadingMessage,
+        setInterviewResult:setInterviewResult,
+        interviewId:interviewId,
+        setRoomID:setRoomID
+      });
+    }
+    else{
+      navigate("/");
+    }
+  }
 
   const handleLogin = async () => {
     await oauth_url_api()
@@ -68,12 +85,11 @@ function Header() {
   }
 
   useEffect(() => {
-    if (window.location.pathname==="/"){
+    if (window.location.pathname === "/" || window.location.pathname === "/how-to"){
       setHowTo(true);
     }else{
       setHowTo(false);
     }
-
 
     if (window.location.pathname === "/room") {
       setIsRoom(true);
@@ -94,9 +110,13 @@ function Header() {
       setRoomID("modeSelect");
       navigate("/room");
     } else if (roomId==="interviewChat"){
-
-      SaveProgess({setIsLoading:setIsLoading,setLoadingMessage:setLoadingMessage,setInterviewResult:setInterviewResult,interviewId:interviewId,setRoomID:setRoomID});
-      
+      SaveProgess({
+        setIsLoading:setIsLoading,
+        setLoadingMessage:setLoadingMessage,
+        setInterviewResult:setInterviewResult,
+        interviewId:interviewId,
+        setRoomID:setRoomID
+      });
     }
     else {
       setRoomID("modeSelect");
@@ -106,8 +126,15 @@ function Header() {
 
   const handleButtonHowTo=(e)=>{
     e.preventDefault();
+    setExitHowTo(true);
     navigate("/how-to");
   };
+
+  const handleButtonHowToBack = (e) => {
+    e.preventDefault();
+    setExitHowTo(false);
+    navigate("/");
+  }
 
   return (
     <Disclosure
@@ -122,8 +149,8 @@ function Header() {
                 <MobileMenuButton open={open} />
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <CompanyLogo />
-                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo}/>
+                <CompanyLogo handleLogoClick={handleLogoClick} />
+                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo} handleButtonHowToBack={handleButtonHowToBack} exitHowTo={exitHowTo}/>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{!userLogin ? null : `${userNickname}님`}</div>
@@ -131,7 +158,7 @@ function Header() {
               </div>
             </div>
           </div>
-          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo}/>
+          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo} handleButtonHowToBack={handleButtonHowToBack} exitHowTo={exitHowTo}/>
         </>
       )}
     </Disclosure>
@@ -152,10 +179,10 @@ function MobileMenuButton(props) {
   );
 }
 
-function CompanyLogo() {
+function CompanyLogo(props) {
   return (
     <div className="flex flex-shrink-0 items-center">
-      <img className="h-8 w-auto" src={logo} alt="Your Company" />
+      <img className="h-8 w-auto cursor-pointer" src={logo} alt="Your Company" onClick={(e) => props.handleLogoClick(e)} />
     </div>
   );
 }
@@ -174,15 +201,15 @@ function MenuButton(props) {
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </button>
-        {props.isHowTo?        <button
+        {props.isHowTo ? <button
           className={classNames(
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
             "rounded-md px-5 py-2 text-sm font-medium"
           )}
-          onClick={(e) => props.handleButtonHowTo(e)}
+          onClick={(e) => !props.exitHowTo ? props.handleButtonHowTo(e) : props.handleButtonHowToBack(e)}
         >
-          {"사용 방법"}
-        </button>:""}
+          {!props.exitHowTo ? "사용방법" : "뒤로가기"}
+        </button>: null}
       </div>
     </div>
   );
@@ -270,16 +297,16 @@ function MenuButtonResized(props) {
         >
           {!props.isRoom ? "면접 시작" : "면접 종료"}
         </Disclosure.Button>
-        {props.isHowTo?        <Disclosure.Button
+        {props.isHowTo ? <Disclosure.Button
           as="a"
           className={classNames(
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
             "block rounded-md px-3 py-2 text-base font-medium"
           )}
-          onClick={(e) => props.handleButtonHowTo(e)}
+          onClick={(e) => !props.exitHowTo ? props.handleButtonHowTo(e) : props.handleButtonHowToBack(e)}
         >
-          {"사용 방법"}
-        </Disclosure.Button>:""}
+          {!props.exitHowTo ? "사용방법" : "뒤로가기"}
+        </Disclosure.Button>: null}
       </div>
     </Disclosure.Panel>
   );
