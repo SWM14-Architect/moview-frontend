@@ -211,6 +211,7 @@ function InterviewChat(){
           }
         })
         .catch((err) => {
+          setCurrentQuestionContent("다시 한번 더 말씀해주실 수 있나요?");
           handleInterviewerQuestion(null, "다시 한번 더 말씀해주실 수 있나요?");
           setIntervieweeAnswerFormText(intervieweeAnswer);
         });
