@@ -1,4 +1,4 @@
-import {API_INSTANCE_WITH_TOKEN} from "./api_instance";
+import {API_INSTANCE_TO_INJECT_TOKEN} from "./api_instance";
 import {
   MAX_COMPANY_NAME_LENGTH,
   MAX_POSITION_NAME_LENGTH,
@@ -45,7 +45,7 @@ export const input_api = ({intervieweeName, companyName, jobGroup, recruitAnnoun
   };
 
   // response {flag,content}
-  return API_INSTANCE_WITH_TOKEN.post('/interview/input', requestBody)
+  return API_INSTANCE_TO_INJECT_TOKEN.post('/interview/input', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -73,7 +73,7 @@ export const light_api=({intervieweeName, companyName, jobGroup, keyword})=>{
     "keyword":keyword,
   };
   // response {flag,content}
-  return API_INSTANCE_WITH_TOKEN.post('/interview/light', requestBody)
+  return API_INSTANCE_TO_INJECT_TOKEN.post('/interview/light', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -102,7 +102,7 @@ export const answer_api = ({interview_id, question_id, question_content, answer_
     "answer_content": answer_content,
   };
 
-  return API_INSTANCE_WITH_TOKEN.post('/interview/answer', requestBody)
+  return API_INSTANCE_TO_INJECT_TOKEN.post('/interview/answer', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -119,7 +119,7 @@ export const evaluation_api = ({interview_id}) => {
     "interview_id": interview_id,
   };
 
-  return API_INSTANCE_WITH_TOKEN.post('/interview/evaluation', requestBody)
+  return API_INSTANCE_TO_INJECT_TOKEN.post('/interview/evaluation', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -144,7 +144,7 @@ export const feedback_api = ( {interview_id, question_ids, feedback_scores} ) =>
     "feedback_scores": feedback_scores,
   };
 
-  return API_INSTANCE_WITH_TOKEN.post('/interview/feedback', requestBody)
+  return API_INSTANCE_TO_INJECT_TOKEN.post('/interview/feedback', requestBody)
   .catch(error => {
     throw error;
   });
@@ -163,7 +163,7 @@ export const tts_api = ( {interview_id, text} ) => {
     "text": text,
   };
 
-  return API_INSTANCE_WITH_TOKEN.post('/interview/tts', requestBody)
+  return API_INSTANCE_TO_INJECT_TOKEN.post('/interview/tts', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
@@ -180,7 +180,7 @@ export const stt_api = ( {interview_id, audio_data} ) => {
     "audio_data": audio_data,
   }
 
-  return API_INSTANCE_WITH_TOKEN.post('/interview/stt', requestBody)
+  return API_INSTANCE_TO_INJECT_TOKEN.post('/interview/stt', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;

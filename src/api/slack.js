@@ -1,4 +1,4 @@
-import {API_INSTANCE_WITH_TOKEN} from "./api_instance";
+import {API_INSTANCE_TO_INJECT_TOKEN} from "./api_instance";
 import moment from "moment-timezone";
 
 export const slack_feedback_api = ( {user_message} ) => {
@@ -14,7 +14,7 @@ export const slack_feedback_api = ( {user_message} ) => {
     "created_at": created_at,
   }
 
-  return API_INSTANCE_WITH_TOKEN.post('/slack/feedback', requestBody)
+  return API_INSTANCE_TO_INJECT_TOKEN.post('/slack/feedback', requestBody)
   .then(response => response.data)
   .catch(error => {
     throw error;
