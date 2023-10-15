@@ -119,14 +119,14 @@ function CoverLetterForm({
       ) : null}
       <div className={`${style.input_form_box}`}>
         <InputForm
-          placeholder={`자소서 문항을 입력하세요. (최대 ${MAX_COVERLETTER_QUESTION_LENGTH}자)`}
+          placeholder={`자소서 항목을 입력하세요. (최대 ${MAX_COVERLETTER_QUESTION_LENGTH}자)`}
           item={item.question}
           index={index}
           onChange={onQuestionChange}
         />
         <div>
           <TextareaForm
-              placeholder={"자소서 문항에 대한 답변을 작성하세요."}
+              placeholder={"자소서 항목에 대한 내용을 작성하세요."}
               item={item.content}
               index={index}
               onChange={(e) => onContentChange(e, index)}
@@ -408,7 +408,7 @@ function InterviewInput() {
           className={`fadeInUpEffect animation-delay-2`}
           style={{ margin: "10px" }}
         >
-          <div className={`${style.input_title}`}>자소서 입력 ( + 버튼을 이용해 자소서를 추가할 수 있어요!)</div>
+          <div className={`${style.input_title}`}>자소서 항목 입력 ( + 버튼을 이용해 자소서 항목을 추가할 수 있어요!)</div>
           <CoverLetterComponent
             coverLetters={interviewCoverLetters}
             setCoverLetters={setInterviewCoverLetters}
