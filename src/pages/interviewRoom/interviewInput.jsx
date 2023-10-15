@@ -330,7 +330,7 @@ function InterviewInput() {
     );
 
     setIsLoading(true);
-    setLoadingMessage("잠시 후 면접이 시작됩니다. 대기 시간은 약 8 ~ 13초 정도입니다!");
+    setLoadingMessage("잠시 후 면접이 시작됩니다. 대기 시간은 약 10 ~ 15초 정도입니다!");
     input_api({
       intervieweeName: userNickname,
       companyName: interviewTargetCompany,
