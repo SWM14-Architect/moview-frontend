@@ -6,7 +6,7 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 import Loading from "./components/loading";
 import RouteChangeTracker from "./RouteChangeTracker";
-import {Interceptor} from "./api/api_instance";
+import {AuthTokenInterceptor} from "./api/api_instance";
 import FeedbackModal from "./components/feedbackModal";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
   const [isLoading, ] = useRecoilState(loadingAtom);
   const [loadingMessage, ] = useRecoilState(loadingMessageAtom);
   return(
-    <Interceptor>
+    <AuthTokenInterceptor>
       <div className={`wrapper`}>
         <div className={`contentWrapper`}>
           <Header/>
@@ -26,7 +26,7 @@ function App() {
         {isLoading ? <Loading message={loadingMessage} isLoading={isLoading} /> : null}
         <FeedbackModal />
       </div>
-    </Interceptor>
+    </AuthTokenInterceptor>
   )
 }
 

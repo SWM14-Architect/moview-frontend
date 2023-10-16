@@ -14,46 +14,46 @@ import {toast} from "react-toastify";
 
 function FirstSection(props){
   return (
-    <div style={{width: "100%", textAlign:"center"}}>
+    <div className={`${style.first_section}`} style={{width: "100%", textAlign:"center"}}>
       <TypeIt className={`${style.title_header}`} options={{speed: 30}}>
         <div>아직도 면접에 </div>
         <div style={{marginLeft:"5px", color:"#9a3838"}}>두려움</div>
         <div>을 느끼고 계신가요?</div>
       </TypeIt>
-      <div className={`fadeInUpEffect animation-delay-1`} style={{marginBottom:"2em", overflow:"hidden"}}>
-        <img src={MainImage} alt="main" style={{width:"100%"}} />
-      </div>
-      <div className={`fadeInUpEffect animation-delay-3`}>
-        {!props.userLogin ?
-          <div>
-            <div className={`${style.title_content_start}`}>
-              <div>시작을 위해서는 계정이 필요합니다.</div>
-              <div>카카오 계정으로 로그인하실 수 있습니다.</div>
+      <img src={MainImage} className={`fadeInUpEffect animation-delay-1`} alt="main" style={{width:"100%", borderRadius:"20px", marginBottom:"2em"}} />
+      <div>
+        <div className={`fadeInUpEffect animation-delay-3`}>
+          {!props.userLogin ?
+            <div>
+              <div className={`${style.title_content_start}`}>
+                <div>시작을 위해서는 계정이 필요합니다.</div>
+                <div>카카오 계정으로 로그인하실 수 있습니다.</div>
+              </div>
+              <button
+                className={`blackButton`}
+                style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
+                onClick={(e) => props.handleLogin(e)}
+              >
+                카카오 로그인
+              </button>
+            </div> :
+            <div>
+              <div className={`${style.title_content_start}`}>
+                <div>정보를 입력하고 시작버튼을 누르시면,</div>
+                <div>AI가 내용을 분석하고 질문을 생성합니다.</div>
+              </div>
+              <button
+                className={`blackButton`}
+                style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
+                onClick={(e) => props.handleButtonClick(e)}
+              >
+                {"면접시작 >"}
+              </button>
             </div>
-            <button
-              className={`blackButton`}
-              style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
-              onClick={(e) => props.handleLogin(e)}
-            >
-              카카오 로그인
-            </button>
-          </div> :
-          <div>
-            <div className={`${style.title_content_start}`}>
-              <div>정보를 입력하고 시작버튼을 누르시면,</div>
-              <div>AI가 내용을 분석하고 질문을 생성합니다.</div>
-            </div>
-            <button
-              className={`blackButton`}
-              style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
-              onClick={(e) => props.handleButtonClick(e)}
-            >
-              {"면접시작 >"}
-            </button>
-          </div>
-        }
+          }
+        </div>
+        <div className={`line fadeInUpEffect animation-delay-3`} />
       </div>
-      <div className={`line fadeInUpEffect animation-delay-3`} />
     </div>
   );
 }

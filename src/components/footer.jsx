@@ -9,7 +9,7 @@ function Footer() {
             href="https://github.com/SWM14-Architect"
             className="flex items-center mb-4 sm:mb-0"
           >
-            <span className="self-center text-sm font-semibold whitespace-nowrap text-gray-200 dark:text-white">
+            <span className="self-center text-sm font-semibold whitespace-normal text-gray-200 dark:text-white">
               © 2023 SWM Architect Team All Rights Reserved.
             </span>
           </a>
