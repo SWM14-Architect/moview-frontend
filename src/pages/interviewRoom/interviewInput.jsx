@@ -119,14 +119,14 @@ function CoverLetterForm({
       ) : null}
       <div className={`${style.input_form_box}`}>
         <InputForm
-          placeholder={`자소서 문항을 입력하세요. (최대 ${MAX_COVERLETTER_QUESTION_LENGTH}자)`}
+          placeholder={`자소서 항목을 입력하세요. (최대 ${MAX_COVERLETTER_QUESTION_LENGTH}자)`}
           item={item.question}
           index={index}
           onChange={onQuestionChange}
         />
         <div>
           <TextareaForm
-              placeholder={"자소서 문항에 대한 답변을 작성하세요."}
+              placeholder={"자소서 항목에 대한 내용을 작성하세요."}
               item={item.content}
               index={index}
               onChange={(e) => onContentChange(e, index)}
@@ -330,7 +330,7 @@ function InterviewInput() {
     );
 
     setIsLoading(true);
-    setLoadingMessage("잠시 후 면접이 시작됩니다. 대기 시간은 약 8 ~ 13초 정도입니다!");
+    setLoadingMessage("잠시 후 면접이 시작됩니다. 대기 시간은 약 10 ~ 15초 정도입니다!");
     input_api({
       intervieweeName: userNickname,
       companyName: interviewTargetCompany,
@@ -370,9 +370,7 @@ function InterviewInput() {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err.response?.status === 401) {
-          toast.info("다시 로그인을 해주세요.");
-        } else {
+        if (err.response?.status !== 401) {
           toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
         }
       });
@@ -410,7 +408,7 @@ function InterviewInput() {
           className={`fadeInUpEffect animation-delay-2`}
           style={{ margin: "10px" }}
         >
-          <div className={`${style.input_title}`}>자소서 입력 ( + 버튼을 이용해 자소서를 추가할 수 있어요!)</div>
+          <div className={`${style.input_title}`}>자소서 항목 입력 ( + 버튼을 이용해 자소서 항목을 추가할 수 있어요!)</div>
           <CoverLetterComponent
             coverLetters={interviewCoverLetters}
             setCoverLetters={setInterviewCoverLetters}

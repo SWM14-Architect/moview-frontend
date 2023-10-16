@@ -103,7 +103,7 @@ function InterviewLightInput() {
     // 로딩 렌더링
     setIsLoading(true);
     setLoadingMessage(
-      "잠시 후 면접이 시작됩니다. 대기 시간은 약 3 ~ 6초 정도입니다!"
+      "잠시 후 면접이 시작됩니다. 대기 시간은 약 6 ~ 9초 정도입니다!"
     );
 
     //api call
@@ -140,9 +140,7 @@ function InterviewLightInput() {
       })
       .catch((err) => {
         setIsLoading(false);
-        if (err.response?.status === 401) {
-          toast.info("다시 로그인을 해주세요.");
-        } else {
+        if (err.response?.status !== 401) {
           toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
         }
       });

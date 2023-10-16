@@ -11,7 +11,7 @@ export default function ErrorPage() {
 
   const handleGoBackButton = (e) => {
     e.preventDefault();
-    navigate(-1);
+    navigate("/");
   }
 
   return (

@@ -43,7 +43,7 @@ const features = [
   },
   {
     title: "실전 모드에서 자소서 추가하는 방법",
-    content : "+ 버튼을 클릭하시면 됩니다. 최대 5개까지 입력 가능합니다.",
+    content : "+ 버튼을 클릭하시면 됩니다. 최대 3개까지 입력 가능합니다.",
     source: HowToAddRequirements,
   },
   {

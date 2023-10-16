@@ -52,7 +52,7 @@ const RouteChangeTracker = () => {
       ReactGA.send("pageview");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialized, location]);
+  }, [initialized, location, roomID]);
 };
 
 export default RouteChangeTracker;

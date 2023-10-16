@@ -1,4 +1,11 @@
 
+.first_section {
+    min-height: 700px;
+    height: calc(100vh - 94px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
 .title_header {
     display: flex;
