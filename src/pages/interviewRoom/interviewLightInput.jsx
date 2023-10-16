@@ -103,7 +103,7 @@ function InterviewLightInput() {
     // 로딩 렌더링
     setIsLoading(true);
     setLoadingMessage(
-      "잠시 후 면접이 시작됩니다. 대기 시간은 약 3 ~ 6초 정도입니다!"
+      "잠시 후 면접이 시작됩니다.\n대기 시간은 약 3 ~ 6초 정도입니다!"
     );
 
     //api call
@@ -149,7 +149,7 @@ function InterviewLightInput() {
   return (
     <section style={{ backgroundColor: "#f4f7fb", flex: 1 }}>
       <div className={`container`} style={{ flexDirection: "column" }}>
-        <div className={`${style.header}`}>면접 정보 입력 (연습 모드)</div>
+        <div className={`${style.header}`}>면접 정보 입력<br/>(연습 모드)</div>
         <SecondStep />
         <div className={`layout-flex-grid-2 fadeInUpEffect`}>
           <InputComponent

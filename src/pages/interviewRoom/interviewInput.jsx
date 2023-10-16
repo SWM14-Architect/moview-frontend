@@ -330,7 +330,7 @@ function InterviewInput() {
     );
 
     setIsLoading(true);
-    setLoadingMessage("잠시 후 면접이 시작됩니다. 대기 시간은 약 8 ~ 13초 정도입니다!");
+    setLoadingMessage("잠시 후 면접이 시작됩니다.\n대기 시간은 약 8 ~ 13초 정도입니다!");
     input_api({
       intervieweeName: userNickname,
       companyName: interviewTargetCompany,
@@ -379,7 +379,7 @@ function InterviewInput() {
   return (
     <section style={{ backgroundColor: "#f4f7fb", flex: 1 }}>
       <div className={`container`} style={{ flexDirection: "column" }}>
-        <div className={`${style.header}`}>면접 정보 입력 (실전 모드)</div>
+        <div className={`${style.header}`}>면접 정보 입력<br/>(실전 모드)</div>
         <SecondStep/>
         <div className={`layout-flex-grid-2 fadeInUpEffect`}>
           <InputComponent

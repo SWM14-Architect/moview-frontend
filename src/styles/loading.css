@@ -28,3 +28,9 @@
     animation:Dimming 1s;
     animation-fill-mode: forwards;
 }
+
+div.loading_modal h4 {
+    white-space: pre-line;
+    text-align: center;
+    margin-bottom: 1em;
+}
