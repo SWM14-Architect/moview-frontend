@@ -47,18 +47,16 @@ function Index() {
 
   useEffect(() => {
     if(process.env.REACT_APP_ENV === "prod") {
-      const kakaoScript1 = document.createElement('script');
-      kakaoScript1.type = 'text/javascript';
-      kakaoScript1.id = 'kakao-script-1';
-      kakaoScript1.charset = "UTF-8";
-      kakaoScript1.src = "//t1.daumcdn.net/kas/static/kp.js";
-      document.head.appendChild(kakaoScript1);
+      const kakaoPackageScript = document.createElement('script');
+      kakaoPackageScript.type = 'text/javascript';
+      kakaoPackageScript.charset = "UTF-8";
+      kakaoPackageScript.src = "//t1.daumcdn.net/kas/static/kp.js";
+      document.head.appendChild(kakaoPackageScript);
 
-      const kakaoScript2 = document.createElement('script');
-      kakaoScript2.type = 'text/javascript';
-      kakaoScript2.id = 'kakao-script-2';
-      kakaoScript2.innerHTML = `kakaoPixel('${process.env.REACT_APP_KAKAO_SDK_ID}').pageView();`;
-      document.head.appendChild(kakaoScript2);
+      const kakaoPageViewScript = document.createElement('script');
+      kakaoPageViewScript.type = 'text/javascript';
+      kakaoPageViewScript.innerHTML = `kakaoPixel('${process.env.REACT_APP_KAKAO_SDK_ID}').pageView();`;
+      document.head.appendChild(kakaoPageViewScript);
     }
   }, []);
 
