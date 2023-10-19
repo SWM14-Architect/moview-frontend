@@ -25,18 +25,21 @@ const KakaoCallback = () => {
     await apiClient
       .get("/oauth", {params: {code}})
       .then((res) => {
-        const userProfile = res?.message.user;
-        const hasSignedUp = res?.message.has_signed_up;
+        const userProfile = res.data?.message.user_profile;
+        const hasSignedUp = res.data?.message.has_signed_up;
         setUserLogin(true);
         setUserNickname(userProfile["profile_nickname"]);
         setUserProfile(userProfile["profile_image_url"]);
 
         if(hasSignedUp){
-          const kakaoSignupScript = document.createElement('script');
-          kakaoSignupScript.type = 'text/javascript';
-          kakaoSignupScript.id = 'kakao-signup-script';
-          kakaoSignupScript.innerHTML = `kakaoPixel('${process.env.REACT_APP_KAKAO_SDK_ID}').completeRegistration();`;
-          document.head.appendChild(kakaoSignupScript);
+          if(process.env.REACT_APP_ENV === "prod") {
+            const kakaoSignupScript = document.createElement('script');
+            kakaoSignupScript.type = 'text/javascript';
+            kakaoSignupScript.id = 'kakao-signup-script';
+            kakaoSignupScript.innerHTML = `kakaoPixel('${process.env.REACT_APP_KAKAO_SDK_ID}').completeRegistration();`;
+            document.head.appendChild(kakaoSignupScript);
+          }
+          toast.info("회원가입이 완료되었습니다!", {});
         }
 
         navigate("/");
