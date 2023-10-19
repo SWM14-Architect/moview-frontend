@@ -25,10 +25,16 @@ const KakaoCallback = () => {
     await apiClient
       .get("/oauth", {params: {code}})
       .then((res) => {
+        const userProfile = res?.message.user;
+        const hasSignedUp = res?.message.has_signed_up;
         setUserLogin(true);
-        setUserNickname(res.data["profile_nickname"]);
-        setUserProfile(res.data["profile_image_url"]);
-        navigate("/");
+        setUserNickname(userProfile["profile_nickname"]);
+        setUserProfile(userProfile["profile_image_url"]);
+        if(hasSignedUp){
+          navigate("/signup");
+        } else {
+          navigate("/");
+        }
       })
       .catch((error) => {
         toast.error(`${error.response?.data.message ? error.response.data.message.error : "오류가 발생했습니다!\n" + error.message}`, {});
