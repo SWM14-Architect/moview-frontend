@@ -103,7 +103,7 @@ function InterviewLightInput() {
     // 로딩 렌더링
     setIsLoading(true);
     setLoadingMessage(
-      "잠시 후 면접이 시작됩니다.\n대기 시간은 약 3 ~ 6초 정도입니다!"
+      "잠시 후 면접이 시작됩니다.\n대기 시간은 약 6 ~ 9초 정도입니다!"
     );
 
     //api call
