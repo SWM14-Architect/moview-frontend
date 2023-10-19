@@ -25,9 +25,23 @@ const KakaoCallback = () => {
     await apiClient
       .get("/oauth", {params: {code}})
       .then((res) => {
+        const userProfile = res.data?.message.user_profile;
+        const hasSignedUp = res.data?.message.has_signed_up;
         setUserLogin(true);
-        setUserNickname(res.data["profile_nickname"]);
-        setUserProfile(res.data["profile_image_url"]);
+        setUserNickname(userProfile["profile_nickname"]);
+        setUserProfile(userProfile["profile_image_url"]);
+
+        if(hasSignedUp){
+          if(process.env.REACT_APP_ENV === "prod") {
+            const kakaoSignupScript = document.createElement('script');
+            kakaoSignupScript.type = 'text/javascript';
+            kakaoSignupScript.id = 'kakao-signup-script';
+            kakaoSignupScript.innerHTML = `kakaoPixel('${process.env.REACT_APP_KAKAO_SDK_ID}').completeRegistration();`;
+            document.head.appendChild(kakaoSignupScript);
+          }
+          toast.info("회원가입이 완료되었습니다!", {});
+        }
+
         navigate("/");
       })
       .catch((error) => {
@@ -37,6 +51,13 @@ const KakaoCallback = () => {
 
   useEffect(() => {
     callOAuthAPI();
+
+    return () => {
+      const kakaoSignupScript = document.getElementById('kakao-signup-script');
+      if (kakaoSignupScript) {
+        document.head.removeChild(kakaoSignupScript);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

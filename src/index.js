@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -22,6 +22,7 @@ import KakaoCallback from "./pages/login_callback";
 import { CookiesProvider } from "react-cookie";
 import HowTo from "./pages/howto";
 
+
 function Index() {
   const router = createBrowserRouter([
     {
@@ -43,6 +44,21 @@ function Index() {
       element: <KakaoCallback />,
     },
   ]);
+
+  useEffect(() => {
+    if(process.env.REACT_APP_ENV === "prod") {
+      const kakaoPackageScript = document.createElement('script');
+      kakaoPackageScript.type = 'text/javascript';
+      kakaoPackageScript.charset = "UTF-8";
+      kakaoPackageScript.src = "//t1.daumcdn.net/kas/static/kp.js";
+      document.head.appendChild(kakaoPackageScript);
+
+      const kakaoPageViewScript = document.createElement('script');
+      kakaoPageViewScript.type = 'text/javascript';
+      kakaoPageViewScript.innerHTML = `kakaoPixel('${process.env.REACT_APP_KAKAO_SDK_ID}').pageView();`;
+      document.head.appendChild(kakaoPageViewScript);
+    }
+  }, []);
 
   return (
     <RecoilRoot>
