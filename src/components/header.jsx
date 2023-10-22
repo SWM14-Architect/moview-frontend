@@ -199,7 +199,7 @@ function MenuButton(props) {
           )}
           onClick={(e) => props.handleButtonClick(e)}
         >
-          {!props.isRoom ? "면접 시작" : "면접 종료"}
+          {!props.isRoom ? "무료 면접 시작" : "면접 종료"}
         </button>
         {props.isHowTo ? <button
           className={classNames(
@@ -295,7 +295,7 @@ function MenuButtonResized(props) {
           )}
           onClick={(e) => props.handleButtonClick(e)}
         >
-          {!props.isRoom ? "면접 시작" : "면접 종료"}
+          {!props.isRoom ? "무료 면접 시작" : "면접 종료"}
         </Disclosure.Button>
         {props.isHowTo ? <Disclosure.Button
           as="a"
