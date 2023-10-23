@@ -213,8 +213,8 @@ function InterviewChat(){
         .catch((err) => {
           // RateLimitError 등 서비스 일시 정지인 경우의 예외 처리
           if (err.response?.status === 503) {
-            setCurrentQuestionContent("현재 분당 LLM 토큰 사용량이 초과되었어요! 1분 뒤에 다시 시도해주세요!");
-            handleInterviewerQuestion(null, "현재 분당 LLM 토큰 사용량이 초과되었어요! 1분 뒤에 다시 시도해주세요!");
+            setCurrentQuestionContent("사용량이 많아서 서비스가 잠시 원할하지 않습니다. 1분 뒤에 다시 시도해주세요");
+            handleInterviewerQuestion(null, "사용량이 많아서 서비스가 잠시 원할하지 않습니다. 1분 뒤에 다시 시도해주세요");
             setIntervieweeAnswerFormText(intervieweeAnswer);
           }else{
             setCurrentQuestionContent("다시 한번 더 말씀해주실 수 있나요?");
