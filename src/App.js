@@ -8,10 +8,12 @@ import Loading from "./components/loading";
 import RouteChangeTracker from "./RouteChangeTracker";
 import {AuthTokenInterceptor} from "./api/api_instance";
 import FeedbackModal from "./components/feedbackModal";
+import WindowHeight from "./utils/windowHeight";
 
 function App() {
   // 모든 화면에 공통된 부분을 처리하는 컴포넌트
   // <Outlet/>은 라우터가 연결된 컴포넌트를 표시하는 영역
+  WindowHeight();
   RouteChangeTracker();
   const [isLoading, ] = useRecoilState(loadingAtom);
   const [loadingMessage, ] = useRecoilState(loadingMessageAtom);
