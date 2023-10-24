@@ -91,11 +91,18 @@ function Header() {
       setHowTo(false);
     }
 
+    if(window.location.pathname !== "/how-to"){
+      if(exitHowTo){
+        setExitHowTo(false);
+      }
+    }
+
     if (window.location.pathname === "/room") {
       setIsRoom(true);
     } else {
       setIsRoom(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   const handleButtonClick = (e) => {
@@ -139,7 +146,8 @@ function Header() {
   return (
     <Disclosure
       as="nav"
-      className="bg-white-800 border-b border-b-2 border-gray-150"
+      className="bg-white border-b border-b-2 border-gray-150"
+      style={{zIndex: 1000}}
     >
       {({ open }) => (
         <>
@@ -199,7 +207,7 @@ function MenuButton(props) {
           )}
           onClick={(e) => props.handleButtonClick(e)}
         >
-          {!props.isRoom ? "무료 면접 시작" : "면접 종료"}
+          {!props.isRoom ? "무료 면접" : "면접 종료"}
         </button>
         {props.isHowTo ? <button
           className={classNames(
