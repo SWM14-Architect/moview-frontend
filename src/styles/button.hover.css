@@ -50,3 +50,7 @@
 .grayButton:hover{
     background-color: #7a7a7a;
 }
+
+#accordion-color-heading-1 button {
+    border: 1px solid #c9c9c9;
+}
