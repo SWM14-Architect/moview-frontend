@@ -47,13 +47,16 @@ function FirstSection(props){
                 <div>정보를 입력하고 시작버튼을 누르시면,</div>
                 <div>AI가 내용을 분석하고 질문을 생성합니다.</div>
               </div>
-              <button
-                className={`blackButton`}
-                style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
-                onClick={(e) => props.handleButtonClick(e)}
-              >
-                {"면접시작 >"}
-              </button>
+              <div className="relative m-auto">
+                <button
+                  className={`blackButton`}
+                  style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
+                  onClick={(e) => props.handleButtonClick(e)}
+                >
+                  {"면접시작 >"}
+                </button>
+                <div className="absolute animate-bounce text-white" style={{top:"15px", left:"47%", fontSize:"5px", userSelect:"none"}}>FREE</div>
+              </div>
             </div>
           }
         </div>

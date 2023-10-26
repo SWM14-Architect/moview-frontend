@@ -173,6 +173,12 @@ function Header() {
   );
 }
 
+function FreeBounceText({left}){
+  return (
+    <div className="absolute animate-bounce text-white" style={{top:"0px", left:left, fontSize:"5px", userSelect:"none"}}>FREE</div>
+  )
+}
+
 function MobileMenuButton(props) {
   return (
     <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -200,15 +206,18 @@ function MenuButton(props) {
   return (
     <div className="hidden sm:ml-6 sm:block">
       <div className="flex space-x-4">
-        <button
-          className={classNames(
-            "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
-            "rounded-md px-5 py-2 text-sm font-medium"
-          )}
-          onClick={(e) => props.handleButtonClick(e)}
-        >
-          {!props.isRoom ? "무료 면접" : "면접 종료"}
-        </button>
+        <div className="relative">
+          <button
+            className={classNames(
+              "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
+              "rounded-md px-5 py-2 text-sm font-medium"
+            )}
+            onClick={(e) => props.handleButtonClick(e)}
+          >
+            {!props.isRoom ? "면접 시작" : "면접 종료"}
+          </button>
+          {!props.isRoom ? <FreeBounceText left="20px" /> : null}
+        </div>
         {props.isHowTo ? <button
           className={classNames(
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
@@ -295,21 +304,24 @@ function MenuButtonResized(props) {
   return (
     <Disclosure.Panel className="sm:hidden">
       <div className="space-y-1 px-2 pb-3 pt-2">
-        <Disclosure.Button
-          as="a"
-          className={classNames(
-            "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
-            "block rounded-md px-3 py-2 text-base font-medium"
-          )}
-          onClick={(e) => props.handleButtonClick(e)}
-        >
-          {!props.isRoom ? "무료 면접 시작" : "면접 종료"}
-        </Disclosure.Button>
+        <div className="relative">
+          <Disclosure.Button
+            as="a"
+            className={classNames(
+              "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
+              "block rounded-md px-3 py-2 text-base font-medium cursor-pointer"
+            )}
+            onClick={(e) => props.handleButtonClick(e)}
+          >
+            {!props.isRoom ? "면접 시작" : "면접 종료"}
+          </Disclosure.Button>
+          {!props.isRoom ? <FreeBounceText left={"13px"} /> : null}
+        </div>
         {props.isHowTo ? <Disclosure.Button
           as="a"
           className={classNames(
             "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
-            "block rounded-md px-3 py-2 text-base font-medium"
+            "block rounded-md px-3 py-2 text-base font-medium cursor-pointer"
           )}
           onClick={(e) => !props.exitHowTo ? props.handleButtonHowTo(e) : props.handleButtonHowToBack(e)}
         >
