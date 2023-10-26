@@ -29,9 +29,9 @@ function FirstSection(props){
       <div>
         <h2 className="fadeInUpEffect text-base font-semibold leading-7 text-indigo-600">나만의 면접 연습 서비스, 모두의 인터뷰.</h2>
         <TypeIt className={`${style.title_header} mt-2 mx-auto max-w-3xl text-3xl sm:text-4xl font-bold ][`} options={{speed: 30}} style={{lineHeight:"1em"}}>
-          <div>아직도 면접에 </div>
-          <div style={{marginLeft:"5px", color:"#d56d64"}}>두려움</div>
-          <div>을 느끼고 계신가요?</div>
+          <div>직무 면접, 모뷰에서 </div>
+          <div style={{marginLeft:"5px", color:"#ff5e5e"}}>무료</div>
+          <div>로 연습해보세요.</div>
         </TypeIt>
       </div>
       <img src={MainImage} className={`fadeInUpEffect animation-delay-1 mx-2 sm:mx-0`} alt="main" style={{width:"100%", borderRadius:"20px"}} />
@@ -79,9 +79,9 @@ function SecondSection(){
     <div className={`${style.second_section} bg-white sm:py-16 mb-10`}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-base font-semibold leading-7 text-indigo-600">곧 면접을 보러 가시나요?</h2>
+          <h2 className="text-base font-semibold leading-7 text-indigo-600">취업의 최종 관문, 면접.</h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            어려운 직무 면접을 모뷰에서 연습해보세요.
+            아직도 면접에 두려움을 느끼고 계신가요?
           </p>
         </div>
         <div className="flex flex-col sm:flex-row mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl" style={{}}>
@@ -91,7 +91,7 @@ function SecondSection(){
               <img className="my-auto mr-2" src={InterviewIcon} loading="lazy" alt={"Icon"} style={{width:"40px", height:"40px"}} />
               <p className="text-xl font-bold tracking-tight sm:text-2xl mb-4">LLM AI를 활용한<br/>나만의 맞춤형 면접 서비스</p>
             </div>
-            <p className="leading-7 tracking-tight">지원하고자 하는 회사의 채용공고와 자기소개서를 넣으면, 일반적인 면접 질문이 아닌 나에게 맞춰진 질문이 나옵니다!</p>
+            <p className="leading-7 tracking-tight">지원하고자 하는 회사의 채용공고와 자기소개서를 넣으면, 일반적인 면접 질문이 아닌 나에게 맞춰진 질문을 제공합니다!</p>
           </div>
         </div>
       </div>
@@ -127,7 +127,7 @@ function ThirdSection(){
     <div className={`${style.third_section} bg-white py-12 sm:py-16 h-full`}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-base font-semibold leading-7 text-indigo-600">취업의 최종 관문, 면접.</h2>
+          <h2 className="text-base font-semibold leading-7 text-indigo-600">곧 면접을 보러 가시나요?</h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             다가오는 면접 날짜에 더 이상 두려워하지 마세요.
           </p>
