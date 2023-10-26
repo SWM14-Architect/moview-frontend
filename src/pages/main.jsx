@@ -22,6 +22,7 @@ import HowToChatType from "../assets/howto/how-to-chat-type.png";
 import HowToChatMicOn from "../assets/howto/how-to-chat-mic-on.png";
 import HowToChatMicOff from "../assets/howto/how-to-chat-mic-off.png";
 import HowToChatMicEdit from "../assets/howto/how-to-chat-mic-edit.png";
+import {Button} from "flowbite-react";
 
 function FirstSection(props){
   return (
@@ -34,7 +35,7 @@ function FirstSection(props){
           <div>로 연습해보세요.</div>
         </TypeIt>
       </div>
-      <img src={MainImage} className={`fadeInUpEffect animation-delay-1 mx-2 sm:mx-0`} alt="main" style={{width:"100%", borderRadius:"20px"}} />
+      <img src={MainImage} className={`fadeInUpEffect animation-delay-1`} alt="main" style={{width:"100%", borderRadius:"20px"}} />
       <div>
         <div className={`fadeInUpEffect animation-delay-3 mb-10`}>
           {!props.userLogin ?
@@ -88,7 +89,7 @@ function SecondSection(){
           <img src={MoviewPlayGif} loading="lazy" alt={"Moview"} style={{borderRadius:"10px", maxWidth:"30em"}} />
           <div className="sm:pl-6 pt-4 w-full">
             <div className="flex flex-row">
-              <img className="my-auto mr-2" src={InterviewIcon} loading="lazy" alt={"Icon"} style={{width:"40px", height:"40px"}} />
+              <img className="my-auto ml-2" src={InterviewIcon} loading="lazy" alt={"Icon"} style={{width:"40px", height:"40px"}} />
               <p className="text-xl font-bold tracking-tight sm:text-2xl mb-4">LLM AI를 활용한<br/>나만의 맞춤형 면접 서비스</p>
             </div>
             <p className="leading-7 tracking-tight">지원하고자 하는 회사의 채용공고와 자기소개서를 넣으면, 일반적인 면접 질문이 아닌 나에게 맞춰진 질문을 제공합니다!</p>
@@ -265,6 +266,16 @@ function Main(){
           <HowotoSection />
         </section>
       </section>
+      {/*<div>*/}
+      {/*  <img className={`${style.floating_button}`} src={HowIcon} style={{width:"50px", height:"50px"}} />*/}
+      {/*</div>*/}
+      <Button
+        className={`${style.floating_button}`}
+        gradientDuoTone="purpleToBlue"
+        style={{borderRadius:"30%", width:"50px", height:"50px"}}
+      >
+        Help
+      </Button>
     </section>
   );
 }
