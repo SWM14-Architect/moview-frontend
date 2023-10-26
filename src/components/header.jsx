@@ -37,8 +37,6 @@ function Header() {
   const [, setLoadingMessage] = useRecoilState(loadingMessageAtom);
   const [, setInterviewResult] = useRecoilState(interviewResultAtom); // 인터뷰 결과
   const [interviewId, ] = useRecoilState(interviewIdAtom);
-  const [isHowTo, setHowTo]=useState(false);
-  const [exitHowTo, setExitHowTo] = useState(false);
 
   const handleLogoClick = (e) => {
     e.preventDefault();
@@ -85,18 +83,6 @@ function Header() {
   }
 
   useEffect(() => {
-    if (window.location.pathname === "/" || window.location.pathname === "/how-to"){
-      setHowTo(true);
-    }else{
-      setHowTo(false);
-    }
-
-    if(window.location.pathname !== "/how-to"){
-      if(exitHowTo){
-        setExitHowTo(false);
-      }
-    }
-
     if (window.location.pathname === "/room") {
       setIsRoom(true);
     } else {
@@ -131,15 +117,8 @@ function Header() {
     }
   };
 
-  const handleButtonHowTo=(e)=>{
-    e.preventDefault();
-    setExitHowTo(true);
-    navigate("/how-to");
-  };
-
   const handleButtonHowToBack = (e) => {
     e.preventDefault();
-    setExitHowTo(false);
     navigate("/");
   }
 
@@ -158,7 +137,7 @@ function Header() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <CompanyLogo handleLogoClick={handleLogoClick} />
-                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo} handleButtonHowToBack={handleButtonHowToBack} exitHowTo={exitHowTo}/>
+                <MenuButton isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowToBack={handleButtonHowToBack}/>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div style={{fontSize:"0.8em", fontFamily:"NanumGothic"}}>{!userLogin ? null : `${userNickname}님`}</div>
@@ -166,7 +145,7 @@ function Header() {
               </div>
             </div>
           </div>
-          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowTo={handleButtonHowTo} isHowTo={isHowTo} handleButtonHowToBack={handleButtonHowToBack} exitHowTo={exitHowTo}/>
+          <MenuButtonResized isRoom={isRoom} handleButtonClick={handleButtonClick} handleButtonHowToBack={handleButtonHowToBack}/>
         </>
       )}
     </Disclosure>
@@ -218,15 +197,6 @@ function MenuButton(props) {
           </button>
           {!props.isRoom ? <FreeBounceText left="20px" /> : null}
         </div>
-        {props.isHowTo ? <button
-          className={classNames(
-            "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
-            "rounded-md px-5 py-2 text-sm font-medium"
-          )}
-          onClick={(e) => !props.exitHowTo ? props.handleButtonHowTo(e) : props.handleButtonHowToBack(e)}
-        >
-          {!props.exitHowTo ? "사용방법" : "뒤로가기"}
-        </button>: null}
       </div>
     </div>
   );
@@ -317,16 +287,6 @@ function MenuButtonResized(props) {
           </Disclosure.Button>
           {!props.isRoom ? <FreeBounceText left={"13px"} /> : null}
         </div>
-        {props.isHowTo ? <Disclosure.Button
-          as="a"
-          className={classNames(
-            "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
-            "block rounded-md px-3 py-2 text-base font-medium cursor-pointer"
-          )}
-          onClick={(e) => !props.exitHowTo ? props.handleButtonHowTo(e) : props.handleButtonHowToBack(e)}
-        >
-          {!props.exitHowTo ? "사용방법" : "뒤로가기"}
-        </Disclosure.Button>: null}
       </div>
     </Disclosure.Panel>
   );
