@@ -35,7 +35,6 @@ function FirstSection(props){
           >
             {"면접시작 >"}
           </button>
-          <div className={`${style.free_div} absolute animate-bounce text-white` } style={{top:"15px", left:"47%"}}>FREE</div>
         </div>
       </div>
       <img src={MainImage} className={`fadeInUpEffect animation-delay-1`} alt="main" style={{width:"100%", borderRadius:"20px"}} />
