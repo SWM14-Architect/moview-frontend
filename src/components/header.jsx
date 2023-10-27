@@ -186,16 +186,17 @@ function MenuButton(props) {
     <div className="hidden sm:ml-6 sm:block">
       <div className="flex space-x-4">
         <div className="relative">
-          <button
-            className={classNames(
-              "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
-              "rounded-md px-5 py-2 text-sm font-medium"
-            )}
-            onClick={(e) => props.handleButtonClick(e)}
-          >
-            {!props.isRoom ? "면접 시작" : "면접 종료"}
-          </button>
-          {!props.isRoom ? <FreeBounceText left="20px" /> : null}
+          {props.isRoom ?
+            <button
+              className={classNames(
+                "bg-gray-900 text-white hover:bg-indigo-600 hover:text-white",
+                "rounded-md px-5 py-2 text-sm font-medium"
+              )}
+              onClick={(e) => props.handleButtonClick(e)}
+            >
+              {"면접 종료"}
+            </button> : null
+          }
         </div>
       </div>
     </div>
