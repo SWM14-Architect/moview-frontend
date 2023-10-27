@@ -266,16 +266,6 @@ function Main(){
           <HowotoSection />
         </section>
       </section>
-      {/*<div>*/}
-      {/*  <img className={`${style.floating_button}`} src={HowIcon} style={{width:"50px", height:"50px"}} />*/}
-      {/*</div>*/}
-      <Button
-        className={`${style.floating_button}`}
-        gradientDuoTone="purpleToBlue"
-        style={{borderRadius:"30%", width:"50px", height:"50px"}}
-      >
-        Help
-      </Button>
     </section>
   );
 }
