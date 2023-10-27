@@ -70,7 +70,6 @@ export const AuthTokenInterceptor = ({children}) => {
 
         if(config.url === REFRESH_URL){
           toast.info("다시 로그인을 해주세요.");
-          console.error(err);
           resetUserData();
           return Promise.reject(err);
         }

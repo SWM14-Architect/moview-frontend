@@ -1,10 +1,22 @@
 
 .first_section {
-    min-height: 700px;
-    height: calc(100vh - 94px);
+    min-height: 500px;
+    height: calc(var(--vh, 1vh) * 100 - 94px);
+    /*height: calc(100vh - 94px);*/
+    display: flex;
+    flex-direction: column;
+    /*justify-content: space-around;*/
+}
+
+.third_section {
+    min-height: calc(var(--vh, 1vh) * 100 - 94px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.second_section {
+    max-height: calc(var(--vh, 1vh) * 100 - 94px);
 }
 
 .title_header {
@@ -14,7 +26,6 @@
     width: 100%;
     color: #212121;
     font-family: "GmarketSansBold";
-    font-size: 2.5em;
     margin-bottom: 40px;
     justify-content: center;
 }
