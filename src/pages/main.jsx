@@ -13,64 +13,32 @@ import {userLoginAtom} from "../store/userAtom";
 import {oauth_url_api} from "../api/jwt";
 import {roomIdAtom} from "../store/interviewRoomAtom";
 import {toast} from "react-toastify";
-import Accordion from "../components/accordion";
-import HowToSelectMode from "../assets/howto/how-to-select-mode.png";
-import HowToLight from "../assets/howto/how-to-light.png";
-import HowToAddRequirements from "../assets/howto/how-to-add-req.png";
-import HowToInput from "../assets/howto/how-to-input.jpeg";
-import HowToChatType from "../assets/howto/how-to-chat-type.png";
-import HowToChatMicOn from "../assets/howto/how-to-chat-mic-on.png";
-import HowToChatMicOff from "../assets/howto/how-to-chat-mic-off.png";
-import HowToChatMicEdit from "../assets/howto/how-to-chat-mic-edit.png";
-import {Button} from "flowbite-react";
+import {redirectAtom} from "../store/redirectAtom";
 
 function FirstSection(props){
   return (
     <div className={`${style.first_section}`} style={{width: "100%", textAlign:"center"}}>
       <div>
         <h2 className="fadeInUpEffect text-base font-semibold leading-7 text-indigo-600">나만의 면접 연습 서비스, 모두의 인터뷰.</h2>
-        <TypeIt className={`${style.title_header} mt-2 mx-auto max-w-3xl text-3xl sm:text-4xl font-bold ][`} options={{speed: 30}} style={{lineHeight:"1em"}}>
+        <TypeIt className={`${style.title_header} mt-2 mx-auto max-w-3xl text-3xl sm:text-4xl font-bold`} options={{speed: 30}} style={{lineHeight:"1em"}}>
           <div>직무 면접, 모뷰에서 </div>
           <div style={{marginLeft:"5px", color:"#ff5e5e"}}>무료</div>
           <div>로 연습해보세요.</div>
         </TypeIt>
       </div>
-      <img src={MainImage} className={`fadeInUpEffect animation-delay-1`} alt="main" style={{width:"100%", borderRadius:"20px"}} />
-      <div>
-        <div className={`fadeInUpEffect animation-delay-3 mb-10`}>
-          {!props.userLogin ?
-            <div>
-              <div className={`${style.title_content_start}`}>
-                <div>시작을 위해서는 계정이 필요합니다.</div>
-                <div>카카오 계정으로 로그인하실 수 있습니다.</div>
-              </div>
-              <button
-                className={`blackButton`}
-                style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
-                onClick={(e) => props.handleLogin(e)}
-              >
-                카카오 로그인
-              </button>
-            </div> :
-            <div>
-              <div className={`${style.title_content_start}`}>
-                <div>정보를 입력하고 시작버튼을 누르시면,</div>
-                <div>AI가 내용을 분석하고 질문을 생성합니다.</div>
-              </div>
-              <div className="relative m-auto">
-                <button
-                  className={`blackButton`}
-                  style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
-                  onClick={(e) => props.handleButtonClick(e)}
-                >
-                  {"면접시작 >"}
-                </button>
-                <div className={`${style.free_div} absolute animate-bounce text-white` } style={{top:"15px", left:"47%"}}>FREE</div>
-              </div>
-            </div>
-          }
+      <div className={`fadeInUpEffect animation-delay-3 mb-10`}>
+        <div className="relative m-auto">
+          <button
+            className={`blackButton`}
+            style={{marginTop: "15px", marginBottom:"15px", width:"150px", borderRadius: "10px"}}
+            onClick={(e) => props.handleButtonClick(e)}
+          >
+            {"면접시작 >"}
+          </button>
+          <div className={`${style.free_div} absolute animate-bounce text-white` } style={{top:"15px", left:"47%"}}>FREE</div>
         </div>
       </div>
+      <img src={MainImage} className={`fadeInUpEffect animation-delay-1`} alt="main" style={{width:"100%", borderRadius:"20px"}} />
     </div>
   );
 }
@@ -152,106 +120,39 @@ function ThirdSection(){
   );
 }
 
-const howto_features = [
-  {
-    title: "모드 선택",
-    content: "연습 모드, 실전 모드 중 하나를 선택하세요.",
-    source: HowToSelectMode,
-  },
-  {
-    title: "연습 모드 입력 예시",
-    content: "다음 예시처럼 작성해주시면 됩니다.",
-    source: HowToLight,
-  },
-  {
-    title: "실전 모드에서 자소서 추가하는 방법",
-    content : "+ 버튼을 클릭하시면 됩니다. 최대 3개까지 입력 가능합니다.",
-    source: HowToAddRequirements,
-  },
-  {
-    title: "실전 모드 입력 예시",
-    content: "다음 예시처럼 작성해주시면 됩니다.",
-    source: HowToInput,
-  },
-  {
-    title: "면접 입력 텍스트로 하는 방법",
-    content: "다음 예시처럼 작성해주시면 됩니다.",
-    source: HowToChatType,
-  },
-
-  {
-    title: "마이크 키는 방법",
-    content: "다음 아이콘을 클릭하십시오.",
-    source: HowToChatMicOn,
-  },
-  {
-    title: "면접 입력 시 마이크 사용하는 방법",
-    content: "다음 아이콘인 상태에서 말을 하십시오. 그리고 말을 마치면 마이크 아이콘을 클릭하십시오.",
-    source: HowToChatMicOff,
-  },
-  {
-    title: "음성 인식된 문장 수정하는 방법",
-    content: "다음 영역을 직접 텍스트로 수정하면 됩니다.",
-    source: HowToChatMicEdit,
-  }
-];
-
-function HowotoSection(){
-  return (
-    <section>
-      <div className={`container`} style={{ flexDirection: "column" }}>
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-base font-semibold leading-7 text-indigo-600">How To.</h2>
-          <p className="mt-2 mb-10 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            이 서비스를 사용하는 방법
-          </p>
-        </div>
-        <div>
-          {howto_features.map((feature, index) => (
-            <div key={index}>
-              <Accordion
-                index={index}
-                title={feature.title}
-                content={feature.content}
-                source={feature.source}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Main(){
   useTitle(`${SERVICE_TITLE}`);
   ScrollToTop();
   const navigate = useNavigate();
   const [, setRoomID] = useRecoilState(roomIdAtom);
   const [userLogin, ] = useRecoilState(userLoginAtom);
+  const [, setRedirectPath] = useRecoilState(redirectAtom);
 
-  const handleButtonClick = (e) => {
+  const handleButtonClick = async(e) => {
     e.preventDefault();
     setRoomID("modeSelect");
+
+    if(!userLogin){
+      await oauth_url_api()
+        .then((res) => {
+          window.location.href = res.data["kakao_oauth_url"];
+          setRedirectPath("/room");
+        })
+        .catch((err) => {
+          toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
+        });
+      return;
+    }
+
     navigate("/room");
   }
-
-  const handleLogin = async () => {
-    await oauth_url_api()
-    .then((res) => {
-      window.location.href = res.data["kakao_oauth_url"];
-    })
-    .catch((err) => {
-      toast.error(`${err.response?.data.message ? err.response.data.message.error : "오류가 발생했습니다!\n" + err.message}`, {});
-    });
-  };
 
   return (
     <section style={{flex: 1, paddingTop:"0px"}}>
       <section>
         <section style={{backgroundColor:"white"}}>
           <div className={`container`} style={{flexDirection:"column"}}>
-            <FirstSection userLogin={userLogin} handleLogin={handleLogin} handleButtonClick={handleButtonClick} />
+            <FirstSection userLogin={userLogin} handleButtonClick={handleButtonClick} />
           </div>
         </section>
         <section>
@@ -261,9 +162,6 @@ function Main(){
         </section>
         <section>
           <ThirdSection/>
-        </section>
-        <section>
-          <HowotoSection />
         </section>
       </section>
     </section>
