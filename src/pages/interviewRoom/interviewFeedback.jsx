@@ -73,7 +73,7 @@ function InterviewFeedback() {
 }
 
 function Accordion(props) {
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHidden, setIsHidden] = useState(props.index === 0 ? false : true);
 
   const toggleHidden = () => {
     setIsHidden(!isHidden);
