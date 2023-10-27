@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {userLoginAtom, userNicknameAtom, userProfileAtom} from "../store/userAtom";
 import {toast} from "react-toastify";
+import {redirectAtom} from "../store/redirectAtom";
 
 // 기본 URL 설정
 const apiClient = axios.create({
@@ -17,6 +18,7 @@ const KakaoCallback = () => {
   const [, setUserLogin] = useRecoilState(userLoginAtom);
   const [, setUserNickname] = useRecoilState(userNicknameAtom);
   const [, setUserProfile] = useRecoilState(userProfileAtom);
+  const [redirectPath, setRedirectPath] = useRecoilState(redirectAtom);
 
   const callOAuthAPI = async () => {
     let params = new URL(document.URL).searchParams;
@@ -42,7 +44,12 @@ const KakaoCallback = () => {
           toast.info("회원가입이 완료되었습니다!", {});
         }
 
-        navigate("/");
+        if(redirectPath === null) {
+          navigate("/");
+        } else {
+          navigate(redirectPath);
+          setRedirectPath(null);
+        }
       })
       .catch((error) => {
         toast.error(`${error.response?.data.message ? error.response.data.message.error : "오류가 발생했습니다!\n" + error.message}`, {});
