@@ -79,7 +79,7 @@ function FeedbackModal(){
   }
 
   return (
-    <Modal show={openModal === 'feedback'} onClose={() => handleOnClose()}>
+    <Modal show={openModal === 'feedback'} onClose={() => handleOnClose()} style={{zIndex:1001}}>
       <Modal.Header>Feedback</Modal.Header>
       <Modal.Body>
         <div className="space-y-6">
