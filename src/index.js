@@ -45,16 +45,23 @@ function Index() {
 
   useEffect(() => {
     if(process.env.REACT_APP_ENV === "prod") {
-      const kakaoPackageScript = document.createElement('script');
-      kakaoPackageScript.type = 'text/javascript';
-      kakaoPackageScript.charset = "UTF-8";
-      kakaoPackageScript.src = "//t1.daumcdn.net/kas/static/kp.js";
-      document.head.appendChild(kakaoPackageScript);
-
+      // KAKAO PIXEK SDK PAGE VIEW EVENT
       const kakaoPageViewScript = document.createElement('script');
       kakaoPageViewScript.type = 'text/javascript';
       kakaoPageViewScript.innerHTML = `kakaoPixel('${process.env.REACT_APP_KAKAO_SDK_ID}').pageView();`;
       document.head.appendChild(kakaoPageViewScript);
+
+      // GOOGLE TAG
+      const googleTagScript = document.createElement('script');
+      googleTagScript.async = true;
+      googleTagScript.src = `https://www.googletagmanager.com/gtag/js?id=${process.env.REACT_APP_GOOGLE_ADS_TAG_ID}`;
+      document.head.appendChild(googleTagScript);
+
+      // GOOGLE DATA LAYER
+      const googleDataLayerScript = document.createElement('script');
+      googleDataLayerScript.type = 'text/javascript';
+      googleDataLayerScript.innerHTML = `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${process.env.REACT_APP_GOOGLE_ADS_TAG_ID}');`;
+      document.head.appendChild(googleDataLayerScript);
     }
   }, []);
 
